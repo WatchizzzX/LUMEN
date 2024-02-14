@@ -69,7 +69,7 @@ jobs:
           path: ${{ env.PROJECT_NAME }}.StandaloneWindows64.zip
   create-release:
     name: Upload and create new release
-    needs: build-for-desktop
+    needs: [build-for-linux, build-for-windows]
     runs-on: ubuntu-latest
     steps:
       - name: Create environment variables
