@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: db443c1f007428a469a9dfc6715e6aa5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 217832
+  packageName: Game Developer's Toolkit (GDTK)
+  packageVersion: 1.15
+  assetPath: Assets/NullSave/Game Dev Toolkit/Scripts/Core/Interaction/Interactables/InteractableRPGObject.cs
+  uploadId: 635723

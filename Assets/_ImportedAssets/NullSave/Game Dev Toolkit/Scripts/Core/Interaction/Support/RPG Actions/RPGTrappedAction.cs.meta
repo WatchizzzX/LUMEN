@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 12f7976ad1599834f988c27f1360973b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 217832
+  packageName: Game Developer's Toolkit (GDTK)
+  packageVersion: 1.15
+  assetPath: Assets/NullSave/Game Dev Toolkit/Scripts/Core/Interaction/Support/RPG
+    Actions/RPGTrappedAction.cs
+  uploadId: 635723
