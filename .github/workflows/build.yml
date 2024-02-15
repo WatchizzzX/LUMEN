@@ -65,26 +65,22 @@ jobs:
         with:
           name: ${{ env.PROJECT_NAME }}.StandaloneWindows64.zip
           path: ${{ env.PROJECT_NAME }}.StandaloneWindows64.zip
-  create-release:
-    name: Upload and create new release
-    needs: [build-for-linux, build-for-windows]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create environment variables
-        run: |
-          date="$(date +"%Y.%m.%d")"
-          echo "date=$date" >> $GITHUB_ENV
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          path: artifacts
-      - name: Create release
-        uses: softprops/action-gh-release@v1
-        with:
-          name: "Release v${{ github.ref }} on ${{ env.date }}"
-          tag_name: ${{ github.ref }}
-          files: artifacts/**/*.*
-          generate_release_notes: true
-      - uses: geekyeggo/delete-artifact@v2
-        with:
-          name: ${{ env.projectName }}*
+  #create-release:
+  #  name: Upload and create new release
+  #  needs: [build-for-linux, build-for-windows]
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - name: Download build artifacts
+  #      uses: actions/download-artifact@v3
+  #      with:
+  #        path: artifacts
+  #    - name: Create release
+  #      uses: softprops/action-gh-release@v1
+  #      with:
+  #        name: "Release v${{ github.ref }} on ${{ env.date }}"
+  #        tag_name: ${{ github.ref }}
+  #        body_path: ./CHANGELOG.md
+  #        files: artifacts/**/*.*
+  #    - uses: geekyeggo/delete-artifact@v2
+  #      with:
+  #        name: ${{ env.projectName }}*
