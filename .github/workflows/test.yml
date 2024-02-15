@@ -7,12 +7,9 @@ jobs:
     name: test
     runs-on: ubuntu-latest
     steps:
-      - name: Get latest release
-        id: last_release
-        uses: InsonusK/get-latest-release@v1.0.1
-        with:
-          myToken: ${{ github.token }}
-          view_top: 1
+      - name: Get Previous tag
+        id: previoustag
+        uses: WyriHaximus/github-action-get-previous-tag@v1
       - name: Print result
         run: |
           echo "id: ${{ steps.last_release.outputs.id }}"
