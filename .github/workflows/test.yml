@@ -7,37 +7,20 @@ jobs:
     name: test
     runs-on: ubuntu-latest
     steps:
+      - name: Get version from tag
+        id: tag_name
+        run: |
+          echo ::set-output name=current_version::${GITHUB_REF#refs/tags/v}
+        shell: bash
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Get Changelog Entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2
         with:
-          python-version: '3.x'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install regex
-      - name: Extract tag from CHANGELOG.md
-        id: extract_tag
-        run: |
-          import re
-          
-          with open('CHANGELOG.md', 'r') as file:
-              data = file.read()
-          
-          pattern = r'(?<=\[).+?(?=\])'
-          match = re.search(pattern, data)
-          if match:
-              tag = match.group(0)
-              print(f"::set-output name=tag::{tag}")
-
+          validation_level: warn
+          version: ${{ steps.tag_name.outputs.current_version }}
+          path: ./CHANGELOG.md
       - name: Print result
         run: |
-          echo ${{ steps.extract_tag.outputs.tag }}
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ steps.extract_tag.outputs.tag }}
-          body: "Release ${{ steps.extract_tag.outputs.tag }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo ${{ steps.changelog_reader.outputs.version }}
