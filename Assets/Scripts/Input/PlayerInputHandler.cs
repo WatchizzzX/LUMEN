@@ -1,6 +1,12 @@
-namespace DefaultNamespace;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PlayerInputHandler : UnityEngine.MonoBehaviour
+namespace Input
 {
-    
+    [RequireComponent(typeof(PlayerInput))]
+    public class PlayerInputHandler : MonoBehaviour
+    {
+        
+    }
 }
+
