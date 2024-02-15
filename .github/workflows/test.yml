@@ -7,16 +7,37 @@ jobs:
     name: test
     runs-on: ubuntu-latest
     steps:
-      - name: Get Previous tag
-        id: previoustag
-        uses: WyriHaximus/github-action-get-previous-tag@v1
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install regex
+      - name: Extract tag from CHANGELOG.md
+        id: extract_tag
+        run: |
+          import re
+          
+          with open('CHANGELOG.md', 'r') as file:
+              data = file.read()
+          
+          pattern = r'(?<=\[).+?(?=\])'
+          match = re.search(pattern, data)
+          if match:
+              tag = match.group(0)
+              print(f"::set-output name=tag::{tag}")
+
       - name: Print result
         run: |
-          echo "id: ${{ steps.last_release.outputs.id }}"
-          echo "name: ${{ steps.last_release.outputs.name }}"
-          echo "tag_name: ${{ steps.last_release.outputs.tag_name }}"
-          echo "created_at: ${{ steps.last_release.outputs.created_at }}"
-          echo "draft: ${{ steps.last_release.outputs.draft }}"
-          echo "prerelease: ${{ steps.last_release.outputs.prerelease }}"
-          echo "url: ${{ steps.last_release.outputs.url }}"
-          echo "html_url: ${{ steps.last_release.outputs.html_url }}"
+          echo ${{ steps.extract_tag.outputs.tag }}
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.extract_tag.outputs.tag }}
+          body: "Release ${{ steps.extract_tag.outputs.tag }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
