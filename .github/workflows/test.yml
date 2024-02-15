@@ -8,16 +8,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get latest release
-        id: latest_release
-        uses: actions/github-script@v5
+        id: last_release
+        uses: InsonusK/get-latest-release@v1.0.1
         with:
-          script: |
-            const releases = await github.repos.listReleases({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            });
-            const latestRelease = releases.data[0];
-            return latestRelease.id;
-
-      - name: Print latest release ID
-        run: echo "The latest release ID is ${{ steps.latest_release.outputs.result }}"
+          myToken: ${{ github.token }}
+          view_top: 1
+      - name: Print result
+        run: |
+          echo "id: ${{ steps.last_release.outputs.id }}"
+          echo "name: ${{ steps.last_release.outputs.name }}"
+          echo "tag_name: ${{ steps.last_release.outputs.tag_name }}"
+          echo "created_at: ${{ steps.last_release.outputs.created_at }}"
+          echo "draft: ${{ steps.last_release.outputs.draft }}"
+          echo "prerelease: ${{ steps.last_release.outputs.prerelease }}"
+          echo "url: ${{ steps.last_release.outputs.url }}"
+          echo "html_url: ${{ steps.last_release.outputs.html_url }}"
