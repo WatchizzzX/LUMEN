@@ -10,7 +10,7 @@ namespace Input
     {
         [SerializeField] private UnityEvent<Vector2> onMoveEvent;
         [SerializeField] private UnityEvent<bool> onSprintEvent;
-        [SerializeField] private UnityEvent<bool> onJumpEvent;
+        [SerializeField] private UnityEvent onJumpEvent;
         [SerializeField] private UnityEvent<bool> onInteractEvent;
 
         private PlayerInput _input;
@@ -67,7 +67,7 @@ namespace Input
         {
             IsJumping = obj.ReadValueAsButton();
             if (IsJumping)
-                onJumpEvent.Invoke(IsJumping);
+                onJumpEvent.Invoke();
         }
 
         private void OnSprint(InputAction.CallbackContext obj)
