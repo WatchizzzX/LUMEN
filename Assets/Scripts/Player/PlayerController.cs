@@ -20,6 +20,7 @@ namespace Player
         [SerializeField, Range(0, 5)] private int maxAirJumps = 0;
 
         [SerializeField, Range(0f, 0.5f)] private float coyoteTime;
+        [SerializeField, Range(0f, 1f)] private float jumpCooldown;
 
         [SerializeField, Range(0, 90)] private float maxGroundAngle = 25f, maxStairsAngle = 50f;
 
@@ -53,6 +54,7 @@ namespace Player
         private float _minGroundDotProduct, _minStairsDotProduct;
 
         private float _internalCoyoteTimer;
+        private float _internalJumpCooldownTimer;
 
         public bool OnGround => _groundContactCount > 0;
         public bool OnSteep => _steepContactCount > 0;
@@ -113,6 +115,8 @@ namespace Player
         {
             if (_internalCoyoteTimer > 0f)
                 _internalCoyoteTimer -= Time.deltaTime;
+            if (_internalJumpCooldownTimer > 0f)
+                _internalJumpCooldownTimer -= Time.deltaTime;
         }
 
         private void RotateToVelocity()
@@ -140,6 +144,9 @@ namespace Player
             _velocity = _body.velocity;
             if (OnGround || SnapToGround() || CheckSteepContacts())
             {
+                if (_stepsSinceLastGrounded > 1)
+                    _internalJumpCooldownTimer = jumpCooldown;
+                
                 _stepsSinceLastGrounded = 0;
                 if (_stepsSinceLastJump > 1)
                 {
@@ -155,11 +162,11 @@ namespace Player
             {
                 if (_stepsSinceLastGrounded == 1)
                 {
-                    if (_stepsSinceLastJump != 2)
+                    if (_stepsSinceLastJump > 2)
                         _internalCoyoteTimer = coyoteTime;
-                    else if(_stepsSinceLastJump < _stepsSinceLastGrounded)
-                        _internalCoyoteTimer = 0f;
                 }
+                if (_stepsSinceLastJump < _stepsSinceLastGrounded)
+                    _internalCoyoteTimer = 0f;
 
                 _contactNormal = Vector3.up;
             }
@@ -231,6 +238,8 @@ namespace Player
 
         private void Jump()
         {
+            if (_internalJumpCooldownTimer > 0f) return;
+            
             Vector3 jumpDirection;
             if (OnGround)
             {
