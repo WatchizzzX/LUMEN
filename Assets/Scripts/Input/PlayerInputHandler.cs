@@ -1,7 +1,8 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Utils;
+using Logger = Utils.Logger;
 
 namespace Input
 {
@@ -11,7 +12,7 @@ namespace Input
         [SerializeField] private UnityEvent<Vector2> onMoveEvent;
         [SerializeField] private UnityEvent<bool> onSprintEvent;
         [SerializeField] private UnityEvent onJumpEvent;
-        [SerializeField] private UnityEvent<bool> onInteractEvent;
+        [SerializeField] private UnityEvent onInteractEvent;
 
         private PlayerInput _input;
 
@@ -40,7 +41,8 @@ namespace Input
             }
             catch
             {
-                //TODO: add logging on incorrect input map
+                Logger.Log(LoggerChannel.Input, Priority.Error, "Some action can't be found. InputHandler will be off");
+                enabled = false;
                 return;
             }
 
@@ -60,7 +62,8 @@ namespace Input
         private void OnInteract(InputAction.CallbackContext obj)
         {
             IsInteracting = obj.ReadValueAsButton();
-            onInteractEvent.Invoke(IsInteracting);
+            if (IsInteracting)
+                onInteractEvent.Invoke();
         }
 
         private void OnJump(InputAction.CallbackContext obj)

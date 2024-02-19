@@ -2,7 +2,9 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Utils;
 using Utils.Extensions;
+using Logger = Utils.Logger;
 
 namespace Player
 {
@@ -75,6 +77,10 @@ namespace Player
         {
             _body = GetComponent<Rigidbody>();
             _cameraPosition = Camera.main.transform;
+
+            if (_cameraPosition == null)
+                Logger.Log(LoggerChannel.Player, Priority.Warning,
+                    "Controller can't find MainCamera. Rotating input will be not work");
             OnValidate();
         }
 

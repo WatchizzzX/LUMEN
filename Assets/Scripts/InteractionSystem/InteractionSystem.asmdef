@@ -1,8 +1,7 @@
 {
-    "name": "Input",
+    "name": "InteractionSystem",
     "rootNamespace": "",
     "references": [
-        "GUID:75469ad4d38634e559750d17036d5f7c",
         "GUID:53c4ef596f6edbbe1b5699c9b21281a6"
     ],
     "includePlatforms": [],
