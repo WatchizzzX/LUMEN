@@ -62,7 +62,7 @@ namespace Player
         public MovementState GetMovementState()
         {
             return new MovementState(
-                !OnGround && _body.velocity.y < 0,
+                (OnSteep && !OnGround) || (!OnGround && _body.velocity.y < 0),
                 HorizontalVelocity.magnitude / DesiredSpeed);
         }
 
@@ -81,8 +81,8 @@ namespace Player
 
         private void Update()
         {
-            RotateInputAccordingToCamera();
             CalculateMovementVector();
+            RotateVelocityAccordingToCamera();
             RotateToVelocity();
             UpdateTimers();
             DebugText();
@@ -150,14 +150,17 @@ namespace Player
                 {
                     _contactNormal.Normalize();
                 }
-                
             }
             else
             {
-                if (_stepsSinceLastGrounded == 1 && _stepsSinceLastJump != 2)
+                if (_stepsSinceLastGrounded == 1)
                 {
-                    _internalCoyoteTimer = coyoteTime;
+                    if (_stepsSinceLastJump != 2)
+                        _internalCoyoteTimer = coyoteTime;
+                    else if(_stepsSinceLastJump < _stepsSinceLastGrounded)
+                        _internalCoyoteTimer = 0f;
                 }
+
                 _contactNormal = Vector3.up;
             }
         }
@@ -322,9 +325,10 @@ namespace Player
             _velocity -= ProjectOnContactPlane(Physics.gravity) * Time.fixedDeltaTime;
         }
 
-        private void RotateInputAccordingToCamera()
+        private void RotateVelocityAccordingToCamera()
         {
-            _cachedDirection.RotateVector2(_cameraPosition.rotation.eulerAngles.y);
+            var cameraRotation = Quaternion.AngleAxis(_cameraPosition.eulerAngles.y, Vector3.up);
+            _desiredVelocity = cameraRotation * _desiredVelocity;
         }
 
         public void SetMoveDirection(Vector2 input)
