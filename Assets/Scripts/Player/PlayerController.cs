@@ -63,9 +63,11 @@ namespace Player
 
         public MovementState GetMovementState()
         {
-            return new MovementState(
-                (OnSteep && !OnGround) || (!OnGround && _body.velocity.y < 0),
-                HorizontalVelocity.magnitude / DesiredSpeed);
+            var velocity = _body.velocity;
+            var isFalling = (OnSteep && !OnGround) || (!OnGround && velocity.y < 0);
+            var relativeSpeed = HorizontalVelocity.magnitude / DesiredSpeed;
+            var isJumping = _desiredJump && _internalJumpCooldownTimer <= 0f || (!OnGround && velocity.y >= 0);
+            return new MovementState(isFalling, relativeSpeed, isJumping, _cachedSprinting);
         }
 
         private void Awake()
@@ -146,7 +148,7 @@ namespace Player
             {
                 if (_stepsSinceLastGrounded > 1)
                     _internalJumpCooldownTimer = jumpCooldown;
-                
+
                 _stepsSinceLastGrounded = 0;
                 if (_stepsSinceLastJump > 1)
                 {
@@ -165,6 +167,7 @@ namespace Player
                     if (_stepsSinceLastJump > 2)
                         _internalCoyoteTimer = coyoteTime;
                 }
+
                 if (_stepsSinceLastJump < _stepsSinceLastGrounded)
                     _internalCoyoteTimer = 0f;
 
@@ -239,7 +242,7 @@ namespace Player
         private void Jump()
         {
             if (_internalJumpCooldownTimer > 0f) return;
-            
+
             Vector3 jumpDirection;
             if (OnGround)
             {

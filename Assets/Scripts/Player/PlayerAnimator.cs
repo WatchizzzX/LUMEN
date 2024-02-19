@@ -39,6 +39,8 @@ namespace Player
             var state = _movementController.GetMovementState();
 
             _walkingSpeed = state.RelativeWalkSpeed;
+            _isJumping = state.IsJumping;
+            _isSprinting = state.IsSprinting;
 
             SmoothValues();
 
@@ -58,16 +60,6 @@ namespace Player
             _smoothedWalkingSpeed =
                 Mathf.SmoothDamp(_smoothedWalkingSpeed, _isSprinting ? _walkingSpeed * 2 : _walkingSpeed,
                     ref _smoothVelocity, smoothTime);
-        }
-
-        public void SetSprint(bool sprint)
-        {
-            _isSprinting = sprint;
-        }
-
-        public void CallToJump()
-        {
-            _isJumping = true;
         }
     }
 }
