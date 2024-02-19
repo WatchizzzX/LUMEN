@@ -45,6 +45,7 @@ namespace Player
 
         private Vector2 _cachedDirection;
         private bool _cachedSprinting;
+        private bool _cachedInAirSprinting;
 
         private int _jumpPhase;
         private int _stepsSinceLastGrounded, _stepsSinceLastJump;
@@ -148,6 +149,12 @@ namespace Player
             {
                 if (_stepsSinceLastGrounded > 1)
                     _internalJumpCooldownTimer = jumpCooldown;
+
+                if (_cachedInAirSprinting)
+                {
+                    _cachedSprinting = true;
+                    _cachedInAirSprinting = false;
+                }
 
                 _stepsSinceLastGrounded = 0;
                 if (_stepsSinceLastJump > 1)
@@ -350,7 +357,12 @@ namespace Player
 
         public void SetSprint(bool sprint)
         {
-            _cachedSprinting = sprint;
+            if (OnGround || _cachedSprinting)
+                _cachedSprinting = sprint;
+            else
+            {
+                _cachedInAirSprinting = true;
+            }
         }
 
         public void CallToJump()
