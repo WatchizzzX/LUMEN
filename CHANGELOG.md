@@ -1,3 +1,17 @@
+# [0.2.0](https://github.com/WatchizzzX/LUMEN/compare/v0.1.0...v0.2.0) (2024-02-19)
+
+
+### Bug Fixes
+
+* Add new logger channel for interactable. Refactor ([ef58c48](https://github.com/WatchizzzX/LUMEN/commit/ef58c489d5604d0550c557366daff244245a0cae))
+* Interact event now work as a trigger ([b78de2b](https://github.com/WatchizzzX/LUMEN/commit/b78de2b663928863dcf0811510c69d72e1bff770))
+
+
+### Features
+
+* Add InteractableSystem ([5728222](https://github.com/WatchizzzX/LUMEN/commit/5728222c6fbabd25d17c5f0e797c15abe026bf28))
+* Add Logger system and implemented ([e228e52](https://github.com/WatchizzzX/LUMEN/commit/e228e528f69504d352b9d360b71083500d8e8b00))
+
 # [0.1.0](https://github.com/WatchizzzX/LUMEN/compare/v0.0.2...v0.1.0) (2024-02-19)
 
 
