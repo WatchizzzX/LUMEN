@@ -16,7 +16,8 @@ namespace Utils
         Common = 1 << 0,
         Assert = 1 << 1,
         Player = 1 << 2,
-        Input = 1 << 3
+        Input = 1 << 3,
+        InteractableSystem = 1 << 4
     }
 
     /// <summary>
@@ -159,7 +160,7 @@ namespace Utils
         {
             if (!condition)
             {
-                FinalLog(LoggerChannel.Assert, Priority.FatalError, string.Format("Assert Failed: {0}", message));
+                FinalLog(LoggerChannel.Assert, Priority.FatalError, $"Assert Failed: {message}");
             }
         }
 
@@ -174,7 +175,7 @@ namespace Utils
             if (!IsChannelActive(logLoggerChannel)) return;
             // Dialog boxes can't support rich text mark up, do we won't colour the final string 
             var finalMessage =
-                ContructFinalString(logLoggerChannel, priority, message, priority != Priority.FatalError);
+                ConstructFinalString(logLoggerChannel, priority, message, priority != Priority.FatalError);
 
 #if UNITY_EDITOR && UNITY_DIALOGS
             // Fatal errors will create a pop up when in the editor
@@ -215,41 +216,39 @@ namespace Utils
         /// <param name="message"></param>
         /// <param name="shouldColour"></param>
         /// <returns></returns>
-        private static string ContructFinalString(LoggerChannel logLoggerChannel, Priority priority, string message,
+        private static string ConstructFinalString(LoggerChannel logLoggerChannel, Priority priority, string message,
             bool shouldColour)
         {
-            var priortiyColour = priorityToColour[priority];
+            var priorityColour = PriorityToColour[priority];
 
-            if (!channelToColour.TryGetValue(logLoggerChannel, out var channelColour))
-            {
-                channelColour = "black";
-                Debug.LogErrorFormat("Please add colour for loggerChannel {0}", logLoggerChannel);
-            }
+            if (ChannelToColour.TryGetValue(logLoggerChannel, out var channelColour))
+                return shouldColour
+                    ? $"<b><color={channelColour}>[{logLoggerChannel}] </color></b> <color={priorityColour}>{message}</color>"
+                    : $"[{logLoggerChannel}] {message}";
+            channelColour = "black";
+            Debug.LogErrorFormat("Please add colour for loggerChannel {0}", logLoggerChannel);
 
-            if (shouldColour)
-            {
-                return string.Format("<b><color={0}>[{1}] </color></b> <color={2}>{3}</color>", channelColour,
-                    logLoggerChannel, priortiyColour, message);
-            }
-
-            return $"[{logLoggerChannel}] {message}";
+            return shouldColour
+                ? $"<b><color={channelColour}>[{logLoggerChannel}] </color></b> <color={priorityColour}>{message}</color>"
+                : $"[{logLoggerChannel}] {message}";
         }
 
         /// <summary>
         /// Map a loggerChannel to a colour, using Unity's rich text system
         /// </summary>
-        private static readonly Dictionary<LoggerChannel, string> channelToColour = new()
+        private static readonly Dictionary<LoggerChannel, string> ChannelToColour = new()
         {
             { LoggerChannel.Common, "#ffecd1" },
             { LoggerChannel.Assert, "#9e2a2b" },
             { LoggerChannel.Input, "#ff7d00" },
-            { LoggerChannel.Player, "#15616d"},
+            { LoggerChannel.Player, "#15616d" },
+            { LoggerChannel.InteractableSystem, "#4f772d" }
         };
 
         /// <summary>
         /// Map a priority to a colour, using Unity's rich text system
         /// </summary>
-        private static readonly Dictionary<Priority, string> priorityToColour = new()
+        private static readonly Dictionary<Priority, string> PriorityToColour = new()
         {
             { Priority.Info, "#FFF9DE" },
             { Priority.Warning, "#FFFC9B" },
