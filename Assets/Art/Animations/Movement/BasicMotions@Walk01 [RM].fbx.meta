@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 60fd831fa965d4b8faa62190c4a11675
 ModelImporter:
-  serializedVersion: 21300
+  serializedVersion: 22200
   internalIDToNameTable:
   - first:
       1: 100000
@@ -473,52 +473,52 @@ ModelImporter:
     second: BasicMotions@Run01_ClosedHands - BackwardsRight
   - first:
       74: 7400032
-    second: BasicMotions@Run01 - Forwards [RM]
+    second: 'BasicMotions@Run01 - Forwards [RM]'
   - first:
       74: 7400034
-    second: BasicMotions@Run01 - ForwardsLeft [RM]
+    second: 'BasicMotions@Run01 - ForwardsLeft [RM]'
   - first:
       74: 7400036
-    second: BasicMotions@Run01 - ForwardsRight [RM]
+    second: 'BasicMotions@Run01 - ForwardsRight [RM]'
   - first:
       74: 7400038
-    second: BasicMotions@Run01 - Left [RM]
+    second: 'BasicMotions@Run01 - Left [RM]'
   - first:
       74: 7400040
-    second: BasicMotions@Run01 - Right [RM]
+    second: 'BasicMotions@Run01 - Right [RM]'
   - first:
       74: 7400042
-    second: BasicMotions@Run01 - Backwards [RM]
+    second: 'BasicMotions@Run01 - Backwards [RM]'
   - first:
       74: 7400044
-    second: BasicMotions@Run01 - BackwardsLeft [RM]
+    second: 'BasicMotions@Run01 - BackwardsLeft [RM]'
   - first:
       74: 7400046
-    second: BasicMotions@Run01 - BackwardsRight [RM]
+    second: 'BasicMotions@Run01 - BackwardsRight [RM]'
   - first:
       74: 7400048
-    second: BasicMotions@Walk01 - Forwards [RM]
+    second: 'BasicMotions@Walk01 - Forwards [RM]'
   - first:
       74: 7400050
-    second: BasicMotions@Walk01 - ForwardsLeft [RM]
+    second: 'BasicMotions@Walk01 - ForwardsLeft [RM]'
   - first:
       74: 7400052
-    second: BasicMotions@Walk01 - ForwardsRight [RM]
+    second: 'BasicMotions@Walk01 - ForwardsRight [RM]'
   - first:
       74: 7400054
-    second: BasicMotions@Walk01 - Left [RM]
+    second: 'BasicMotions@Walk01 - Left [RM]'
   - first:
       74: 7400056
-    second: BasicMotions@Walk01 - Right [RM]
+    second: 'BasicMotions@Walk01 - Right [RM]'
   - first:
       74: 7400058
-    second: BasicMotions@Walk01 - Backwards [RM]
+    second: 'BasicMotions@Walk01 - Backwards [RM]'
   - first:
       74: 7400060
-    second: BasicMotions@Walk01 - BackwardsLeft [RM]
+    second: 'BasicMotions@Walk01 - BackwardsLeft [RM]'
   - first:
       74: 7400062
-    second: BasicMotions@Walk01 - BackwardsRight [RM]
+    second: 'BasicMotions@Walk01 - BackwardsRight [RM]'
   - first:
       95: 9500000
     second: //RootNode
@@ -527,28 +527,28 @@ ModelImporter:
     second: ImportLogs
   - first:
       74: 1695192892109923712
-    second: BasicMotions@Walk01 - Forwards [RM]
+    second: 'BasicMotions@Walk01 - Forwards [RM]'
   - first:
       74: -4806549469666548942
-    second: BasicMotions@Walk01 - ForwardsLeft [RM]
+    second: 'BasicMotions@Walk01 - ForwardsLeft [RM]'
   - first:
       74: 1922147897020755831
-    second: BasicMotions@Walk01 - ForwardsRight [RM]
+    second: 'BasicMotions@Walk01 - ForwardsRight [RM]'
   - first:
       74: 5659637821263495846
-    second: BasicMotions@Walk01 - Left [RM]
+    second: 'BasicMotions@Walk01 - Left [RM]'
   - first:
       74: 5265780745243343361
-    second: BasicMotions@Walk01 - Right [RM]
+    second: 'BasicMotions@Walk01 - Right [RM]'
   - first:
       74: 122471509461140758
-    second: BasicMotions@Walk01 - Backwards [RM]
+    second: 'BasicMotions@Walk01 - Backwards [RM]'
   - first:
       74: -596700691782342955
-    second: BasicMotions@Walk01 - BackwardsLeft [RM]
+    second: 'BasicMotions@Walk01 - BackwardsLeft [RM]'
   - first:
       74: -9013019248230706172
-    second: BasicMotions@Walk01 - BackwardsRight [RM]
+    second: 'BasicMotions@Walk01 - BackwardsRight [RM]'
   externalObjects: {}
   materials:
     materialImportMode: 0
@@ -562,8 +562,6 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -579,7 +577,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - Forwards [RM]
+      name: 'BasicMotions@Walk01 - Forwards [RM]'
       takeName: BasicMotions@Walk01 - Forwards
       internalID: 0
       firstFrame: 0
@@ -608,7 +606,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - ForwardsLeft [RM]
+      name: 'BasicMotions@Walk01 - ForwardsLeft [RM]'
       takeName: BasicMotions@Walk01 - ForwardsLeft
       internalID: 0
       firstFrame: 0
@@ -637,7 +635,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - ForwardsRight [RM]
+      name: 'BasicMotions@Walk01 - ForwardsRight [RM]'
       takeName: BasicMotions@Walk01 - ForwardsRight
       internalID: 0
       firstFrame: 0
@@ -666,7 +664,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - Left [RM]
+      name: 'BasicMotions@Walk01 - Left [RM]'
       takeName: BasicMotions@Walk01 - Left
       internalID: 0
       firstFrame: 0
@@ -695,7 +693,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - Right [RM]
+      name: 'BasicMotions@Walk01 - Right [RM]'
       takeName: BasicMotions@Walk01 - Right
       internalID: 0
       firstFrame: 0
@@ -724,7 +722,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - Backwards [RM]
+      name: 'BasicMotions@Walk01 - Backwards [RM]'
       takeName: BasicMotions@Walk01 - Backwards
       internalID: 0
       firstFrame: 0
@@ -753,7 +751,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - BackwardsLeft [RM]
+      name: 'BasicMotions@Walk01 - BackwardsLeft [RM]'
       takeName: BasicMotions@Walk01 - BackwardsLeft
       internalID: 0
       firstFrame: 0
@@ -782,7 +780,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: BasicMotions@Walk01 - BackwardsRight [RM]
+      name: 'BasicMotions@Walk01 - BackwardsRight [RM]'
       takeName: BasicMotions@Walk01 - BackwardsRight
       internalID: 0
       firstFrame: 0
@@ -818,6 +816,7 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 0
     importBlendShapes: 0
     importCameras: 0
@@ -845,6 +844,7 @@ ModelImporter:
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -1627,6 +1627,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
   remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
