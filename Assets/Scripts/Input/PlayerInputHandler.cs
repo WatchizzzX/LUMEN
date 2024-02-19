@@ -1,7 +1,8 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Utils;
+using Logger = Utils.Logger;
 
 namespace Input
 {
@@ -40,7 +41,8 @@ namespace Input
             }
             catch
             {
-                //TODO: add logging on incorrect input map
+                Logger.Log(LoggerChannel.Input, Priority.Error, "Some action can't be found. InputHandler will be off");
+                enabled = false;
                 return;
             }
 
