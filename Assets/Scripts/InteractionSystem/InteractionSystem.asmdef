@@ -1,0 +1,16 @@
+{
+    "name": "InteractionSystem",
+    "rootNamespace": "",
+    "references": [
+        "GUID:53c4ef596f6edbbe1b5699c9b21281a6"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
