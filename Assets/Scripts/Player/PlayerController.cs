@@ -7,7 +7,7 @@ using Utils.Extensions;
 namespace Player
 {
     [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IMovementController
     {
         [SerializeField, Range(0f, 100f)] private float walkSpeed = 1.2f, runSpeed = 4.2f;
 
@@ -58,7 +58,14 @@ namespace Player
         public bool OnSteep => _steepContactCount > 0;
         public float DesiredSpeed => _cachedSprinting ? runSpeed : walkSpeed;
         public Vector3 HorizontalVelocity => new(_body.velocity.x, 0f, _body.velocity.z);
-        
+
+        public MovementState GetMovementState()
+        {
+            return new MovementState(
+                !OnGround && _body.velocity.y < 0,
+                HorizontalVelocity.magnitude / DesiredSpeed);
+        }
+
         private void Awake()
         {
             _body = GetComponent<Rigidbody>();
@@ -112,10 +119,11 @@ namespace Player
         {
             var horizontalVelocity = HorizontalVelocity;
             if (!(horizontalVelocity.magnitude > 0.1f)) return;
-            
+
             var targetAngle = Mathf.Atan2(horizontalVelocity.x, horizontalVelocity.z) * Mathf.Rad2Deg;
 
-            _calculatedAngle = Mathf.SmoothDampAngle(_calculatedAngle, targetAngle, ref _currentAngleVelocity, smoothRotationTime);
+            _calculatedAngle = Mathf.SmoothDampAngle(_calculatedAngle, targetAngle, ref _currentAngleVelocity,
+                smoothRotationTime);
             transform.rotation = Quaternion.Euler(0, _calculatedAngle, 0);
         }
 
@@ -142,11 +150,14 @@ namespace Player
                 {
                     _contactNormal.Normalize();
                 }
+                
             }
             else
             {
-                if (_stepsSinceLastGrounded == 1)
+                if (_stepsSinceLastGrounded == 1 && _stepsSinceLastJump != 2)
+                {
                     _internalCoyoteTimer = coyoteTime;
+                }
                 _contactNormal = Vector3.up;
             }
         }
@@ -326,10 +337,9 @@ namespace Player
             _cachedSprinting = sprint;
         }
 
-        public void CallToJump(bool jump)
+        public void CallToJump()
         {
-            if (jump)
-                _desiredJump = true;
+            _desiredJump = true;
         }
     }
 }
