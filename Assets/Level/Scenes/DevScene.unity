@@ -1507,7 +1507,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 5314035313382500621}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1813144563}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6467f1130c92453fa9f91b8426696284, type: 3}
@@ -1894,11 +1894,35 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1813144567}
+        m_TargetAssemblyTypeName: Player.PlayerAnimator, Assembly-CSharp
+        m_MethodName: SetMoveDirection
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onSprintEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1135743691}
         m_TargetAssemblyTypeName: Player.PlayerController, Assembly-CSharp
+        m_MethodName: SetSprint
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1813144567}
+        m_TargetAssemblyTypeName: Player.PlayerAnimator, Assembly-CSharp
         m_MethodName: SetSprint
         m_Mode: 0
         m_Arguments:
@@ -1915,7 +1939,19 @@ MonoBehaviour:
       - m_Target: {fileID: 1135743691}
         m_TargetAssemblyTypeName: Player.PlayerController, Assembly-CSharp
         m_MethodName: CallToJump
-        m_Mode: 0
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1813144567}
+        m_TargetAssemblyTypeName: Player.PlayerAnimator, Assembly-CSharp
+        m_MethodName: CallToJump
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2108,6 +2144,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1813144563 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4566498130862951778, guid: cc9fab4905a175fdcbec875861c7f375,
+    type: 3}
+  m_PrefabInstance: {fileID: 5314035313382500621}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1813144567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813144563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cbb95297a2548e989d2b41131aee354, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smoothTime: 0.2
 --- !u!43 &1916738018
 Mesh:
   m_ObjectHideFlags: 0
@@ -3059,7 +3114,7 @@ PrefabInstance:
     - target: {fileID: 8599354551831376377, guid: cc9fab4905a175fdcbec875861c7f375,
         type: 3}
       propertyPath: runSpeed
-      value: 4.2
+      value: 4.1
       objectReference: {fileID: 0}
     - target: {fileID: 8599354551831376377, guid: cc9fab4905a175fdcbec875861c7f375,
         type: 3}
@@ -3073,6 +3128,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8599354551831376377, guid: cc9fab4905a175fdcbec875861c7f375,
         type: 3}
+      propertyPath: walkSpeed
+      value: 3.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8599354551831376377, guid: cc9fab4905a175fdcbec875861c7f375,
+        type: 3}
       propertyPath: coyoteTime
       value: 0.5
       objectReference: {fileID: 0}
@@ -3080,6 +3140,11 @@ PrefabInstance:
         type: 3}
       propertyPath: jumpHeight
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8599354551831376377, guid: cc9fab4905a175fdcbec875861c7f375,
+        type: 3}
+      propertyPath: jumpCooldown
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 8599354551831376377, guid: cc9fab4905a175fdcbec875861c7f375,
         type: 3}
@@ -3124,7 +3189,7 @@ PrefabInstance:
     - target: {fileID: 8599354551831376377, guid: cc9fab4905a175fdcbec875861c7f375,
         type: 3}
       propertyPath: smoothRotationTime
-      value: 0.18
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 8599354551831376377, guid: cc9fab4905a175fdcbec875861c7f375,
         type: 3}
@@ -3134,7 +3199,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4566498130862951778, guid: cc9fab4905a175fdcbec875861c7f375,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1813144567}
   m_SourcePrefab: {fileID: 100100000, guid: cc9fab4905a175fdcbec875861c7f375, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
