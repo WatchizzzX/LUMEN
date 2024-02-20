@@ -1,7 +1,11 @@
 using System;
 using LogicalSystem.Interfaces;
+using LogicalSystem.Utils;
 using TypeReferences;
+using UnityEditor;
 using UnityEngine;
+using Utils;
+using Logger = Utils.Logger;
 
 namespace LogicalSystem
 {
@@ -24,8 +28,15 @@ namespace LogicalSystem
         public void Interact()
         {
             Result = !Result;
-            Debug.Log($"{name}-Source now is: {Result}");
+            Logger.Log(LoggerChannel.LogicalSystem, Priority.Info, $"(SourceComponent) - {name}. Value is: {Result}");
             OnValueChanged();
         }
+        
+#if UNITY_EDITOR
+        protected void OnDrawGizmos()
+        {
+            Handles.Label(transform.position,$"<color=#FFFFFF>{name}</color>", HandlesDrawer.GUIStyle);
+        }
+#endif
     }
 }
