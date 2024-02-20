@@ -1,3 +1,26 @@
+# [0.3.0](https://github.com/WatchizzzX/LUMEN/compare/v0.2.0...v0.3.0) (2024-02-20)
+
+
+### Bug Fixes
+
+* Fix bug when no interactables around ([46517e7](https://github.com/WatchizzzX/LUMEN/commit/46517e74c7952548bdaac14dc53c7469924cac16))
+
+
+### Features
+
+* Add clear method Interact to work with events ([b3d735a](https://github.com/WatchizzzX/LUMEN/commit/b3d735a4b79d3b89cf51693089f7ccc9c8897c60))
+* Add debug draw to LogicalComponent ([3d24d3e](https://github.com/WatchizzzX/LUMEN/commit/3d24d3e02af02f9f3e47328a55e86728d69dbdda))
+* Add debug draw to SourceComponent ([535cdf5](https://github.com/WatchizzzX/LUMEN/commit/535cdf5a91ef15ae5b9b891a53d33feb8d49bad0))
+* Add HandlesDrawer to debug draw LogicalSystem ([cea6dbb](https://github.com/WatchizzzX/LUMEN/commit/cea6dbbf32a2046dfb96eeee2bc09e757de42391))
+* Add logger channel to LogicalSystem ([bda2b84](https://github.com/WatchizzzX/LUMEN/commit/bda2b845e7c5be9ac4e50d551e8a8134e50688a4))
+* Add OutputComponent ([5414164](https://github.com/WatchizzzX/LUMEN/commit/54141643e141ddfc91ac28d29db57036ffe67d7d))
+* Implemented LogicalSystem (testing) ([4033ea5](https://github.com/WatchizzzX/LUMEN/commit/4033ea555eca45081cafbe26514f8bc6481d7d79))
+
+
+### Performance Improvements
+
+* Add assembly definition to LogicalSystem ([c40183e](https://github.com/WatchizzzX/LUMEN/commit/c40183e5c1720144eb919aab14ffbcbb93b6cb1c))
+
 # [0.2.0](https://github.com/WatchizzzX/LUMEN/compare/v0.1.0...v0.2.0) (2024-02-19)
 
 
