@@ -14,7 +14,7 @@ namespace InteractionSystem
         private InteractableType _interactableType;
         private string _message;
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             _interactableType = interactableType;
             _message = message.Trim() == "" ? "NULL" : message;
@@ -36,6 +36,8 @@ namespace InteractionSystem
 
         public string GetMessage() => _message;
 
+        public abstract void Interact();
+        
         public abstract void Interact(InteractorController interactor);
     }
 }

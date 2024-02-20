@@ -1894,35 +1894,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1813144567}
-        m_TargetAssemblyTypeName: Player.PlayerAnimator, Assembly-CSharp
-        m_MethodName: SetMoveDirection
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   onSprintEvent:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1135743691}
         m_TargetAssemblyTypeName: Player.PlayerController, Assembly-CSharp
-        m_MethodName: SetSprint
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1813144567}
-        m_TargetAssemblyTypeName: Player.PlayerAnimator, Assembly-CSharp
         m_MethodName: SetSprint
         m_Mode: 0
         m_Arguments:
@@ -1948,9 +1924,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1813144567}
-        m_TargetAssemblyTypeName: Player.PlayerAnimator, Assembly-CSharp
-        m_MethodName: CallToJump
+  onInteractEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1813144571}
+        m_TargetAssemblyTypeName: InteractionSystem.InteractorController, InteractionSystem
+        m_MethodName: Interact
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1960,9 +1939,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onInteractEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1349890546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2163,6 +2139,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoothTime: 0.2
+--- !u!114 &1813144571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813144563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe85867bf47144c6a56e72d585d4e856, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  interactiveRange: 1.5
+  bufferSize: 3
 --- !u!43 &1916738018
 Mesh:
   m_ObjectHideFlags: 0
@@ -3184,7 +3177,7 @@ PrefabInstance:
     - target: {fileID: 8599354551831376377, guid: cc9fab4905a175fdcbec875861c7f375,
         type: 3}
       propertyPath: maxAirAcceleration
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8599354551831376377, guid: cc9fab4905a175fdcbec875861c7f375,
         type: 3}
@@ -3204,6 +3197,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1813144567}
+    - targetCorrespondingSourceObject: {fileID: 4566498130862951778, guid: cc9fab4905a175fdcbec875861c7f375,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1813144571}
   m_SourcePrefab: {fileID: 100100000, guid: cc9fab4905a175fdcbec875861c7f375, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

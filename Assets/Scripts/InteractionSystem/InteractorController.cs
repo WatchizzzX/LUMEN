@@ -44,7 +44,7 @@ namespace InteractionSystem
 
         public void Interact()
         {
-            if (_interactableObjectsCount < 0) return;
+            if (_interactableObjectsCount == 0) return;
             
             _interactable.Interact(this);
         }

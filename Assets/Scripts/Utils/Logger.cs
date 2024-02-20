@@ -17,7 +17,8 @@ namespace Utils
         Assert = 1 << 1,
         Player = 1 << 2,
         Input = 1 << 3,
-        InteractableSystem = 1 << 4
+        InteractableSystem = 1 << 4,
+        LogicalSystem = 1 << 5
     }
 
     /// <summary>
@@ -242,7 +243,8 @@ namespace Utils
             { LoggerChannel.Assert, "#9e2a2b" },
             { LoggerChannel.Input, "#ff7d00" },
             { LoggerChannel.Player, "#15616d" },
-            { LoggerChannel.InteractableSystem, "#4f772d" }
+            { LoggerChannel.InteractableSystem, "#4f772d" },
+            { LoggerChannel.LogicalSystem, "#F8D210"}
         };
 
         /// <summary>
