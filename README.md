@@ -21,7 +21,9 @@ This is an isometric game with a top view in which you play as a robot and solve
 - The ability to program inside the game in Lua Script
 
 ## Process
-I'm developing this game for my thesis. The topic I have chosen is learning. Since I am studying to be a programmer, the game will teach in this area. Although it is more suitable for those who have never tried it and want to try to expand their thinking towards programming and making consistent solutions for logical problems. Initially, this game was supposed to be FPV, but after that the concept changed to an isometric style.  Also, during brainstorming, ideas were added for interacting with objects to solve physics-based puzzles (as in Portal), as well as programming small drones, but executing various commands using Lua, which would allow even a person who had no programming experience to complete the game.
+I am creating this game as part of my thesis project. The theme I have selected is learning, as I am studying to become a programmer. The game will contribute to this area in a positive way.
+Although the game is intended for people with no prior experience and who wish to expand their horizons in the area of programming and solving logical problems, it may be more suitable for those with less programming knowledge. Initially, the game was planned to be in first-person view, but the design has since shifted to isometric.
+During the brainstorming process, we added features such as interacting with objects in order to solve puzzles based on physical principles (similar to Portal), as well as the ability to program small drones to perform various tasks using Lua, allowing even those without prior programming experience to complete the game.
 ## Authors
 
 - [@WatchizzzX (Zahar Czembrowicz)](https://www.github.com/WatchizzzX)
