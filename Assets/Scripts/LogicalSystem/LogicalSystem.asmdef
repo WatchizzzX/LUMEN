@@ -2,7 +2,9 @@
     "name": "LogicalSystem",
     "rootNamespace": "",
     "references": [
-        "GUID:e07d200add5080734a10bc0952131bcf"
+        "GUID:e07d200add5080734a10bc0952131bcf",
+        "GUID:ea6a6314f279f814facc8c48a7d3c9f1",
+        "GUID:53c4ef596f6edbbe1b5699c9b21281a6"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
