@@ -1,10 +1,13 @@
+using System.Linq;
+using LogicalSystem.Interfaces;
+
 namespace LogicalSystem.LogicalElements
 {
-    public class Nand : And
+    public class Nand : ILogicalComponent
     {
-        public new bool Calculate(bool[] inputs)
+        public bool Calculate(bool[] inputs)
         {
-            return !base.Calculate(inputs);
+            return !inputs.All(item => item);
         }
     }
 }

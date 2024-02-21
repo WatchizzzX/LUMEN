@@ -1,10 +1,13 @@
+using System.Linq;
+using LogicalSystem.Interfaces;
+
 namespace LogicalSystem.LogicalElements
 {
-    public class Nor : Or
+    public class Nor : ILogicalComponent
     {
-        public new bool Calculate(bool[] inputs)
+        public bool Calculate(bool[] inputs)
         {
-            return !base.Calculate(inputs);
+            return !inputs.Any(item => item);
         }
     }
 }
