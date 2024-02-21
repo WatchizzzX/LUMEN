@@ -1,3 +1,11 @@
+## [0.5.1](https://github.com/WatchizzzX/LUMEN/compare/v0.5.0...v0.5.1) (2024-02-21)
+
+
+### Bug Fixes
+
+* Fix bug, when non-interactable object was on InteractableLayer ([646d950](https://github.com/WatchizzzX/LUMEN/commit/646d9501b04420cf96c0363d41bd1a83cf7d6f74))
+* Rework pad for work with all physics bodies ([5a463f3](https://github.com/WatchizzzX/LUMEN/commit/5a463f367e96fdec535fa210ca78eacb83420923))
+
 # [0.5.0](https://github.com/WatchizzzX/LUMEN/compare/v0.4.0...v0.5.0) (2024-02-21)
 
 
