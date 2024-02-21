@@ -18,7 +18,8 @@ namespace Utils
         Player = 1 << 2,
         Input = 1 << 3,
         InteractableSystem = 1 << 4,
-        LogicalSystem = 1 << 5
+        LogicalSystem = 1 << 5,
+        PickableSystem = 1 << 6
     }
 
     /// <summary>
@@ -244,7 +245,8 @@ namespace Utils
             { LoggerChannel.Input, "#ff7d00" },
             { LoggerChannel.Player, "#15616d" },
             { LoggerChannel.InteractableSystem, "#4f772d" },
-            { LoggerChannel.LogicalSystem, "#F8D210"}
+            { LoggerChannel.LogicalSystem, "#F8D210"},
+            { LoggerChannel.PickableSystem, "#7fbca1"}
         };
 
         /// <summary>
