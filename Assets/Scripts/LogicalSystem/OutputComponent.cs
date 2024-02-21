@@ -22,7 +22,7 @@ namespace LogicalSystem
 
         private void Awake()
         {
-            inputsList.ClearList();
+            inputsList.ClearListFromNulls();
             
             _inputsArray = inputsList.ToArray();
 

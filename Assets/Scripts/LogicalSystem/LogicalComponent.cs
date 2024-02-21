@@ -34,7 +34,7 @@ namespace LogicalSystem
 
             _logicalComponent = Activator.CreateInstance(logicalType) as ILogicalComponent;
             
-            inputsList.ClearList();
+            inputsList.ClearListFromNulls();
             
             _inputsArray = inputsList.ToArray();
 
