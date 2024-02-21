@@ -2,7 +2,7 @@ using UnityEngine;
 using Utils;
 using Logger = Utils.Logger;
 
-namespace InteractionSystem
+namespace InteractionSystem.Interactables
 {
     public abstract class BasicInteractable : MonoBehaviour, IInteractable
     {

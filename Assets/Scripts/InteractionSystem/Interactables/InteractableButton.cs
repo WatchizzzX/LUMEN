@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace InteractionSystem
+namespace InteractionSystem.Interactables
 {
     public class InteractableButton : BasicInteractable
     {

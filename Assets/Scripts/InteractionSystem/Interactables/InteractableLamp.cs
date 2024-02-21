@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace InteractionSystem
+namespace InteractionSystem.Interactables
 {
     [RequireComponent(typeof(MeshRenderer))]
     public class InteractableLamp : BasicInteractable

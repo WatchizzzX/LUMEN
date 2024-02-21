@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Utils;
+using Utils.Extensions;
 using Logger = Utils.Logger;
 
 namespace LogicalSystem
@@ -25,11 +26,16 @@ namespace LogicalSystem
         private bool[] _cachedInputs;
         private bool _cachedResult;
 
+        public TypeReference LogicalType => logicalType;
+
         private void Awake()
         {
             if (logicalType == null) return;
 
             _logicalComponent = Activator.CreateInstance(logicalType) as ILogicalComponent;
+            
+            inputsList.ClearList();
+            
             _inputsArray = inputsList.ToArray();
 
             foreach (var connector in _inputsArray)

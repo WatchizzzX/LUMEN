@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using Utils;
+using Utils.Extensions;
 using Logger = Utils.Logger;
 
 namespace LogicalSystem
@@ -21,6 +22,8 @@ namespace LogicalSystem
 
         private void Awake()
         {
+            inputsList.ClearList();
+            
             _inputsArray = inputsList.ToArray();
 
             foreach (var connector in _inputsArray)
