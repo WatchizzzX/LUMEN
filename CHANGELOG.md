@@ -1,3 +1,15 @@
+# [0.6.0](https://github.com/WatchizzzX/LUMEN/compare/v0.5.1...v0.6.0) (2024-02-21)
+
+
+### Features
+
+* Implemented PickupSystem ([2046900](https://github.com/WatchizzzX/LUMEN/commit/2046900458978b44f3bd50cae1f56167449091c1))
+
+
+### Performance Improvements
+
+* Optimize InteractionController ([0d3a329](https://github.com/WatchizzzX/LUMEN/commit/0d3a3298d0548a05a588c3f994dc19e90746224e))
+
 ## [0.5.1](https://github.com/WatchizzzX/LUMEN/compare/v0.5.0...v0.5.1) (2024-02-21)
 
 
