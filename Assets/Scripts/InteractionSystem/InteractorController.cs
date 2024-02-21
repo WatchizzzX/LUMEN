@@ -17,16 +17,12 @@ namespace InteractionSystem
         private IInteractable _interactable;
         private InteractableType _interactableType;
 
-        //private Tweener _tweener;
-
-        //private Typewriter _typewriter;
-
         private void Start()
         {
             _colliders = new Collider[bufferSize];
         }
 
-        private void Update()
+        public void Interact()
         {
             _interactableObjectsCount =
                 Physics.OverlapSphereNonAlloc(transform.position, interactiveRange, _colliders, interactableLayer);
@@ -50,10 +46,7 @@ namespace InteractionSystem
             }
 
             _interactableType = _interactable.GetInteractableType();
-        }
-
-        public void Interact()
-        {
+            
             if (_interactableObjectsCount == 0) return;
 
             _interactable.Interact(this);
