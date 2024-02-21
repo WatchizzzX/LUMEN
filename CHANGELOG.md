@@ -1,3 +1,11 @@
+# [0.4.0](https://github.com/WatchizzzX/LUMEN/compare/v0.3.1...v0.4.0) (2024-02-21)
+
+
+### Features
+
+* Add ListExtensions and clear input nodes ([d11f03e](https://github.com/WatchizzzX/LUMEN/commit/d11f03eef488ec60f3eff89580fd22bb36dd4b52))
+* Add LogicComponentEditor ([17f4cac](https://github.com/WatchizzzX/LUMEN/commit/17f4cacf1b07dc94f1388f976f32017fd64aab17))
+
 ## [0.3.1](https://github.com/WatchizzzX/LUMEN/compare/v0.3.0...v0.3.1) (2024-02-21)
 
 
