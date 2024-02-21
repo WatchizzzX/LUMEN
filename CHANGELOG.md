@@ -1,3 +1,11 @@
+## [0.3.1](https://github.com/WatchizzzX/LUMEN/compare/v0.3.0...v0.3.1) (2024-02-21)
+
+
+### Bug Fixes
+
+* Add recalculate call on start ([6916cb3](https://github.com/WatchizzzX/LUMEN/commit/6916cb34d4e5467b16fdafd01789a091c230907f))
+* Fix logic in components ([7e45b98](https://github.com/WatchizzzX/LUMEN/commit/7e45b989ef67419b530792d71743937374a4dfd4))
+
 # [0.3.0](https://github.com/WatchizzzX/LUMEN/compare/v0.2.0...v0.3.0) (2024-02-20)
 
 
