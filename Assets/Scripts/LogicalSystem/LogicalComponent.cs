@@ -33,6 +33,9 @@ namespace LogicalSystem
             if (logicalType == null) return;
 
             _logicalComponent = Activator.CreateInstance(logicalType) as ILogicalComponent;
+            
+            inputsList.ClearList();
+            
             _inputsArray = inputsList.ToArray();
 
             foreach (var connector in _inputsArray)
