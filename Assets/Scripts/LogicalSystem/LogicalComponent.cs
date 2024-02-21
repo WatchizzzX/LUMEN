@@ -38,6 +38,11 @@ namespace LogicalSystem
             }
         }
 
+        private void Start()
+        {
+            Recalculate();
+        }
+
         private void OnDestroy()
         {
             foreach (var connector in _inputsArray)

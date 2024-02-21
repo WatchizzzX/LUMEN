@@ -1,10 +1,13 @@
+using System.Linq;
+using LogicalSystem.Interfaces;
+
 namespace LogicalSystem.LogicalElements
 {
-    public class Xnor : Xor
+    public class Xnor : ILogicalComponent
     {
-        public new bool Calculate(bool[] inputs)
+        public bool Calculate(bool[] inputs)
         {
-            return !base.Calculate(inputs);
+            return inputs.Count(item => item) % 2 == 0;
         }
     }
 }
