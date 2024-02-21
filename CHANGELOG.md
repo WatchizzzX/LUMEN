@@ -1,3 +1,18 @@
+# [0.5.0](https://github.com/WatchizzzX/LUMEN/compare/v0.4.0...v0.5.0) (2024-02-21)
+
+
+### Features
+
+* Add CableControlller ([72df453](https://github.com/WatchizzzX/LUMEN/commit/72df45301437ab1949f89b9e05a13855d71b1d20))
+* Add CleanedListFromNulls ([5189db7](https://github.com/WatchizzzX/LUMEN/commit/5189db7feccd912e7b0c67b7b32456b259f7425e))
+* Implemeted InteractablePad (test) ([838d836](https://github.com/WatchizzzX/LUMEN/commit/838d836d63570fb94a71c6dfdd5ff5a0b7ea64a9))
+
+
+### Performance Improvements
+
+* Add editor assembly definition ([98ae2f6](https://github.com/WatchizzzX/LUMEN/commit/98ae2f6bb56f7e91d282295c574a3059f975e1c9))
+* Add LogicalSystem assembly definition ([0418390](https://github.com/WatchizzzX/LUMEN/commit/0418390e2e4f0b66d4c8c468bc84e2d42e8f5300))
+
 # [0.4.0](https://github.com/WatchizzzX/LUMEN/compare/v0.3.1...v0.4.0) (2024-02-21)
 
 
