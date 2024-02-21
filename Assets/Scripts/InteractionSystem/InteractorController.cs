@@ -1,5 +1,7 @@
 using System.Linq;
 using UnityEngine;
+using Utils;
+using Logger = Utils.Logger;
 
 namespace InteractionSystem
 {
@@ -16,7 +18,7 @@ namespace InteractionSystem
         private InteractableType _interactableType;
 
         //private Tweener _tweener;
-        
+
         //private Typewriter _typewriter;
 
         private void Start()
@@ -39,13 +41,21 @@ namespace InteractionSystem
             ).First().gameObject;
 
             _interactable = _closestInteractableObject.GetComponent<IInteractable>();
+
+            if (_interactable == null)
+            {
+                Logger.Log(LoggerChannel.InteractableSystem, Priority.Warning,
+                    $"{_closestInteractableObject.name} on Interactable layer, but don't have a InteractableScript");
+                return;
+            }
+
             _interactableType = _interactable.GetInteractableType();
         }
 
         public void Interact()
         {
             if (_interactableObjectsCount == 0) return;
-            
+
             _interactable.Interact(this);
         }
     }
