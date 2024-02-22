@@ -1,3 +1,10 @@
+## [0.6.1](https://github.com/WatchizzzX/LUMEN/compare/v0.6.0...v0.6.1) (2024-02-22)
+
+
+### Bug Fixes
+
+* Fix SourceComponent. Revert deleted files ([f1f416d](https://github.com/WatchizzzX/LUMEN/commit/f1f416da253f1366bf0711f10c94fae1030a6522))
+
 # [0.6.0](https://github.com/WatchizzzX/LUMEN/compare/v0.5.1...v0.6.0) (2024-02-21)
 
 
