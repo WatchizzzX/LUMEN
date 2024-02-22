@@ -1,10 +1,20 @@
 namespace Player
 {
+    /// <summary>
+    /// The interface loosely connects the animator and the player controller
+    /// </summary>
     public interface IMovementController
     {
+        /// <summary>
+        /// Get MovementState from controller
+        /// </summary>
+        /// <returns>Current MovementState</returns>
         public MovementState GetMovementState();
     }
 
+    /// <summary>
+    /// Movement state struct
+    /// </summary>
     public struct MovementState
     {
         public bool IsFalling { get; private set; }
