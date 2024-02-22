@@ -10,20 +10,58 @@ using Logger = Utils.Logger;
 
 namespace LogicalSystem
 {
+    /// <summary>
+    /// The component that outputs the signal from the LogicalSystem
+    /// </summary>
     public class OutputComponent : MonoBehaviour
     {
-        [SerializeField] private List<ConnectableComponent> inputsList;
-        [SerializeField] private UnityEvent onChange;
-        [SerializeField] private UnityEvent<bool> onChangeWithValue;
-        
+        #region Serialized Fileds
+
+        /// <summary>
+        /// Inputs list
+        /// </summary>
+        [Tooltip("Inputs list")] [SerializeField]
+        private List<ConnectableComponent> inputsList;
+
+        /// <summary>
+        /// Event on value changed
+        /// </summary>
+        [Tooltip("On value changed")] [SerializeField]
+        private UnityEvent onChange;
+
+        /// <summary>
+        /// Event on value changed with internal value
+        /// </summary>
+        [Tooltip("On value changed with value")] [SerializeField]
+        private UnityEvent<bool> onChangeWithValue;
+
+        #endregion
+
+        #region Private Variables
+
+        /// <summary>
+        /// Array of inputs
+        /// </summary>
         private ConnectableComponent[] _inputsArray;
+
+        /// <summary>
+        /// Cached inputs on last calculated
+        /// </summary>
         private bool[] _cachedInputs;
+
+        /// <summary>
+        /// Cached result on last calculated
+        /// </summary>
         private bool _cachedResult;
+
+        #endregion
+
+        #region MonoBehaviour
 
         private void Awake()
         {
             inputsList.ClearListFromNulls();
-            
+
             _inputsArray = inputsList.ToArray();
 
             foreach (var connector in _inputsArray)
@@ -32,30 +70,16 @@ namespace LogicalSystem
             }
         }
 
-        private void Recalculate()
-        {
-            _cachedInputs = _inputsArray.Select(x => x.Result).ToArray();
-            var result = _cachedInputs.All(item => item);
-            
-            Logger.Log(LoggerChannel.LogicalSystem, Priority.Info, $"(OutputComponent) - {name}. Value is: {result}");
-
-            if (_cachedResult == result) return;
-
-            _cachedResult = result;
-            onChange.Invoke();
-            onChangeWithValue.Invoke(_cachedResult);
-        }
-        
 #if UNITY_EDITOR
         protected void OnDrawGizmos()
         {
-            Handles.Label(transform.position,$"<color=#FFFFFF>{name}</color>", HandlesDrawer.GUIStyle);
+            Handles.Label(transform.position, $"<color=#FFFFFF>{name}</color>", HandlesDrawer.GUIStyle);
             if (_inputsArray?.Length > 0)
             {
                 foreach (var connector in _inputsArray)
                 {
-                    if(connector == null) continue;
-                    
+                    if (connector == null) continue;
+
                     var position = connector.transform.position;
 
                     Handles.color = connector.Result ? Color.green : Color.red;
@@ -66,8 +90,8 @@ namespace LogicalSystem
             {
                 foreach (var connector in inputsList)
                 {
-                    if(connector == null) continue;
-                    
+                    if (connector == null) continue;
+
                     var position = connector.transform.position;
 
                     Handles.color = connector.Result ? Color.green : Color.red;
@@ -76,5 +100,28 @@ namespace LogicalSystem
             }
         }
 #endif
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Calculate value on internal LogicalComponent and inputs
+        /// </summary>
+        private void Recalculate()
+        {
+            _cachedInputs = _inputsArray.Select(x => x.Result).ToArray();
+            var result = _cachedInputs.All(item => item);
+
+            Logger.Log(LoggerChannel.LogicalSystem, Priority.Info, $"(OutputComponent) - {name}. Value is: {result}");
+
+            if (_cachedResult == result) return;
+
+            _cachedResult = result;
+            onChange.Invoke();
+            onChangeWithValue.Invoke(_cachedResult);
+        }
+
+        #endregion
     }
 }
