@@ -4,6 +4,7 @@ using LogicalSystem.Utils;
 using TypeReferences;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utils;
 using Logger = Utils.Logger;
 
@@ -22,7 +23,7 @@ namespace LogicalSystem
         /// </summary>
         [Tooltip("Source type")]
         [Inherits(typeof(ISourceComponent), ShortName = true, ShowNoneElement = false), SerializeField]
-        private TypeReference logicalType;
+        private TypeReference sourceType;
 
         #endregion
 
@@ -31,7 +32,7 @@ namespace LogicalSystem
         /// <summary>
         /// Instance of SourceComponent
         /// </summary>
-        private ISourceComponent _logicalComponent;
+        private ISourceComponent _sourceComponent;
 
         #endregion
 
@@ -39,9 +40,9 @@ namespace LogicalSystem
 
         private void Awake()
         {
-            if (logicalType != null)
+            if (sourceType != null)
             {
-                _logicalComponent = Activator.CreateInstance(logicalType) as ISourceComponent;
+                _sourceComponent = Activator.CreateInstance(sourceType) as ISourceComponent;
             }
         }
 
