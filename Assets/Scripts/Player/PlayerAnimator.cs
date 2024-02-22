@@ -2,24 +2,78 @@ using UnityEngine;
 
 namespace Player
 {
+    /// <summary>
+    /// Animator for player
+    /// </summary>
     [RequireComponent(typeof(Animator))]
     public class PlayerAnimator : MonoBehaviour
     {
-        [SerializeField, Range(0f, 0.5f)] private float smoothTime;
+        #region Serialized Fields
 
+        /// <summary>
+        /// Time to smooth transitions between walking and sprinting animations
+        /// </summary>
+        [Tooltip("Time to smooth transitions between walking and sprinting animations")]
+        [SerializeField, Range(0f, 0.5f)]
+        private float smoothTime;
+
+        #endregion
+
+        #region Private Variables
+
+        /// <summary>
+        /// Cached Animator
+        /// </summary>
         private Animator _animator;
+
+        /// <summary>
+        /// Cached IMovementController realization
+        /// </summary>
         private IMovementController _movementController;
 
+        /// <summary>
+        /// Cached current walking speed
+        /// </summary>
         private float _walkingSpeed;
+
+        /// <summary>
+        /// Cached sprinting state
+        /// </summary>
         private bool _isSprinting;
+
+        /// <summary>
+        /// Cached jumping state
+        /// </summary>
         private bool _isJumping;
 
+        /// <summary>
+        /// Smoothed walking speed
+        /// </summary>
         private float _smoothedWalkingSpeed;
+
+        /// <summary>
+        /// Velocity of change smoothedWalkingSpeed
+        /// </summary>
         private float _smoothVelocity;
 
+        /// <summary>
+        /// Hash of forward parameter
+        /// </summary>
         private static readonly int Forward = Animator.StringToHash("Forward");
+
+        /// <summary>
+        /// Hash of jumping parameter
+        /// </summary>
         private static readonly int IsJumping = Animator.StringToHash("IsJumping");
+
+        /// <summary>
+        /// Hash of falling parameter
+        /// </summary>
         private static readonly int IsFalling = Animator.StringToHash("IsFalling");
+
+        #endregion
+
+        #region MonoBehaviour
 
         private void Awake()
         {
@@ -55,11 +109,20 @@ namespace Player
             }
         }
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Smooth walking speed, based on smoothTime
+        /// </summary>
         private void SmoothValues()
         {
             _smoothedWalkingSpeed =
                 Mathf.SmoothDamp(_smoothedWalkingSpeed, _isSprinting ? _walkingSpeed * 2 : _walkingSpeed,
                     ref _smoothVelocity, smoothTime);
         }
+
+        #endregion
     }
 }
