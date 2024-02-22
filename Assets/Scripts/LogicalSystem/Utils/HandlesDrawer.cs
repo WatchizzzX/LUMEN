@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace LogicalSystem.Utils
 {
+    /// <summary>
+    /// Contains info for debug drawing
+    /// </summary>
     public static class HandlesDrawer
     {
 #if UNITY_EDITOR
