@@ -9,22 +9,88 @@ namespace Input
     [RequireComponent(typeof(PlayerInput))]
     public class PlayerInputHandler : MonoBehaviour
     {
+        #region Serialized Fields
+
+        /// <summary>
+        /// On change move direction
+        /// </summary>
+        [Tooltip("On change move direction")]
         [SerializeField] private UnityEvent<Vector2> onMoveEvent;
+        
+        /// <summary>
+        /// On change sprint state
+        /// </summary>
+        [Tooltip("On change sprint state")]
         [SerializeField] private UnityEvent<bool> onSprintEvent;
+        
+        /// <summary>
+        /// Trigger on jump
+        /// </summary>
+        [Tooltip("Trigger on jump")]
         [SerializeField] private UnityEvent onJumpEvent;
+        
+        /// <summary>
+        /// Trigger on interact
+        /// </summary>
+        [Tooltip("Trigger on interact")]
         [SerializeField] private UnityEvent onInteractEvent;
 
+        #endregion
+
+        #region Private Variables
+
+        /// <summary>
+        /// Cached PlayerInput
+        /// </summary>
         private PlayerInput _input;
 
+        /// <summary>
+        /// Action for move direction
+        /// </summary>
         private InputAction _moveAction;
+        
+        /// <summary>
+        /// Action for sprint
+        /// </summary>
         private InputAction _sprintAction;
+        
+        /// <summary>
+        /// Action for jump
+        /// </summary>
         private InputAction _jumpAction;
+        
+        /// <summary>
+        /// Action for interact
+        /// </summary>
         private InputAction _interactAction;
 
+        #endregion
+
+        #region Public Fields
+
+        /// <summary>
+        /// Move direction
+        /// </summary>
         public Vector2 Move { get; private set; }
+        
+        /// <summary>
+        /// Sprint state
+        /// </summary>
         public bool IsSprinting { get; private set; }
+        
+        /// <summary>
+        /// Jumping state
+        /// </summary>
         public bool IsJumping { get; private set; }
+        
+        /// <summary>
+        /// Interacting state
+        /// </summary>
         public bool IsInteracting { get; private set; }
+
+        #endregion
+
+        #region MonoBehaviour
 
         private void Awake()
         {
@@ -59,6 +125,14 @@ namespace Input
             _interactAction.canceled += OnInteract;
         }
 
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Event on interact key pressed or unpressed
+        /// </summary>
+        /// <param name="obj">CallbackContext</param>
         private void OnInteract(InputAction.CallbackContext obj)
         {
             IsInteracting = obj.ReadValueAsButton();
@@ -66,6 +140,10 @@ namespace Input
                 onInteractEvent.Invoke();
         }
 
+        /// <summary>
+        /// Event on jump key pressed or unpressed
+        /// </summary>
+        /// <param name="obj">CallbackContext</param>
         private void OnJump(InputAction.CallbackContext obj)
         {
             IsJumping = obj.ReadValueAsButton();
@@ -73,16 +151,26 @@ namespace Input
                 onJumpEvent.Invoke();
         }
 
+        /// <summary>
+        /// Event on sprint key pressed or unpressed
+        /// </summary>
+        /// <param name="obj">CallbackContext</param>
         private void OnSprint(InputAction.CallbackContext obj)
         {
             IsSprinting = obj.ReadValueAsButton();
             onSprintEvent.Invoke(IsSprinting);
         }
 
+        /// <summary>
+        /// Event on move key pressed or unpressed
+        /// </summary>
+        /// <param name="obj">CallbackContext</param>
         private void OnMove(InputAction.CallbackContext obj)
         {
             Move = obj.ReadValue<Vector2>();
             onMoveEvent.Invoke(Move);
         }
+
+        #endregion
     }
 }
