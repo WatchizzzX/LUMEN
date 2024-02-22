@@ -1,22 +1,57 @@
-using System;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace LogicalSystem
 {
+    /// <summary>
+    /// A simple class that implements changing the color of the cable, depending on the signal from the input
+    /// </summary>
     [RequireComponent(typeof(MeshRenderer))]
     public class CableController : MonoBehaviour
     {
-        [SerializeField] private Color onColor = Color.yellow;
-        [SerializeField] private Color offColor = Color.black;
-        [SerializeField] private float changeTime = 0.5f;
+        #region Serialized Fields
 
-        [SerializeField] public ConnectableComponent input;
-        
+        /// <summary>
+        /// Color when cable is enable
+        /// </summary>
+        [Tooltip("Color when cable is enable")] [SerializeField]
+        private Color onColor = Color.yellow;
+
+        /// <summary>
+        /// Color when cable is disable
+        /// </summary>
+        [Tooltip("Color when cable is disable")] [SerializeField]
+        private Color offColor = Color.black;
+
+        /// <summary>
+        /// Time to change color
+        /// </summary>
+        [Tooltip("Time to change color")] [SerializeField]
+        private float changeTime = 0.5f;
+
+        /// <summary>
+        /// Input ConnectableComponent
+        /// </summary>
+        [Tooltip("Input ConnectableComponent")] [SerializeField]
+        public ConnectableComponent input;
+
+        #endregion
+
+        #region Private Variables
+
+        /// <summary>
+        /// Cached MeshRenderer
+        /// </summary>
         private MeshRenderer _meshRenderer;
 
+        /// <summary>
+        /// Internal state
+        /// </summary>
         private bool _isEnabled;
+
+        #endregion
+
+        #region MonoBehaviour
 
         private void Awake()
         {
@@ -31,15 +66,27 @@ namespace LogicalSystem
             input.ValueChanged -= OnValueChanged;
         }
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Callback when value of input is changed
+        /// </summary>
         private void OnValueChanged()
         {
             _isEnabled = input.Result;
             ChangeColor();
         }
 
+        /// <summary>
+        /// Change color of cable. Based on internal state
+        /// </summary>
         private void ChangeColor()
         {
             _meshRenderer.material.DOColor(_isEnabled ? onColor : offColor, changeTime);
         }
+
+        #endregion
     }
 }
