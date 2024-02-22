@@ -1,77 +1,240 @@
-using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utils;
 using Utils.Extensions;
 using Logger = Utils.Logger;
 
 namespace Player
 {
+    /// <summary>
+    /// Player movement controller
+    /// </summary>
     [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
     public class PlayerController : MonoBehaviour, IMovementController
     {
-        [SerializeField, Range(0f, 100f)] private float walkSpeed = 1.2f, runSpeed = 4.2f;
+        #region Serialized Fileds
 
-        [SerializeField, Range(0f, 100f)] private float maxAcceleration = 10f, maxAirAcceleration = 1f;
+        /// <summary>
+        /// Walk speed
+        /// </summary>
+        [Header("Movement settings")] [Tooltip("Walk speed (m/s)")] [SerializeField, Range(0f, 100f)]
+        private float walkSpeed = 1.2f;
 
-        [SerializeField, Range(0f, 1)] private float smoothRotationTime = 0.5f;
+        /// <summary>
+        /// Run speed
+        /// </summary>
+        [Tooltip("Run speed (m/s)")] [SerializeField, Range(0f, 100f)]
+        private float runSpeed = 4.2f;
 
-        [SerializeField, Range(0f, 10f)] private float jumpHeight = 2f;
+        /// <summary>
+        /// Acceleration force when player on ground
+        /// </summary>
+        [Tooltip("Acceleration force on ground")] [SerializeField, Range(0f, 100f)]
+        private float maxAcceleration = 10f;
 
-        [SerializeField, Range(0, 5)] private int maxAirJumps = 0;
+        /// <summary>
+        /// Acceleration force when player in air
+        /// </summary>
+        [Tooltip("Acceleration force in air")] [SerializeField, Range(0f, 100f)]
+        private float maxAirAcceleration = 1f;
 
-        [SerializeField, Range(0f, 0.5f)] private float coyoteTime;
-        [SerializeField, Range(0f, 1f)] private float jumpCooldown;
+        /// <summary>
+        /// The time for which the player turns in desired direction
+        /// </summary>
+        [Space(2f), Header("Rotation settings")]
+        [Tooltip("The time for which the player turns")]
+        [SerializeField, Range(0f, 1)]
+        private float smoothRotationTime = 0.5f;
 
-        [SerializeField, Range(0, 90)] private float maxGroundAngle = 25f, maxStairsAngle = 50f;
+        /// <summary>
+        /// Jump height
+        /// </summary>
+        [Space(2f), Header("Jumping settings")] [Tooltip("Jump height in metres")] [SerializeField, Range(0f, 10f)]
+        private float jumpHeight = 2f;
 
-        [SerializeField, Range(0f, 100f)] private float maxSnapSpeed = 100f;
+        /// <summary>
+        /// Max count of air jumps
+        /// </summary>
+        [Tooltip("Max jumps count in air")] [SerializeField, Range(0, 5)]
+        private int maxAirJumps = 0;
 
-        [SerializeField, Min(0f)] private float probeDistance = 1f;
+        /// <summary>
+        /// Time for coyote jump
+        /// </summary>
+        [Tooltip("Time for coyote jump")] [SerializeField, Range(0f, 0.5f)]
+        private float coyoteTime;
 
-        [SerializeField] private LayerMask probeMask = -1, stairsMask = -1;
+        /// <summary>
+        /// Cooldown for next jump
+        /// </summary>
+        [Tooltip("Cooldown for next jump")] [SerializeField, Range(0f, 1f)]
+        private float jumpCooldown;
 
-        [SerializeField] private TextMeshProUGUI debugText;
+        /// <summary>
+        /// The maximum angle at which the ground remains the ground"
+        /// </summary>
+        [Space(2f), Header("Ground detection settings")]
+        [Tooltip("The maximum angle at which the ground remains the ground")]
+        [SerializeField, Range(0, 90)]
+        private float maxGroundAngle = 25f;
 
+        /// <summary>
+        /// The maximum angle at which the stairs remains the stairs
+        /// </summary>
+        [Tooltip("The maximum angle at which the stairs remains the stairs")] [SerializeField, Range(0, 90)]
+        private float maxStairsAngle = 50f;
+
+        /// <summary>
+        /// Layer for ground
+        /// </summary>
+        [Tooltip("Layer for ground")] [SerializeField]
+        private LayerMask probeMask = -1;
+
+        /// <summary>
+        /// Layer for stairs
+        /// </summary>
+        [Tooltip("Layer for stairs")] [SerializeField]
+        private LayerMask stairsMask = -1;
+
+        /// <summary>
+        /// The maximum speed at which the player will be pressed to the ground
+        /// </summary>
+        [Space(2f), Header("Snap settings")]
+        [Tooltip("The maximum speed at which the player will be pressed to the ground")]
+        [SerializeField, Range(0f, 100f)]
+        private float maxSnapSpeed = 100f;
+
+        /// <summary>
+        /// The maximum distance to the ground at which the player will still be attracted to the ground
+        /// </summary>
+        [Tooltip("The maximum distance to the ground at which the player will still be attracted to the ground")]
+        [SerializeField, Min(0f)]
+        private float probeDistance = 1f;
+
+        [Tooltip("Debug text")] [SerializeField]
+        private TextMeshProUGUI debugText;
+
+        #endregion
+
+        #region Private Variables
+
+        /// <summary>
+        /// Cached Rigidbody
+        /// </summary>
         private Rigidbody _body;
 
-        private Vector3 _velocity, _desiredVelocity;
+        /// <summary>
+        /// Calculated velocity
+        /// </summary>
+        private Vector3 _velocity;
+
+        /// <summary>
+        /// Desired velocity according to input
+        /// </summary>
+        private Vector3 _desiredVelocity;
+
+        /// <summary>
+        /// Cached jump state
+        /// </summary>
         private bool _desiredJump;
 
+        /// <summary>
+        /// Calculated angle for rotation
+        /// </summary>
         private float _calculatedAngle;
+
+        /// <summary>
+        /// Velocity of change calculatedAngle
+        /// </summary>
         private float _currentAngleVelocity;
 
-        private Vector3 _contactNormal, _steepNormal;
-        private int _groundContactCount, _steepContactCount;
+        /// <summary>
+        /// Normal of contact point
+        /// </summary>
+        private Vector3 _contactNormal;
 
+        /// <summary>
+        /// Normal of contact, when player on steep
+        /// </summary>
+        private Vector3 _steepNormal;
+
+        /// <summary>
+        /// Count of contacts with ground
+        /// </summary>
+        private int _groundContactCount;
+
+        /// <summary>
+        /// Count of contacts with steep
+        /// </summary>
+        private int _steepContactCount;
+
+        /// <summary>
+        /// Cached input move
+        /// </summary>
         private Vector2 _cachedDirection;
+
+        /// <summary>
+        /// Cached internal state of sprinting
+        /// </summary>
         private bool _cachedSprinting;
+
+        /// <summary>
+        /// Cached internal state of sprinting in air
+        /// </summary>
         private bool _cachedInAirSprinting;
 
+        /// <summary>
+        /// Internal state of jump
+        /// </summary>
         private int _jumpPhase;
-        private int _stepsSinceLastGrounded, _stepsSinceLastJump;
 
+        /// <summary>
+        /// Counter steps from last ground
+        /// </summary>
+        private int _stepsSinceLastGrounded;
+
+        /// <summary>
+        /// Counter steps from last jump
+        /// </summary>
+        private int _stepsSinceLastJump;
+
+        /// <summary>
+        /// Cached camera Transform
+        /// </summary>
         private Transform _cameraPosition;
 
-        private float _minGroundDotProduct, _minStairsDotProduct;
+        /// <summary>
+        /// Calculated internal value to check ground
+        /// </summary>
+        private float _minGroundDotProduct;
 
+        /// <summary>
+        /// Calculated internal value to check stairs
+        /// </summary>
+        private float _minStairsDotProduct;
+
+        /// <summary>
+        /// Internal timer for coyote jump
+        /// </summary>
         private float _internalCoyoteTimer;
+
+        /// <summary>
+        /// Internal timer for jump
+        /// </summary>
         private float _internalJumpCooldownTimer;
+
+        #endregion
+
+        #region Public Fields
 
         public bool OnGround => _groundContactCount > 0;
         public bool OnSteep => _steepContactCount > 0;
         public float DesiredSpeed => _cachedSprinting ? runSpeed : walkSpeed;
         public Vector3 HorizontalVelocity => new(_body.velocity.x, 0f, _body.velocity.z);
 
-        public MovementState GetMovementState()
-        {
-            var velocity = _body.velocity;
-            var isFalling = (OnSteep && !OnGround) || (!OnGround && velocity.y < 0);
-            var relativeSpeed = HorizontalVelocity.magnitude / DesiredSpeed;
-            var isJumping = _desiredJump && _internalJumpCooldownTimer <= 0f || (!OnGround && velocity.y >= 0);
-            return new MovementState(isFalling, relativeSpeed, isJumping, _cachedSprinting);
-        }
+        #endregion
+
+        #region MonoBehaviour
 
         private void Awake()
         {
@@ -115,11 +278,40 @@ namespace Player
             ClearState();
         }
 
+        private void OnCollisionEnter(Collision collision)
+        {
+            EvaluateCollision(collision);
+        }
+
+        private void OnCollisionStay(Collision collision)
+        {
+            EvaluateCollision(collision);
+        }
+
+        #endregion
+
+        #region Methods
+
+        public MovementState GetMovementState()
+        {
+            var velocity = _body.velocity;
+            var isFalling = (OnSteep && !OnGround) || (!OnGround && velocity.y < 0);
+            var relativeSpeed = HorizontalVelocity.magnitude / DesiredSpeed;
+            var isJumping = _desiredJump && _internalJumpCooldownTimer <= 0f || (!OnGround && velocity.y >= 0);
+            return new MovementState(isFalling, relativeSpeed, isJumping, _cachedSprinting);
+        }
+
+        /// <summary>
+        /// Draw debug info
+        /// </summary>
         private void DebugText()
         {
             debugText.text = $"CoyoteTime:{_internalCoyoteTimer:f2}. OnGround:{OnGround}. OnSteep:{OnSteep}";
         }
 
+        /// <summary>
+        /// Update internal timers. Call on every Update
+        /// </summary>
         private void UpdateTimers()
         {
             if (_internalCoyoteTimer > 0f)
@@ -128,6 +320,9 @@ namespace Player
                 _internalJumpCooldownTimer -= Time.deltaTime;
         }
 
+        /// <summary>
+        /// Rotate controller in velocity direction
+        /// </summary>
         private void RotateToVelocity()
         {
             var horizontalVelocity = HorizontalVelocity;
@@ -140,12 +335,18 @@ namespace Player
             transform.rotation = Quaternion.Euler(0, _calculatedAngle, 0);
         }
 
+        /// <summary>
+        /// Clear internal state in end of FixedUpdate
+        /// </summary>
         private void ClearState()
         {
             _groundContactCount = _steepContactCount = 0;
             _contactNormal = _steepNormal = Vector3.zero;
         }
 
+        /// <summary>
+        /// Update internal state in start of FixedUpdate
+        /// </summary>
         private void UpdateState()
         {
             _stepsSinceLastGrounded += 1;
@@ -188,6 +389,10 @@ namespace Player
             }
         }
 
+        /// <summary>
+        /// Try to snap controller to ground
+        /// </summary>
+        /// <returns>Snapping is successful</returns>
         private bool SnapToGround()
         {
             if (_stepsSinceLastGrounded > 1 || _stepsSinceLastJump <= 2)
@@ -222,6 +427,10 @@ namespace Player
             return true;
         }
 
+        /// <summary>
+        /// Check steep contact
+        /// </summary>
+        /// <returns></returns>
         private bool CheckSteepContacts()
         {
             if (_steepContactCount <= 1) return false;
@@ -235,6 +444,9 @@ namespace Player
             return true;
         }
 
+        /// <summary>
+        /// Adjust velocity with according to input
+        /// </summary>
         private void AdjustVelocity()
         {
             var xAxis = ProjectOnContactPlane(Vector3.right).normalized;
@@ -252,6 +464,9 @@ namespace Player
             _velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
         }
 
+        /// <summary>
+        /// Jump handler
+        /// </summary>
         private void Jump()
         {
             if (_internalJumpCooldownTimer > 0f) return;
@@ -297,16 +512,10 @@ namespace Player
             _velocity += jumpDirection * jumpSpeed;
         }
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            EvaluateCollision(collision);
-        }
-
-        private void OnCollisionStay(Collision collision)
-        {
-            EvaluateCollision(collision);
-        }
-
+        /// <summary>
+        /// Evaluate internal state, according on every contact point
+        /// </summary>
+        /// <param name="collision">Detected collision</param>
         private void EvaluateCollision(Collision collision)
         {
             var minDot = GetMinDot(collision.gameObject.layer);
@@ -326,16 +535,29 @@ namespace Player
             }
         }
 
+        /// <summary>
+        /// Project vector on ground contact point
+        /// </summary>
+        /// <param name="vector">Input vector</param>
+        /// <returns>Projected vector</returns>
         private Vector3 ProjectOnContactPlane(Vector3 vector)
         {
             return vector - _contactNormal * Vector3.Dot(vector, _contactNormal);
         }
 
+        /// <summary>
+        /// Get minimal dot product according to physic layer
+        /// </summary>
+        /// <param name="layer"></param>
+        /// <returns></returns>
         private float GetMinDot(int layer)
         {
             return (stairsMask & (1 << layer)) == 0 ? _minGroundDotProduct : _minStairsDotProduct;
         }
 
+        /// <summary>
+        /// Calculate desired movement vector
+        /// </summary>
         private void CalculateMovementVector()
         {
             var convertedDirection = _cachedDirection.ToXZVector3();
@@ -345,16 +567,26 @@ namespace Player
             _desiredVelocity = new Vector3(convertedDirection.x, 0, convertedDirection.z);
         }
 
+        /// <summary>
+        /// Compensate sliding on steep
+        /// </summary>
         private void CompensateStairsSliding()
         {
             _velocity -= ProjectOnContactPlane(Physics.gravity) * Time.fixedDeltaTime;
         }
 
+        /// <summary>
+        /// Rotate input, according to camera
+        /// </summary>
         private void RotateVelocityAccordingToCamera()
         {
             var cameraRotation = Quaternion.AngleAxis(_cameraPosition.eulerAngles.y, Vector3.up);
             _desiredVelocity = cameraRotation * _desiredVelocity;
         }
+
+        #endregion
+
+        #region Callbacks
 
         public void SetMoveDirection(Vector2 input)
         {
@@ -375,5 +607,7 @@ namespace Player
         {
             _desiredJump = true;
         }
+
+        #endregion
     }
 }
