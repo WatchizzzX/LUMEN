@@ -1,9 +1,11 @@
 using System.Linq;
 using LogicalSystem.Interfaces;
-using UnityEngine;
 
 namespace LogicalSystem.LogicalElements
 {
+    /// <summary>
+    /// And implementation of LogicalComponent
+    /// </summary>
     public class And : ILogicalComponent
     {
         public bool Calculate(bool[] inputs)
