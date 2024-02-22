@@ -3,20 +3,29 @@ using UnityEngine.Events;
 
 namespace InteractionSystem.Interactables
 {
+    /// <summary>
+    /// Standard implementation of interactable button with event OnClick 
+    /// </summary>
     public class InteractableButton : BasicInteractable
     {
+        #region Serialized Fields
+
         [SerializeField] private UnityEvent onClick;
 
-        private bool _isEnabled;
+        #endregion
+
+        #region Interface Realizations
 
         public override void Interact()
         {
-            return;
+            Interact(null);
         }
 
         public override void Interact(InteractorController interactor)
         {
             onClick.Invoke();
         }
+
+        #endregion
     }
 }
