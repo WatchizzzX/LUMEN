@@ -5,23 +5,71 @@ using Logger = Utils.Logger;
 
 namespace InteractionSystem
 {
+    /// <summary>
+    /// Interactor controller. Work with BasicInteractable implementations
+    /// </summary>
     public class InteractorController : MonoBehaviour
     {
-        [SerializeField] private LayerMask interactableLayer;
-        [SerializeField, Range(0.1f, 5f)] private float interactiveRange = 0.5f;
-        [SerializeField] private int bufferSize = 3;
+        #region Serialized Fields
 
+        /// <summary>
+        /// Interactive layer
+        /// </summary>
+        [Tooltip("Which layer will be as Interactive layer")] [SerializeField]
+        private LayerMask interactableLayer;
+
+        /// <summary>
+        /// Interaction range
+        /// </summary>
+        [Tooltip("Range in which InteractorController work")] [SerializeField, Range(0.1f, 5f)]
+        private float interactiveRange = 0.5f;
+
+        /// <summary>
+        /// A buffer into which all interactive objects found in the area will be placed. Size affects performance
+        /// </summary>
+        [Tooltip("Buffer size. Optimal size is 3")] [SerializeField]
+        private int bufferSize = 3;
+
+        #endregion
+
+        #region Private Variables
+
+        /// <summary>
+        /// Internal buffer of interactables objects
+        /// </summary>
         private Collider[] _colliders;
+
+        /// <summary>
+        /// Count of founded interactable objects. Max is bufferSize
+        /// </summary>
         private int _interactableObjectsCount;
+
+        /// <summary>
+        /// The nearest object among those found
+        /// </summary>
         private GameObject _closestInteractableObject;
+
+        /// <summary>
+        /// Cached interactable implementation
+        /// </summary>
         private IInteractable _interactable;
-        private InteractableType _interactableType;
+
+        #endregion
+
+        #region MonoBehaviour
 
         private void Start()
         {
             _colliders = new Collider[bufferSize];
         }
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// A public method for processing interactive event
+        /// </summary>
         public void Interact()
         {
             _interactableObjectsCount =
@@ -45,11 +93,11 @@ namespace InteractionSystem
                 return;
             }
 
-            _interactableType = _interactable.GetInteractableType();
-            
             if (_interactableObjectsCount == 0) return;
 
             _interactable.Interact(this);
         }
+
+        #endregion
     }
 }
