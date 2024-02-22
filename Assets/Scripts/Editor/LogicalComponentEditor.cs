@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using LogicalSystem;
 using UnityEditor;
 using UnityEngine;
@@ -11,12 +10,30 @@ namespace Editor
     [CustomEditor(typeof(LogicalComponent))]
     public class LogicalComponentEditor : UnityEditor.Editor
     {
-        private const string LogicalPrefabs = "LogicalPrefabs";
-        private const string CablePrefab = "Cable/Cable";
-        private static readonly string[] AllowedChilds = { "Cable", "CableNodes" };
+        #region Private Const
 
+        /// <summary>
+        /// Path to Logical Node prefabs
+        /// </summary>
+        private const string LogicalPrefabs = "LogicalPrefabs";
+
+        #endregion
+        
+        #region Private Variables
+
+        /// <summary>
+        /// Cached LogicalComponent
+        /// </summary>
         private LogicalComponent _logicalComponent;
+        
+        /// <summary>
+        /// Cached Type
+        /// </summary>
         private Type _type;
+
+        #endregion
+
+        #region Editor Methods
 
         public override void OnInspectorGUI()
         {
@@ -43,29 +60,14 @@ namespace Editor
                 $"Successfully spawned {_type}Node");
         }
 
-        /*private void GenerateCables()
-        {
-            if (_logicalComponent.transform.Find("Cable")) return;
-            
-            foreach (var input in _logicalComponent.Inputs)
-            {
-                var prefab = Resources.Load<GameObject>(CablePrefab);
-            
-                var spawnedCable = (GameObject)PrefabUtility.InstantiatePrefab(prefab, _logicalComponent.transform);
-                spawnedCable.name = "Cable";
+        #endregion
 
-                var splineComputer = spawnedCable.GetComponent<SplineComputer>();
-                splineComputer.SetPoint(0, new SplinePoint(_logicalComponent.transform.position));
-                splineComputer.SetPoint(1, new SplinePoint(input.transform.position));
+        #region Methods
 
-                var tubeGenerator = spawnedCable.GetComponent<TubeGenerator>();
-                tubeGenerator.Bake(true, true);
-
-                var cableController = spawnedCable.GetComponent<CableController>();
-                cableController.input = input;
-            }
-        }*/
-
+        /// <summary>
+        /// Check if node prefab are correctly spawned
+        /// </summary>
+        /// <returns>True if need to spawn prefab, and else if everything is ok</returns>
         private bool CheckSpawnedNode()
         {
             switch (_logicalComponent.transform.childCount)
@@ -81,24 +83,6 @@ namespace Editor
                 }
                 case > 1:
                 {
-                    var nodeCount = 0;
-                    for (var i = 0; i < _logicalComponent.transform.childCount; i++)
-                    {
-                        if (!AllowedChilds.Contains(_logicalComponent.transform.GetChild(i).name))
-                        {
-                            nodeCount++;
-                        }
-                    }
-
-                    if (nodeCount == 1)
-                    {
-                        var child = _logicalComponent.transform.GetChild(0);
-                        if (_type.Name + "Node" == child.name) return false;
-                
-                        Logger.Log(LoggerChannel.LogicalSystem, Priority.Info, $"{_logicalComponent.name} has wrong child. Type: {_type.Name} - Child: {child.name} It will be replaced");
-                        DestroyImmediate(child.gameObject);
-                        return true;
-                    }
                     Logger.Log(LoggerChannel.LogicalSystem, Priority.Warning,
                         $"{_logicalComponent.name} has a multiple childs. They will be deleted");
                     for (var i = 0; i < _logicalComponent.transform.childCount; i++)
@@ -112,5 +96,7 @@ namespace Editor
                     return true;
             }
         }
+
+        #endregion
     }
 }
