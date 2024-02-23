@@ -1,3 +1,19 @@
+# [0.7.0](https://github.com/WatchizzzX/LUMEN/compare/v0.6.1...v0.7.0) (2024-02-23)
+
+
+### Bug Fixes
+
+* Fix LogicalComponent ([150b11e](https://github.com/WatchizzzX/LUMEN/commit/150b11ef3470ecbf06394746915eb9d52250a174))
+* Fix LogicalComponentEditor ([4ba192a](https://github.com/WatchizzzX/LUMEN/commit/4ba192ae1ceb46a1da572ef173e101404f7c3c45))
+* Fix OutputComponent ([7247510](https://github.com/WatchizzzX/LUMEN/commit/72475106516aeb9b9d0efe65a0e0efc04c7157f7))
+
+
+### Features
+
+* Add decreasing velocity when player on slope ([cd743bd](https://github.com/WatchizzzX/LUMEN/commit/cd743bd9b1627ae106d888186016cff49e20f4bb))
+* Add features for PickupController ([1988d5c](https://github.com/WatchizzzX/LUMEN/commit/1988d5c195e9230c867b53b259b923717b89c176))
+* Add isEnabledOnStart option ([b94839a](https://github.com/WatchizzzX/LUMEN/commit/b94839ae738f370990fd3ee6b538ef4eceb80652))
+
 ## [0.6.1](https://github.com/WatchizzzX/LUMEN/compare/v0.6.0...v0.6.1) (2024-02-22)
 
 
