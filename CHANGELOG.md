@@ -1,3 +1,10 @@
+## [0.7.1](https://github.com/WatchizzzX/LUMEN/compare/v0.7.0...v0.7.1) (2024-02-23)
+
+
+### Bug Fixes
+
+* Fix holding by adding rotation ([b8517c4](https://github.com/WatchizzzX/LUMEN/commit/b8517c4d5c8d22ad0810f590fed4a0280a849a20))
+
 # [0.7.0](https://github.com/WatchizzzX/LUMEN/compare/v0.6.1...v0.7.0) (2024-02-23)
 
 
