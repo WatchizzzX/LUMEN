@@ -46,6 +46,8 @@ namespace Editor
             
             if(!CheckSpawnedNode()) return;
 
+            if (_type == null) return;
+
             var prefab = Resources.Load<GameObject>($"{LogicalPrefabs}/{_type.Name}Node");
 
             if (prefab == null)
