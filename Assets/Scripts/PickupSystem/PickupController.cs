@@ -1,6 +1,7 @@
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 using Utils;
 using Logger = Utils.Logger;
 
@@ -56,6 +57,30 @@ namespace PickupSystem
         private float angelOfView = 65f;
 
         /// <summary>
+        /// Pickable cube size
+        /// </summary>
+        [Tooltip("Pickable cube size")] [SerializeField]
+        private Vector3 cubeSize;
+
+        /// <summary>
+        /// Speed to translate object to hold point
+        /// </summary>
+        [Tooltip("Speed to translate object to hold point")] [SerializeField] [Min(1f)]
+        private float translationSpeed = 10f;
+
+        /// <summary>
+        /// When controller successful place object
+        /// </summary>
+        [Header("Events")] [Tooltip("When controller successful place object")] [SerializeField]
+        private UnityEvent onCorrectPlacement;
+
+        /// <summary>
+        /// When controller can't place object in current place
+        /// </summary>
+        [Tooltip("When controller can't place object in current place")] [SerializeField]
+        private UnityEvent onWrongPlacement;
+
+        /// <summary>
         /// A buffer into which all pickable objects found in the area will be placed. Size affects performance
         /// </summary>
         [Space(2f)] [Header("Other Settings")] [SerializeField] [Tooltip("Buffer size. Optimal size is 3")]
@@ -74,6 +99,16 @@ namespace PickupSystem
         /// Rigidbody of held GameObject
         /// </summary>
         private Rigidbody _heldRigidbody;
+
+        /// <summary>
+        /// Collider of held GameObject
+        /// </summary>
+        private Collider _heldCollider;
+
+        /// <summary>
+        /// MeshRenderer of held GameObject
+        /// </summary>
+        private MeshRenderer _heldMeshRenderer;
 
         /// <summary>
         /// Internal state if some object are held
@@ -104,7 +139,7 @@ namespace PickupSystem
             _colliders = new Collider[bufferSize];
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (_isHoldingObject)
                 MoveObject();
@@ -121,7 +156,18 @@ namespace PickupSystem
         {
             if (_isHoldingObject)
             {
-                UnchildObject();
+                var overlapCollider = new Collider[1];
+                Physics.OverlapBoxNonAlloc(frontHoldPoint.position, cubeSize / 2, overlapCollider,
+                    _heldGameObject.transform.rotation);
+                if (overlapCollider[0] == null)
+                {
+                    UnchildObject();
+                }
+                else
+                {
+                    onWrongPlacement.Invoke();
+                    Logger.Log(LoggerChannel.PickableSystem, Priority.Info, "Can't place object in this place");
+                }
             }
             else
             {
@@ -178,14 +224,20 @@ namespace PickupSystem
             Logger.Log(LoggerChannel.PickableSystem, Priority.Info, $"Pickup object: {_heldGameObject.name}");
 
             _heldRigidbody.useGravity = false;
-            _heldRigidbody.drag = 5;
+            _heldRigidbody.drag = 1;
             _heldRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
+            _heldCollider = _heldGameObject.GetComponent<Collider>();
+            _heldCollider.enabled = false;
+
+            _heldMeshRenderer = _heldGameObject.GetComponent<MeshRenderer>();
+            var newColor = _heldMeshRenderer.material.color;
+            newColor.a = 0.3f;
+            _heldMeshRenderer.material.color = newColor;
+
             var animationSequence = DOTween.Sequence();
-            animationSequence.AppendCallback(() => { _heldGameObject.transform.SetParent(frontHoldPoint); })
-                .Append(_heldGameObject.transform.DOLocalMove(Vector3.zero, timeToMove))
-                .AppendCallback(() => { _heldGameObject.transform.SetParent(holdPoint); })
-                .Append(_heldGameObject.transform.DOLocalMove(Vector3.zero, timeToMove));
+            animationSequence.Append(_heldGameObject.transform.DOMove(frontHoldPoint.position, timeToMove))
+                .Append(_heldGameObject.transform.DOMove(holdPoint.position, timeToMove));
         }
 
         /// <summary>
@@ -195,8 +247,7 @@ namespace PickupSystem
         {
             _isHoldingObject = false;
             var animationSequence = DOTween.Sequence();
-            animationSequence.AppendCallback(() => { _heldGameObject.transform.SetParent(frontHoldPoint); })
-                .Append(_heldGameObject.transform.DOLocalMove(Vector3.zero, timeToMove))
+            animationSequence.Append(_heldGameObject.transform.DOMove(frontHoldPoint.position, timeToMove))
                 .AppendCallback(DropObject);
         }
 
@@ -205,13 +256,23 @@ namespace PickupSystem
         /// </summary>
         private void DropObject()
         {
-            _heldGameObject.transform.SetParent(null);
             _heldRigidbody.useGravity = true;
             _heldRigidbody.drag = 1;
             _heldRigidbody.constraints = RigidbodyConstraints.None;
+            _heldRigidbody.velocity = Vector3.zero;
 
+            _heldCollider.enabled = true;
+
+            var newColor = _heldMeshRenderer.material.color;
+            newColor.a = 1;
+            _heldMeshRenderer.material.color = newColor;
+
+            _heldMeshRenderer = null;
+            _heldCollider = null;
             _heldGameObject = null;
             _heldRigidbody = null;
+            
+            onCorrectPlacement.Invoke();
         }
 
         /// <summary>
@@ -221,8 +282,8 @@ namespace PickupSystem
         {
             if (!(Vector3.Distance(_heldGameObject.transform.position, holdPoint.position) > 0.1f)) return;
 
-            var moveDirection = holdPoint.position - _heldGameObject.transform.position;
-            _heldRigidbody.AddForce(moveDirection * pickupForce);
+            _heldGameObject.transform.Translate((holdPoint.position - _heldGameObject.transform.position) *
+                                                (Time.fixedDeltaTime * translationSpeed));
         }
 
         #endregion
