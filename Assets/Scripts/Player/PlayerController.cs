@@ -259,12 +259,17 @@ namespace Player
             RotateVelocityAccordingToCamera();
             RotateToVelocity();
             UpdateTimers();
-            DebugText();
+            if (debugText)
+                DebugText();
         }
 
         private void FixedUpdate()
         {
             UpdateState();
+            
+            if (OnSteep && !OnGround)
+                DecreaseVelocityOnSteep();
+            
             AdjustVelocity();
 
             if (_desiredJump)
@@ -565,6 +570,16 @@ namespace Player
             convertedDirection *= DesiredSpeed;
 
             _desiredVelocity = new Vector3(convertedDirection.x, 0, convertedDirection.z);
+        }
+
+        private void DecreaseVelocityOnSteep()
+        {
+            var dotProduct = Vector3.Dot(_desiredVelocity, _steepNormal);
+
+            if (dotProduct < 0)
+            {
+                _desiredVelocity = Vector3.zero;
+            }
         }
 
         /// <summary>
