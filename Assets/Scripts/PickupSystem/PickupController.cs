@@ -67,6 +67,12 @@ namespace PickupSystem
         /// </summary>
         [Tooltip("Speed to translate object to hold point")] [SerializeField] [Min(1f)]
         private float translationSpeed = 10f;
+        
+        /// <summary>
+        /// Speed to rotate object to zero rotation
+        /// </summary>
+        [Tooltip("Speed to rotate object to zero rotation")] [SerializeField] [Min(1f)]
+        private float rotationSpeed = 5f;
 
         /// <summary>
         /// When controller successful place object
@@ -271,19 +277,26 @@ namespace PickupSystem
             _heldCollider = null;
             _heldGameObject = null;
             _heldRigidbody = null;
-            
+
             onCorrectPlacement.Invoke();
         }
 
         /// <summary>
         /// Smoothly move object to holdPoint
         /// </summary>
-        private void MoveObject()
+        private void MoveObject()5f
         {
-            if (!(Vector3.Distance(_heldGameObject.transform.position, holdPoint.position) > 0.1f)) return;
-
-            _heldGameObject.transform.Translate((holdPoint.position - _heldGameObject.transform.position) *
-                                                (Time.fixedDeltaTime * translationSpeed));
+            if (Vector3.Distance(_heldGameObject.transform.position, holdPoint.position) > 0.1f)
+            {
+                _heldGameObject.transform.Translate((holdPoint.position - _heldGameObject.transform.position) *
+                                                    (Time.fixedDeltaTime * translationSpeed));
+            }
+            
+            if (_heldGameObject.transform.rotation != Quaternion.identity)
+            {
+                _heldGameObject.transform.rotation = Quaternion.RotateTowards(_heldGameObject.transform.rotation,
+                    Quaternion.identity, rotationSpeed);
+            }
         }
 
         #endregion
