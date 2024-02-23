@@ -16,6 +16,7 @@ namespace LogicalSystem
     /// MonoBehaviour class that implements ILogicalComponent
     /// </summary>
     [DisallowMultipleComponent]
+    [SelectionBase]
     public class LogicalComponent : ConnectableComponent
     {
         #region Serialized Fields
@@ -101,7 +102,7 @@ namespace LogicalSystem
         protected void OnDrawGizmos()
         {
             Handles.Label(transform.position, $"<color=#FFFFFF>{name}</color>", HandlesDrawer.GUIStyle);
-            if (_inputsArray?.Length > 0)
+            if (_inputsArray is { Length: > 0 })
             {
                 foreach (var connector in _inputsArray)
                 {
@@ -110,10 +111,10 @@ namespace LogicalSystem
                     var position = connector.transform.position;
 
                     Handles.color = connector.Result ? Color.green : Color.red;
-                    Handles.DrawLine(position, transform.position, 1f);
+                    Handles.DrawLine(position, transform.position, 2f);
                 }
             }
-            else if (inputsList.Count > 0)
+            else if (inputsList is { Count: > 0 })
             {
                 foreach (var connector in inputsList)
                 {
