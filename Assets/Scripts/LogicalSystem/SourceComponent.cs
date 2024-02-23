@@ -4,7 +4,6 @@ using LogicalSystem.Utils;
 using TypeReferences;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utils;
 using Logger = Utils.Logger;
 
@@ -25,6 +24,12 @@ namespace LogicalSystem
         [Inherits(typeof(ISourceComponent), ShortName = true, ShowNoneElement = false), SerializeField]
         private TypeReference sourceType;
 
+        /// <summary>
+        /// If source is enabled on start?
+        /// </summary>
+        [SerializeField] [Tooltip("If source is enabled on start?")]
+        private bool isEnabledOnStart;
+
         #endregion
 
         #region Private Variables
@@ -44,6 +49,12 @@ namespace LogicalSystem
             {
                 _sourceComponent = Activator.CreateInstance(sourceType) as ISourceComponent;
             }
+        }
+
+        private void Start()
+        {
+            if (isEnabledOnStart)
+                Result = true;
         }
 
 #if UNITY_EDITOR
