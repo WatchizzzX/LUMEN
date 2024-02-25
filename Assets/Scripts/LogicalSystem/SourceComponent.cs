@@ -1,4 +1,5 @@
 using System;
+using Codice.Client.GameUI.Explorer;
 using LogicalSystem.Interfaces;
 using LogicalSystem.Utils;
 using TypeReferences;
@@ -71,9 +72,10 @@ namespace LogicalSystem
         /// <summary>
         /// Public void that allow other components interact with SourceComponent
         /// </summary>
-        public void Interact()
+        public void Interact(bool value)
         {
-            Result = !Result;
+            if (value == Result) return;
+            Result = value;
             Logger.Log(LoggerChannel.LogicalSystem, Priority.Info, $"(SourceComponent) - {name}. Value is: {Result}");
             OnValueChanged();
         }
