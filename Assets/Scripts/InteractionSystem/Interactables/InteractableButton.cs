@@ -10,7 +10,8 @@ namespace InteractionSystem.Interactables
     {
         #region Serialized Fields
 
-        [SerializeField] private UnityEvent onClick;
+        [Space(2f)] [Header("Interactable Button settings")] [SerializeField]
+        private UnityEvent onClick;
 
         #endregion
 
@@ -22,6 +23,11 @@ namespace InteractionSystem.Interactables
         }
 
         public override void Interact(InteractorController interactor)
+        {
+            OnInteract();
+        }
+
+        protected override void OnInteract()
         {
             onClick.Invoke();
         }
