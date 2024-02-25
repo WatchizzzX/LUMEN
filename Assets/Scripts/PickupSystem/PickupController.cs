@@ -284,7 +284,7 @@ namespace PickupSystem
         /// <summary>
         /// Smoothly move object to holdPoint
         /// </summary>
-        private void MoveObject()5f
+        private void MoveObject()
         {
             if (Vector3.Distance(_heldGameObject.transform.position, holdPoint.position) > 0.1f)
             {

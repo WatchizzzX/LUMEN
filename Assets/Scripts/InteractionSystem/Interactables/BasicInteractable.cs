@@ -66,6 +66,8 @@ namespace InteractionSystem.Interactables
 
         public abstract void Interact(InteractorController interactor);
 
+        protected abstract void OnInteract();
+
         #endregion
     }
 }

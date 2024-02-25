@@ -6,13 +6,22 @@ namespace InteractionSystem.Interactables
     /// Standard implementation of interactable lamp with switch mechanism
     /// </summary>
     [RequireComponent(typeof(MeshRenderer))]
-    public class InteractableLamp : BasicInteractable
+    public class InteractableLamp : InteractableSwitch
     {
         #region Serialized Fields
 
-        [Tooltip("Color of material when lamp is enabled")] [SerializeField]
+        /// <summary>
+        /// Color of material when lamp is enabled
+        /// </summary>
+        [Space(2f)]
+        [Header("Interactable Lamp settings")]
+        [Tooltip("Color of material when lamp is enabled")]
+        [SerializeField]
         private Color offColor = Color.black;
 
+        /// <summary>
+        /// Color of material when lamp is disabled
+        /// </summary>
         [Tooltip("Color of material when lamp is disabled")] [SerializeField]
         private Color onColor = Color.yellow;
 
@@ -24,11 +33,6 @@ namespace InteractionSystem.Interactables
         /// Cached MeshRender
         /// </summary>
         private MeshRenderer _meshRenderer;
-
-        /// <summary>
-        /// Internal state of lamp
-        /// </summary>
-        private bool _isEnabled;
 
         #endregion
 
@@ -46,15 +50,10 @@ namespace InteractionSystem.Interactables
 
         #region Interface Realizations
 
-        public override void Interact()
+        protected override void OnInteract()
         {
-            Interact(null);
-        }
-
-        public override void Interact(InteractorController interactor)
-        {
-            _isEnabled = !_isEnabled;
-            _meshRenderer.material.color = _isEnabled ? onColor : offColor;
+            base.OnInteract();
+            _meshRenderer.material.color = IsEnabled ? onColor : offColor;
         }
 
         #endregion
