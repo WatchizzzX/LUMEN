@@ -1,3 +1,19 @@
+# [0.8.0](https://github.com/WatchizzzX/LUMEN/compare/v0.7.1...v0.8.0) (2024-02-25)
+
+
+### Bug Fixes
+
+* Fix calculating falling state ([7cd8002](https://github.com/WatchizzzX/LUMEN/commit/7cd8002d591eaa17ae9a08bfa2b7a1846c4b48b5))
+* Make animator transitions faster ([23f993d](https://github.com/WatchizzzX/LUMEN/commit/23f993d05572febe5e594d96933868db4453a5e6))
+* Remove wrong symbols ([9377aa1](https://github.com/WatchizzzX/LUMEN/commit/9377aa1f0a9432063268a5a9d5ef45d5fc4f3674))
+* Rework interactables ([6fdd637](https://github.com/WatchizzzX/LUMEN/commit/6fdd637be84b740cea76827c9c1f8e07c90dd943))
+
+
+### Features
+
+* Add animators for props ([f72ee2d](https://github.com/WatchizzzX/LUMEN/commit/f72ee2d2f64af9c9ab4b7c49bbdc39062772473e))
+* Rework input for SourceComponent ([efdd58d](https://github.com/WatchizzzX/LUMEN/commit/efdd58debda7a2dbf05c8f8a7643cf56daee2825))
+
 ## [0.7.1](https://github.com/WatchizzzX/LUMEN/compare/v0.7.0...v0.7.1) (2024-02-23)
 
 
