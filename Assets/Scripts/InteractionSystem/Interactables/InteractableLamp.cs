@@ -10,12 +10,18 @@ namespace InteractionSystem.Interactables
     {
         #region Serialized Fields
 
+        /// <summary>
+        /// Color of material when lamp is enabled
+        /// </summary>
         [Space(2f)]
         [Header("Interactable Lamp settings")]
         [Tooltip("Color of material when lamp is enabled")]
         [SerializeField]
         private Color offColor = Color.black;
 
+        /// <summary>
+        /// Color of material when lamp is disabled
+        /// </summary>
         [Tooltip("Color of material when lamp is disabled")] [SerializeField]
         private Color onColor = Color.yellow;
 

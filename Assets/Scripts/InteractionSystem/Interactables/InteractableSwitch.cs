@@ -7,9 +7,16 @@ namespace InteractionSystem.Interactables
     {
         #region Serialized Fields
 
+        /// <summary>
+        /// Event when switch is changed value
+        /// </summary>
         [Space(2f)] [Header("Interactable Switch settings")] [SerializeField]
         private UnityEvent<bool> onValueChanged;
 
+        /// <summary>
+        /// Disable interacting with object through InteractorController?
+        /// </summary>
+        [Tooltip("Disable interacting with object through InteractorController?")]
         [SerializeField] private bool disableInteractingWithController;
 
         #endregion
