@@ -266,10 +266,10 @@ namespace Player
         private void FixedUpdate()
         {
             UpdateState();
-            
+
             if (OnSteep && !OnGround)
                 DecreaseVelocityOnSteep();
-            
+
             AdjustVelocity();
 
             if (_desiredJump)
@@ -302,7 +302,8 @@ namespace Player
             var velocity = _body.velocity;
             var isFalling = (OnSteep && !OnGround) || (!OnGround && velocity.y < 0);
             var relativeSpeed = HorizontalVelocity.magnitude / DesiredSpeed;
-            var isJumping = _desiredJump && _internalJumpCooldownTimer <= 0f || (!OnGround && _jumpPhase > 0 && velocity.y >= 0);
+            var isJumping = _desiredJump && _internalJumpCooldownTimer <= 0f ||
+                            (!OnGround && _jumpPhase > 0 && velocity.y >= 0);
             return new MovementState(isFalling, relativeSpeed, isJumping, _cachedSprinting);
         }
 
@@ -311,7 +312,8 @@ namespace Player
         /// </summary>
         private void DebugText()
         {
-            debugText.text = $"CoyoteTime:{_internalCoyoteTimer:f2}. OnGround:{OnGround}. OnSteep:{OnSteep}. Jump: {_jumpPhase}";
+            debugText.text =
+                $"CoyoteTime:{_internalCoyoteTimer:f2}. OnGround:{OnGround}. OnSteep:{OnSteep}. Jump: {_jumpPhase}";
         }
 
         /// <summary>
