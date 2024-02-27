@@ -1,3 +1,24 @@
+# [0.9.0](https://github.com/WatchizzzX/LUMEN/compare/v0.8.0...v0.9.0) (2024-02-27)
+
+
+### Bug Fixes
+
+* Add check for wall in PickupController ([cc770aa](https://github.com/WatchizzzX/LUMEN/commit/cc770aa8e3fe77fc5c54b79348c306e8cbc08a72))
+
+
+### Features
+
+* Add ability snapping to rigidbodies ([7e47d18](https://github.com/WatchizzzX/LUMEN/commit/7e47d18913e93519c5e50fdd145be836a8f0249e))
+* Add ChangeAbilityToInteractive to InteractiveSwitch ([67f2e73](https://github.com/WatchizzzX/LUMEN/commit/67f2e73efd6a036c7a0d589d54ac8e2d626a066a))
+* Add light animator ([f2833ee](https://github.com/WatchizzzX/LUMEN/commit/f2833eeedfdb2afb8d0e16bbde0fbed3dff3ffb1))
+* Add Not element ([0c92605](https://github.com/WatchizzzX/LUMEN/commit/0c926053757ec607fcf3381372fc85a80ad2ab50))
+* Add platform animator ([17ed94a](https://github.com/WatchizzzX/LUMEN/commit/17ed94aa03bb99a7e9652c0bf607358ac892e07f))
+
+
+### Performance Improvements
+
+* Add assembly definition to PickupSystem ([572c3ce](https://github.com/WatchizzzX/LUMEN/commit/572c3ce3c232db8507095852f1d4854ac45d47b7))
+
 # [0.8.0](https://github.com/WatchizzzX/LUMEN/compare/v0.7.1...v0.8.0) (2024-02-25)
 
 
