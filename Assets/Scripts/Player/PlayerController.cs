@@ -124,9 +124,39 @@ namespace Player
         private Rigidbody _body;
 
         /// <summary>
+        /// Cached connected rigidbody
+        /// </summary>
+        private Rigidbody _connectedRigidbody;
+
+        /// <summary>
+        /// Cached previous connected rigidbody
+        /// </summary>
+        private Rigidbody _previousConnectedRigidbody;
+
+        /// <summary>
         /// Calculated velocity
         /// </summary>
         private Vector3 _velocity;
+
+        /// <summary>
+        /// Relative velocity in local space
+        /// </summary>
+        private Vector3 _relativeVelocity;
+
+        /// <summary>
+        /// Cached velocity of connected Rigidbody
+        /// </summary>
+        private Vector3 _connectedVelocity;
+
+        /// <summary>
+        /// World position of connected Rigidbody
+        /// </summary>
+        private Vector3 _connectedWorldPosition;
+
+        /// <summary>
+        /// Local position of connected Rigidbody
+        /// </summary>
+        private Vector3 _connectedLocalPosition;
 
         /// <summary>
         /// Desired velocity according to input
@@ -230,7 +260,7 @@ namespace Player
         public bool OnGround => _groundContactCount > 0;
         public bool OnSteep => _steepContactCount > 0;
         public float DesiredSpeed => _cachedSprinting ? runSpeed : walkSpeed;
-        public Vector3 HorizontalVelocity => new(_body.velocity.x, 0f, _body.velocity.z);
+        public Vector3 HorizontalVelocity => new(_relativeVelocity.x, 0f, _relativeVelocity.z);
 
         #endregion
 
@@ -266,10 +296,10 @@ namespace Player
         private void FixedUpdate()
         {
             UpdateState();
-            
+
             if (OnSteep && !OnGround)
                 DecreaseVelocityOnSteep();
-            
+
             AdjustVelocity();
 
             if (_desiredJump)
@@ -302,7 +332,8 @@ namespace Player
             var velocity = _body.velocity;
             var isFalling = (OnSteep && !OnGround) || (!OnGround && velocity.y < 0);
             var relativeSpeed = HorizontalVelocity.magnitude / DesiredSpeed;
-            var isJumping = _desiredJump && _internalJumpCooldownTimer <= 0f || (!OnGround && _jumpPhase > 0 && velocity.y >= 0);
+            var isJumping = _desiredJump && _internalJumpCooldownTimer <= 0f ||
+                            (!OnGround && _jumpPhase > 0 && velocity.y >= 0);
             return new MovementState(isFalling, relativeSpeed, isJumping, _cachedSprinting);
         }
 
@@ -311,7 +342,8 @@ namespace Player
         /// </summary>
         private void DebugText()
         {
-            debugText.text = $"CoyoteTime:{_internalCoyoteTimer:f2}. OnGround:{OnGround}. OnSteep:{OnSteep}. Jump: {_jumpPhase}";
+            debugText.text =
+                $"CoyoteTime:{_internalCoyoteTimer:f2}. OnGround:{OnGround}. OnSteep:{OnSteep}. Jump: {_jumpPhase}";
         }
 
         /// <summary>
@@ -346,7 +378,9 @@ namespace Player
         private void ClearState()
         {
             _groundContactCount = _steepContactCount = 0;
-            _contactNormal = _steepNormal = Vector3.zero;
+            _contactNormal = _steepNormal = _connectedVelocity = Vector3.zero;
+            _previousConnectedRigidbody = _connectedRigidbody;
+            _connectedRigidbody = null;
         }
 
         /// <summary>
@@ -392,6 +426,14 @@ namespace Player
 
                 _contactNormal = Vector3.up;
             }
+
+            if (_connectedRigidbody)
+            {
+                if (_connectedRigidbody.isKinematic || _connectedRigidbody.mass >= _body.mass)
+                {
+                    UpdateConnectionState();
+                }
+            }
         }
 
         /// <summary>
@@ -411,7 +453,7 @@ namespace Player
                 return false;
             }
 
-            if (!Physics.Raycast(_body.position, Vector3.down, out RaycastHit hit, probeDistance, probeMask))
+            if (!Physics.Raycast(_body.position, Vector3.down, out var hit, probeDistance, probeMask))
             {
                 return false;
             }
@@ -429,6 +471,8 @@ namespace Player
                 _velocity = (_velocity - hit.normal * dot).normalized * speed;
             }
 
+            if (hit.rigidbody != null)
+                _connectedRigidbody = hit.rigidbody;
             return true;
         }
 
@@ -457,8 +501,10 @@ namespace Player
             var xAxis = ProjectOnContactPlane(Vector3.right).normalized;
             var zAxis = ProjectOnContactPlane(Vector3.forward).normalized;
 
-            var currentX = Vector3.Dot(_velocity, xAxis);
-            var currentZ = Vector3.Dot(_velocity, zAxis);
+            _relativeVelocity = _velocity - _connectedVelocity;
+
+            var currentX = Vector3.Dot(_relativeVelocity, xAxis);
+            var currentZ = Vector3.Dot(_relativeVelocity, zAxis);
 
             var acceleration = OnGround ? maxAcceleration : maxAirAcceleration;
             var maxSpeedChange = acceleration * Time.deltaTime;
@@ -538,6 +584,25 @@ namespace Player
                     _steepNormal += normal;
                 }
             }
+
+            if (collision.rigidbody == null) return;
+            _connectedRigidbody = collision.rigidbody;
+        }
+
+        /// <summary>
+        /// Update connection state
+        /// </summary>
+        private void UpdateConnectionState()
+        {
+            if (_connectedRigidbody == _previousConnectedRigidbody)
+            {
+                var connectionMovement = _connectedRigidbody.transform.TransformPoint(_connectedLocalPosition) -
+                                         _connectedWorldPosition;
+                _connectedVelocity = connectionMovement / Time.deltaTime;
+            }
+
+            _connectedWorldPosition = _body.position;
+            _connectedLocalPosition = _connectedRigidbody.transform.InverseTransformPoint(_connectedWorldPosition);
         }
 
         /// <summary>

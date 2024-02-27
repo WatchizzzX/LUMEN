@@ -47,6 +47,11 @@ namespace InteractionSystem.Interactables
             OnInteract();
         }
 
+        public void ChangeAbilityToInteractive()
+        {
+            disableInteractingWithController = !disableInteractingWithController;
+        }
+
         protected override void OnInteract()
         {
             base.OnInteract();

@@ -67,7 +67,7 @@ namespace PickupSystem
         /// </summary>
         [Tooltip("Speed to translate object to hold point")] [SerializeField] [Min(1f)]
         private float translationSpeed = 10f;
-        
+
         /// <summary>
         /// Speed to rotate object to zero rotation
         /// </summary>
@@ -91,6 +91,11 @@ namespace PickupSystem
         /// </summary>
         [Space(2f)] [Header("Other Settings")] [SerializeField] [Tooltip("Buffer size. Optimal size is 3")]
         private int bufferSize = 2;
+
+        /// <summary>
+        /// LayerMask to check walls
+        /// </summary>
+        [SerializeField] private LayerMask wallMask;
 
         #endregion
 
@@ -136,6 +141,11 @@ namespace PickupSystem
         /// </summary>
         private GameObject _closestPickableObject;
 
+        /// <summary>
+        /// Calculated distance to hold point
+        /// </summary>
+        private float _distanceToHoldPoint;
+
         #endregion
 
         #region MonoBehaviour
@@ -143,6 +153,7 @@ namespace PickupSystem
         private void Awake()
         {
             _colliders = new Collider[bufferSize];
+            _distanceToHoldPoint = Vector3.Distance(transform.position, holdPoint.position);
         }
 
         private void FixedUpdate()
@@ -165,7 +176,10 @@ namespace PickupSystem
                 var overlapCollider = new Collider[1];
                 Physics.OverlapBoxNonAlloc(frontHoldPoint.position, cubeSize / 2, overlapCollider,
                     _heldGameObject.transform.rotation);
-                if (overlapCollider[0] == null)
+
+                var isIntersectWall = Physics.Raycast(transform.position, transform.position - holdPoint.position,
+                    _distanceToHoldPoint, wallMask);
+                if (overlapCollider[0] == null && !isIntersectWall)
                 {
                     UnchildObject();
                 }
@@ -241,9 +255,8 @@ namespace PickupSystem
             newColor.a = 0.3f;
             _heldMeshRenderer.material.color = newColor;
 
-            var animationSequence = DOTween.Sequence();
-            animationSequence.Append(_heldGameObject.transform.DOMove(frontHoldPoint.position, timeToMove))
-                .Append(_heldGameObject.transform.DOMove(holdPoint.position, timeToMove));
+            _heldGameObject.transform.DOPath(new[] { frontHoldPoint.position, holdPoint.position },
+                timeToMove * 2, PathType.CatmullRom);
         }
 
         /// <summary>
@@ -291,7 +304,7 @@ namespace PickupSystem
                 _heldGameObject.transform.Translate((holdPoint.position - _heldGameObject.transform.position) *
                                                     (Time.fixedDeltaTime * translationSpeed));
             }
-            
+
             if (_heldGameObject.transform.rotation != Quaternion.identity)
             {
                 _heldGameObject.transform.rotation = Quaternion.RotateTowards(_heldGameObject.transform.rotation,
