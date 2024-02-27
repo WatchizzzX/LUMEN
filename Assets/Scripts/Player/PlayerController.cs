@@ -453,7 +453,7 @@ namespace Player
                 return false;
             }
 
-            if (!Physics.Raycast(_body.position, Vector3.down, out RaycastHit hit, probeDistance, probeMask))
+            if (!Physics.Raycast(_body.position, Vector3.down, out var hit, probeDistance, probeMask))
             {
                 return false;
             }
@@ -471,7 +471,8 @@ namespace Player
                 _velocity = (_velocity - hit.normal * dot).normalized * speed;
             }
 
-            _connectedRigidbody = hit.rigidbody;
+            if (hit.rigidbody != null)
+                _connectedRigidbody = hit.rigidbody;
             return true;
         }
 
@@ -499,7 +500,7 @@ namespace Player
         {
             var xAxis = ProjectOnContactPlane(Vector3.right).normalized;
             var zAxis = ProjectOnContactPlane(Vector3.forward).normalized;
-            
+
             _relativeVelocity = _velocity - _connectedVelocity;
 
             var currentX = Vector3.Dot(_relativeVelocity, xAxis);
@@ -587,7 +588,7 @@ namespace Player
             if (collision.rigidbody == null) return;
             _connectedRigidbody = collision.rigidbody;
         }
-        
+
         /// <summary>
         /// Update connection state
         /// </summary>
@@ -595,7 +596,8 @@ namespace Player
         {
             if (_connectedRigidbody == _previousConnectedRigidbody)
             {
-                var connectionMovement = _connectedRigidbody.transform.TransformPoint(_connectedLocalPosition)- _connectedWorldPosition;
+                var connectionMovement = _connectedRigidbody.transform.TransformPoint(_connectedLocalPosition) -
+                                         _connectedWorldPosition;
                 _connectedVelocity = connectionMovement / Time.deltaTime;
             }
 
