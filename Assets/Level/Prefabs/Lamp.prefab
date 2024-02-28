@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1655910900297876967}
   - component: {fileID: 7066761182557070196}
   - component: {fileID: 8052198522428201737}
-  - component: {fileID: 4417331836481870328}
+  - component: {fileID: 2417410313371275576}
   - component: {fileID: 1414332007266892130}
   m_Layer: 7
   m_Name: Lamp
@@ -62,8 +62,6 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -110,7 +108,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4417331836481870328
+--- !u!114 &2417410313371275576
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,7 +117,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1277633973509956869}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9fbbc8cd1c5492b9add5d534dbb5df4, type: 3}
+  m_Script: {fileID: 11500000, guid: 6da7dc6fe65d47f8b3fe81bc976e3e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   interactableType: 0
@@ -143,9 +141,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   disableInteractingWithController: 1
-  offColor: {r: 0, g: 0, b: 0, a: 0.34901962}
-  onColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 0.30588236}
-  transitionDuration: 0.5
 --- !u!114 &1414332007266892130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,8 +199,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2996243946239123695}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 10
   m_Type: 2
+  m_Shape: 0
   m_Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   m_Intensity: 0
   m_Range: 10
