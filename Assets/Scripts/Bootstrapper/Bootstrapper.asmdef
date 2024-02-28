@@ -1,0 +1,21 @@
+{
+    "name": "Bootstrapper",
+    "rootNamespace": "",
+    "references": [
+        "Utils",
+        "EventBus",
+        "Managers",
+        "ExternalPackages",
+        "NaughtyAttributes.Core",
+        "ServiceLocator"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
