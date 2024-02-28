@@ -1,3 +1,19 @@
+# [0.10.0](https://github.com/WatchizzzX/LUMEN/compare/v0.9.0...v0.10.0) (2024-02-28)
+
+
+### Features
+
+* Add Bootstrapper ([09f7335](https://github.com/WatchizzzX/LUMEN/commit/09f73352e657fc09ea2ec44d7d34db9d35cc3168))
+* Add DDoL util script ([f0e9a50](https://github.com/WatchizzzX/LUMEN/commit/f0e9a50ab054653e04655f78b72b44d47910304c))
+* Add EventBus and signals ([7e9d52e](https://github.com/WatchizzzX/LUMEN/commit/7e9d52e800a6e90eed345927afaf0d44affe3ad0))
+* Add GameManager ([c485a37](https://github.com/WatchizzzX/LUMEN/commit/c485a37109ebcfe04f1b0f696397ed0105a2358d))
+* Add SceneManager ([beb9917](https://github.com/WatchizzzX/LUMEN/commit/beb99179e852bca3234443a1d9bfa3fda840e7c9))
+* Add ServiceLocator ([4d94fe9](https://github.com/WatchizzzX/LUMEN/commit/4d94fe95f24d88b911a0f43ee84c731b82375f99))
+* Add SpawnManager ([35b1ef0](https://github.com/WatchizzzX/LUMEN/commit/35b1ef0838301d534127b62f879ccb95089886b0))
+* Add SpawnManagerSettings ([e2c5620](https://github.com/WatchizzzX/LUMEN/commit/e2c562066c3920f37e77f4adc28755ebb1fdc8fb))
+* Add TransitionManager ([fd108b8](https://github.com/WatchizzzX/LUMEN/commit/fd108b8c6d21cfd733585fa930b216ce880fde3b))
+* Add TransitionManager settings ([698dd31](https://github.com/WatchizzzX/LUMEN/commit/698dd316380633604ecd2b255a1a49101b8d832e))
+
 # [0.9.0](https://github.com/WatchizzzX/LUMEN/compare/v0.8.0...v0.9.0) (2024-02-27)
 
 
