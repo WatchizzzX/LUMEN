@@ -269,7 +269,7 @@ namespace Player
         private void Awake()
         {
             _body = GetComponent<Rigidbody>();
-            _cameraPosition = Camera.main.transform;
+            _cameraPosition = Camera.main?.transform;
 
             if (_cameraPosition == null)
                 Logger.Log(LoggerChannel.Player, Priority.Warning,

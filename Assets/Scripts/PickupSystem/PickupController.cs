@@ -33,12 +33,6 @@ namespace PickupSystem
         private float pickupRadius = 1f;
 
         /// <summary>
-        /// The force with which the object will be held at a point
-        /// </summary>
-        [Tooltip("The force with which the object will be held at a point")] [SerializeField]
-        private float pickupForce = 150f;
-
-        /// <summary>
         /// The time it takes for an object to travel from one point to another
         /// </summary>
         [Tooltip("The time it takes for an object to travel from one point to another")] [SerializeField]

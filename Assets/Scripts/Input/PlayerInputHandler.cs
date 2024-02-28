@@ -1,3 +1,7 @@
+using System;
+using EventBusSystem;
+using EventBusSystem.Signals.DeveloperSignals;
+using ServiceLocatorSystem;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -15,25 +19,25 @@ namespace Input
         /// On change move direction
         /// </summary>
         [Tooltip("On change move direction")]
-        [SerializeField] private UnityEvent<Vector2> onMoveEvent;
+        public UnityEvent<Vector2> onMoveEvent;
         
         /// <summary>
         /// On change sprint state
         /// </summary>
         [Tooltip("On change sprint state")]
-        [SerializeField] private UnityEvent<bool> onSprintEvent;
+        public UnityEvent<bool> onSprintEvent;
         
         /// <summary>
         /// Trigger on jump
         /// </summary>
         [Tooltip("Trigger on jump")]
-        [SerializeField] private UnityEvent onJumpEvent;
+        public UnityEvent onJumpEvent;
         
         /// <summary>
         /// Trigger on interact
         /// </summary>
         [Tooltip("Trigger on interact")]
-        [SerializeField] private UnityEvent onInteractEvent;
+        public UnityEvent onInteractEvent;
 
         #endregion
 
@@ -64,6 +68,10 @@ namespace Input
         /// </summary>
         private InputAction _interactAction;
 
+        private EventBus _eventBus;
+
+        private bool _isInputEnabled;
+
         #endregion
 
         #region Public Fields
@@ -72,7 +80,7 @@ namespace Input
         /// Move direction
         /// </summary>
         public Vector2 Move { get; private set; }
-        
+
         /// <summary>
         /// Sprint state
         /// </summary>
@@ -94,7 +102,9 @@ namespace Input
 
         private void Awake()
         {
+            _eventBus = ServiceLocator.Get<EventBus>();
             _input = GetComponent<PlayerInput>();
+            _isInputEnabled = true;
 
             var actionMap = _input.currentActionMap;
 
@@ -123,6 +133,44 @@ namespace Input
 
             _interactAction.performed += OnInteract;
             _interactAction.canceled += OnInteract;
+            
+            SubscribeToEventBus();
+        }
+
+        private void OnDestroy()
+        {
+            UnsubscribeFromEventBus();
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void SubscribeToEventBus()
+        {
+            _eventBus.Subscribe<DevConsoleSignal>(OnDevConsoleChangeState);
+        }
+        
+        private void UnsubscribeFromEventBus()
+        {
+            _eventBus.Unsubscribe<DevConsoleSignal>(OnDevConsoleChangeState);
+        }
+        
+        private void ChangeInputState(bool isEnabled)
+        {
+            _isInputEnabled = isEnabled;
+
+            if (_isInputEnabled) return;
+            
+            Move = Vector2.zero;
+            IsJumping = false;
+            IsSprinting = false;
+            IsInteracting = false;
+        }
+
+        private void OnDevConsoleChangeState(DevConsoleSignal signal)
+        {
+            ChangeInputState(!signal.IsOpened);
         }
 
         #endregion
@@ -135,6 +183,7 @@ namespace Input
         /// <param name="obj">CallbackContext</param>
         private void OnInteract(InputAction.CallbackContext obj)
         {
+            if (!_isInputEnabled) return;
             IsInteracting = obj.ReadValueAsButton();
             if (IsInteracting)
                 onInteractEvent.Invoke();
@@ -146,6 +195,7 @@ namespace Input
         /// <param name="obj">CallbackContext</param>
         private void OnJump(InputAction.CallbackContext obj)
         {
+            if (!_isInputEnabled) return;
             IsJumping = obj.ReadValueAsButton();
             if (IsJumping)
                 onJumpEvent.Invoke();
@@ -157,6 +207,7 @@ namespace Input
         /// <param name="obj">CallbackContext</param>
         private void OnSprint(InputAction.CallbackContext obj)
         {
+            if (!_isInputEnabled) return;
             IsSprinting = obj.ReadValueAsButton();
             onSprintEvent.Invoke(IsSprinting);
         }
@@ -167,6 +218,7 @@ namespace Input
         /// <param name="obj">CallbackContext</param>
         private void OnMove(InputAction.CallbackContext obj)
         {
+            if (!_isInputEnabled) return;
             Move = obj.ReadValue<Vector2>();
             onMoveEvent.Invoke(Move);
         }

@@ -19,7 +19,12 @@ namespace Utils
         Input = 1 << 3,
         InteractableSystem = 1 << 4,
         LogicalSystem = 1 << 5,
-        PickableSystem = 1 << 6
+        PickableSystem = 1 << 6,
+        SceneManager = 1 << 7,
+        GameManager = 1 << 8,
+        TransitionManager = 1 << 9,
+        ServiceLocator = 1 << 10,
+        EventBus = 1 << 11
     }
 
     /// <summary>
@@ -240,13 +245,18 @@ namespace Utils
         /// </summary>
         private static readonly Dictionary<LoggerChannel, string> ChannelToColour = new()
         {
-            { LoggerChannel.Common, "#ffecd1" },
-            { LoggerChannel.Assert, "#9e2a2b" },
-            { LoggerChannel.Input, "#ff7d00" },
-            { LoggerChannel.Player, "#15616d" },
-            { LoggerChannel.InteractableSystem, "#4f772d" },
-            { LoggerChannel.LogicalSystem, "#F8D210"},
-            { LoggerChannel.PickableSystem, "#7fbca1"}
+            { LoggerChannel.Common, "#f2e8cf" },
+            { LoggerChannel.Assert, "#bc4749" },
+            { LoggerChannel.Input, "#f2cc8f" },
+            { LoggerChannel.Player, "#81b29a" },
+            { LoggerChannel.InteractableSystem, "#ccc5b9" },
+            { LoggerChannel.LogicalSystem, "#3c6e71" },
+            { LoggerChannel.PickableSystem, "#98c1d9" },
+            { LoggerChannel.ServiceLocator, "#52796f" },
+            { LoggerChannel.SceneManager, "#90a955" },
+            { LoggerChannel.GameManager, "#90a955" },
+            { LoggerChannel.TransitionManager, "#90a955" },
+            { LoggerChannel.EventBus, "#ff4d6d" }
         };
 
         /// <summary>
