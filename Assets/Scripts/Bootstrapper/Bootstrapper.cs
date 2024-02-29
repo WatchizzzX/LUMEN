@@ -4,6 +4,7 @@ using Managers;
 using NaughtyAttributes;
 using ServiceLocatorSystem;
 using UnityEngine;
+using Utils;
 using SceneManager = Managers.SceneManager;
 
 namespace Bootstrapper
@@ -13,41 +14,12 @@ namespace Bootstrapper
         [SerializeField] private TransitionManagerSettings transitionManagerSettings;
         [SerializeField] private SpawnManagerSettings spawnManagerSettings;
         [SerializeField, Scene] private int startupScene;
-        
-        private GameManager _gameManager;
-        private SceneManager _sceneManager;
-        private TransitionManager _transitionManager;
-        private SpawnManager _spawnManager;
-        private EventBus _eventBus;
 
+        private EventBus _eventBus;
+        
         private void Awake()
         {
-            DontDestroyOnLoad(this);
-
-            _eventBus = new EventBus();
-            ServiceLocator.Register(_eventBus);
-            
-            var gameManagerGo = new GameObject("Game Manager", typeof(GameManager));
-            gameManagerGo.transform.SetParent(transform);
-            _gameManager = gameManagerGo.GetComponent<GameManager>();
-            ServiceLocator.Register(_gameManager);
-
-            var sceneManagerGo = new GameObject("Scene Manager", typeof(SceneManager));
-            sceneManagerGo.transform.SetParent(transform);
-            _sceneManager = sceneManagerGo.GetComponent<SceneManager>();
-            ServiceLocator.Register(_sceneManager);
-            
-            var spawnManagerGo = new GameObject("Spawn Manager", typeof(SpawnManager));
-            spawnManagerGo.transform.SetParent(transform);
-            _spawnManager = spawnManagerGo.GetComponent<SpawnManager>();
-            _spawnManager.spawnManagerSettings = spawnManagerSettings;
-            ServiceLocator.Register(_spawnManager);
-
-            var transitionManagerGo = new GameObject("Transition Manager", typeof(TransitionManager));
-            transitionManagerGo.transform.SetParent(transform);
-            _transitionManager = transitionManagerGo.GetComponent<TransitionManager>();
-            _transitionManager.transitionManagerSettings = transitionManagerSettings;
-            ServiceLocator.Register(_transitionManager);
+            Initialize();
         }
 
         private void Start()
@@ -55,9 +27,40 @@ namespace Bootstrapper
             LoadStartupScene();
         }
 
+        private void Initialize()
+        {
+            _eventBus = new EventBus();
+            ServiceLocator.Register(_eventBus);
+
+            var managersGo = new GameObject("Managers", typeof(DontDestroyOnLoad));
+            
+            var gameManagerGo = new GameObject("Game Manager", typeof(GameManager));
+            gameManagerGo.transform.SetParent(managersGo.transform);
+            var gameManager = gameManagerGo.GetComponent<GameManager>();
+            ServiceLocator.Register(gameManager);
+
+            var sceneManagerGo = new GameObject("Scene Manager", typeof(SceneManager));
+            sceneManagerGo.transform.SetParent(managersGo.transform);
+            var sceneManager = sceneManagerGo.GetComponent<SceneManager>();
+            ServiceLocator.Register(sceneManager);
+            
+            var transitionManagerGo = new GameObject("Transition Manager", typeof(TransitionManager));
+            transitionManagerGo.transform.SetParent(managersGo.transform);
+            var transitionManager = transitionManagerGo.GetComponent<TransitionManager>();
+            transitionManager.transitionManagerSettings = transitionManagerSettings;
+            ServiceLocator.Register(transitionManager);
+            
+            var spawnManagerGo = new GameObject("Spawn Manager", typeof(SpawnManager));
+            spawnManagerGo.transform.SetParent(managersGo.transform);
+            var spawnManager = spawnManagerGo.GetComponent<SpawnManager>();
+            spawnManager.spawnManagerSettings = spawnManagerSettings;
+            ServiceLocator.Register(spawnManager);
+        }
+
         private void LoadStartupScene()
         {
             _eventBus.Invoke(new SetSceneSignal(startupScene));
+            Destroy(this);
         }
     }
 }
