@@ -2,7 +2,9 @@
     "name": "Animators",
     "rootNamespace": "",
     "references": [
-        "ExternalPackages"
+        "ExternalPackages",
+        "ServiceLocator",
+        "EventBus"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
