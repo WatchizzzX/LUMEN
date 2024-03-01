@@ -2,6 +2,7 @@ using System.Collections;
 using EasyTransition;
 using EventBusSystem;
 using EventBusSystem.Signals.TransitionSignals;
+using Managers.Settings;
 using ServiceLocatorSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -166,7 +167,7 @@ namespace Managers
         {
             yield return new WaitForSecondsRealtime(startDelay);
 
-            _eventBus.Invoke(new ChangeTransitionStateSignal(TransitionState.Started));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started));
 
             var template = Instantiate(transitionManagerSettings.transitionPrefab);
             template.GetComponent<Transition>().transitionSettings = transitionSettings;
@@ -177,13 +178,13 @@ namespace Managers
 
             yield return new WaitForSecondsRealtime(transitionTime);
 
-            _eventBus.Invoke(new ChangeTransitionStateSignal(TransitionState.Cutout));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Cutout));
 
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
 
             yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
 
-            _eventBus.Invoke(new ChangeTransitionStateSignal(TransitionState.Finished));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Finished));
 
             _runningTransition = false;
         }
@@ -192,7 +193,7 @@ namespace Managers
         {
             yield return new WaitForSecondsRealtime(startDelay);
 
-            _eventBus.Invoke(new ChangeTransitionStateSignal(TransitionState.Started));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started));
 
             var template = Instantiate(transitionManagerSettings.transitionPrefab);
             template.GetComponent<Transition>().transitionSettings = transitionSettings;
@@ -203,13 +204,13 @@ namespace Managers
 
             yield return new WaitForSecondsRealtime(transitionTime);
 
-            _eventBus.Invoke(new ChangeTransitionStateSignal(TransitionState.Cutout));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Cutout));
 
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
 
             yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
 
-            _eventBus.Invoke(new ChangeTransitionStateSignal(TransitionState.Finished));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Finished));
 
             _runningTransition = false;
         }
@@ -218,7 +219,7 @@ namespace Managers
         {
             yield return new WaitForSecondsRealtime(delay);
 
-            _eventBus.Invoke(new ChangeTransitionStateSignal(TransitionState.Started));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started));
 
             var template = Instantiate(transitionManagerSettings.transitionPrefab);
             template.GetComponent<Transition>().transitionSettings = transitionSettings;
@@ -229,14 +230,14 @@ namespace Managers
 
             yield return new WaitForSecondsRealtime(transitionTime);
 
-            _eventBus.Invoke(new ChangeTransitionStateSignal(TransitionState.Cutout));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Cutout));
 
             template.GetComponent<Transition>().OnSceneLoad(UnityEngine.SceneManagement.SceneManager.GetActiveScene(),
                 LoadSceneMode.Single);
 
             yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
 
-            _eventBus.Invoke(new ChangeTransitionStateSignal(TransitionState.Finished));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Finished));
 
             _runningTransition = false;
         }
