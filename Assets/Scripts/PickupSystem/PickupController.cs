@@ -147,7 +147,9 @@ namespace PickupSystem
         private void Awake()
         {
             _colliders = new Collider[bufferSize];
-            _distanceToHoldPoint = Vector3.Distance(transform.position, holdPoint.position);
+            var position = transform.position;
+            position.y = frontHoldPoint.position.y;
+            _distanceToHoldPoint = Vector3.Distance(position, frontHoldPoint.position);
         }
 
         private void FixedUpdate()
@@ -167,12 +169,16 @@ namespace PickupSystem
         {
             if (_isHoldingObject)
             {
+                var position = transform.position;
+                var frontHoldPointPosition = frontHoldPoint.position;
+                
                 var overlapCollider = new Collider[1];
-                Physics.OverlapBoxNonAlloc(frontHoldPoint.position, cubeSize / 2, overlapCollider,
+                Physics.OverlapBoxNonAlloc(frontHoldPointPosition, cubeSize / 2, overlapCollider,
                     _heldGameObject.transform.rotation);
 
-                var isIntersectWall = Physics.Raycast(transform.position, transform.position - holdPoint.position,
-                    _distanceToHoldPoint, wallMask);
+                position.y = frontHoldPointPosition.y;
+                var rayDirection = frontHoldPointPosition - position;
+                var isIntersectWall = Physics.Raycast(position, rayDirection, _distanceToHoldPoint + 1f, wallMask);
                 if (overlapCollider[0] == null && !isIntersectWall)
                 {
                     UnchildObject();

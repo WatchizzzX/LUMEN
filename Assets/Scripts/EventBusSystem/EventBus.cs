@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using EventBusSystem.Interfaces;
+using EventBusSystem.Signals;
 using ServiceLocatorSystem;
 using Utils;
 using Logger = Utils.Logger;
@@ -11,7 +13,7 @@ namespace EventBusSystem
     {
         private Dictionary<string, List<CallbackWithPriority>> _signalCallbacks = new();
 
-        public void Subscribe<T>(Action<T> callback, int priority = 0)
+        public void Subscribe<T>(Action<T> callback, int priority = 0) where T : ISignal
         {
             var key = typeof(T).Name;
             if (_signalCallbacks.ContainsKey(key))
@@ -30,7 +32,7 @@ namespace EventBusSystem
                 $"{methodInfo.DeclaringType?.Name} register {methodInfo.Name} handler with {priority} priority for {key}");
         }
 
-        public void Invoke<T>(T signal)
+        public void Invoke<T>(T signal) where T : ISignal
         {
             var key = typeof(T).Name;
             Logger.Log(LoggerChannel.EventBus, Priority.Info, $"Invoked {key}");
@@ -42,7 +44,7 @@ namespace EventBusSystem
             }
         }
 
-        public void Unsubscribe<T>(Action<T> callback)
+        public void Unsubscribe<T>(Action<T> callback) where T : ISignal
         {
             var key = typeof(T).Name;
             var methodInfo = callback.Method;

@@ -1,10 +1,12 @@
+using EventBusSystem.Interfaces;
+
 namespace EventBusSystem.Signals.DeveloperSignals
 {
-    public class DevConsoleSignal
+    public class OnDevConsoleOpenedSignal : ISignal
     {
         public readonly bool IsOpened;
 
-        public DevConsoleSignal(bool isOpened)
+        public OnDevConsoleOpenedSignal(bool isOpened)
         {
             IsOpened = isOpened;
         }

@@ -1,10 +1,12 @@
+using EventBusSystem.Interfaces;
+
 namespace EventBusSystem.Signals.TransitionSignals
 {
-    public class ChangeTransitionStateSignal
+    public class OnChangeTransitionStateSignal : ISignal
     {
         public readonly TransitionState TransitionState;
 
-        public ChangeTransitionStateSignal(TransitionState transitionState)
+        public OnChangeTransitionStateSignal(TransitionState transitionState)
         {
             TransitionState = transitionState;
         }

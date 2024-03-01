@@ -1,8 +1,9 @@
+using EventBusSystem.Interfaces;
 using UnityEngine.SceneManagement;
 
 namespace EventBusSystem.Signals.SceneSignals
 {
-    public class OnSceneLoadedSignal
+    public class OnSceneLoadedSignal : ISignal
     {
         public readonly Scene LoadedScene;
 
