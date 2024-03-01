@@ -1,5 +1,6 @@
 using System;
 using EventBusSystem;
+using EventBusSystem.Signals.GameSignals;
 using EventBusSystem.Signals.SceneSignals;
 using EventBusSystem.Signals.TransitionSignals;
 using Input;
@@ -77,6 +78,7 @@ namespace Managers
         private void UnsubscribeFromEventBus()
         {
             _eventBus.Unsubscribe<OnSceneLoadedSignal>(OnSceneLoaded);
+            _eventBus.Unsubscribe<OnChangeTransitionStateSignal>(OnChangeTransitionState);
         }
 
         private void Initialize()
@@ -135,7 +137,7 @@ namespace Managers
         }
 
         private void OnChangeTransitionState(OnChangeTransitionStateSignal signal)
-        {
+        { 
             switch (signal.TransitionState)
             {
                 case TransitionState.Started:
@@ -149,7 +151,7 @@ namespace Managers
                     CinemachineCamera.Follow = null;
                     break;
                 case TransitionState.Cutout:
-                    CinemachineCamera.transform.position = spawnManagerSettings.spawnCameraPosition;
+                    CinemachineCamera.ForceCameraPosition(spawnManagerSettings.spawnCameraPosition, Quaternion.Euler(20,45,0));
                     break;
                 case TransitionState.Finished:
                     break;
