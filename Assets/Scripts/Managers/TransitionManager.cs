@@ -1,6 +1,7 @@
 using System.Collections;
 using EasyTransition;
 using EventBusSystem;
+using EventBusSystem.Signals.GameSignals;
 using EventBusSystem.Signals.TransitionSignals;
 using Managers.Settings;
 using ServiceLocatorSystem;
@@ -45,10 +46,17 @@ namespace Managers
 
         private void SubscribeToEventBus()
         {
+            _eventBus.Subscribe<OnRespawnPlayerSignal>(OnRespawnPlayer);
         }
 
         private void UnsubscribeFromEventBus()
         {
+            _eventBus.Unsubscribe<OnRespawnPlayerSignal>(OnRespawnPlayer);
+        }
+
+        private void OnRespawnPlayer(OnRespawnPlayerSignal signal)
+        {
+            Transition(0f);
         }
 
         /// <summary>
@@ -167,7 +175,7 @@ namespace Managers
         {
             yield return new WaitForSecondsRealtime(startDelay);
 
-            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started, true));
 
             var template = Instantiate(transitionManagerSettings.transitionPrefab);
             template.GetComponent<Transition>().transitionSettings = transitionSettings;
@@ -178,13 +186,13 @@ namespace Managers
 
             yield return new WaitForSecondsRealtime(transitionTime);
 
-            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Cutout));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Cutout, true));
 
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
 
             yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
 
-            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Finished));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Finished, true));
 
             _runningTransition = false;
         }
@@ -193,7 +201,7 @@ namespace Managers
         {
             yield return new WaitForSecondsRealtime(startDelay);
 
-            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started, true));
 
             var template = Instantiate(transitionManagerSettings.transitionPrefab);
             template.GetComponent<Transition>().transitionSettings = transitionSettings;
@@ -204,13 +212,13 @@ namespace Managers
 
             yield return new WaitForSecondsRealtime(transitionTime);
 
-            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Cutout));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Cutout, true));
 
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
 
             yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
 
-            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Finished));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Finished, true));
 
             _runningTransition = false;
         }
@@ -219,7 +227,7 @@ namespace Managers
         {
             yield return new WaitForSecondsRealtime(delay);
 
-            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started, false));
 
             var template = Instantiate(transitionManagerSettings.transitionPrefab);
             template.GetComponent<Transition>().transitionSettings = transitionSettings;
@@ -230,14 +238,14 @@ namespace Managers
 
             yield return new WaitForSecondsRealtime(transitionTime);
 
-            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Cutout));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Cutout, false));
 
             template.GetComponent<Transition>().OnSceneLoad(UnityEngine.SceneManagement.SceneManager.GetActiveScene(),
                 LoadSceneMode.Single);
 
             yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
 
-            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Finished));
+            _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Finished, false));
 
             _runningTransition = false;
         }
