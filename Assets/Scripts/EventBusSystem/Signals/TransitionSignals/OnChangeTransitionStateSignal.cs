@@ -5,10 +5,12 @@ namespace EventBusSystem.Signals.TransitionSignals
     public class OnChangeTransitionStateSignal : ISignal
     {
         public readonly TransitionState TransitionState;
+        public readonly bool IsChangingScene;
 
-        public OnChangeTransitionStateSignal(TransitionState transitionState)
+        public OnChangeTransitionStateSignal(TransitionState transitionState, bool isChangingScene)
         {
             TransitionState = transitionState;
+            IsChangingScene = isChangingScene;
         }
     }
 
