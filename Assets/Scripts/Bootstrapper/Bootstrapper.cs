@@ -1,6 +1,7 @@
 using EventBusSystem;
 using EventBusSystem.Signals.SceneSignals;
 using Managers;
+using Managers.Settings;
 using NaughtyAttributes;
 using ServiceLocatorSystem;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace Bootstrapper
     {
         [SerializeField] private TransitionManagerSettings transitionManagerSettings;
         [SerializeField] private SpawnManagerSettings spawnManagerSettings;
+        [SerializeField] private CameraManagerSettings cameraManagerSettings;
+        [SerializeField] private GameManagerSettings gameManagerSettings;
         [SerializeField, Scene] private int startupScene;
 
         private EventBus _eventBus;
@@ -37,6 +40,7 @@ namespace Bootstrapper
             var gameManagerGo = new GameObject("Game Manager", typeof(GameManager));
             gameManagerGo.transform.SetParent(managersGo.transform);
             var gameManager = gameManagerGo.GetComponent<GameManager>();
+            gameManager.gameManagerSettings = gameManagerSettings;
             ServiceLocator.Register(gameManager);
 
             var sceneManagerGo = new GameObject("Scene Manager", typeof(SceneManager));
@@ -55,11 +59,17 @@ namespace Bootstrapper
             var spawnManager = spawnManagerGo.GetComponent<SpawnManager>();
             spawnManager.spawnManagerSettings = spawnManagerSettings;
             ServiceLocator.Register(spawnManager);
+            
+            var cameraManagerGo = new GameObject("Camera Manager", typeof(CameraManager));
+            cameraManagerGo.transform.SetParent(managersGo.transform);
+            var cameraManager = cameraManagerGo.GetComponent<CameraManager>();
+            cameraManager.cameraManagerSettings = cameraManagerSettings;
+            ServiceLocator.Register(cameraManager);
         }
 
         private void LoadStartupScene()
         {
-            _eventBus.Invoke(new SetSceneSignal(startupScene));
+            _eventBus.Invoke(new OnSetSceneSignal(startupScene, 0f));
             Destroy(this);
         }
     }
