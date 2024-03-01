@@ -45,6 +45,8 @@ namespace Managers
 
         private GameObject _spawnedPlayerObjectsGo;
 
+        private bool _cachedRespawn;
+
         #endregion
 
         #region MonoBehaviour
@@ -72,12 +74,14 @@ namespace Managers
         private void SubscribeToEventBus()
         {
             _eventBus.Subscribe<OnSceneLoadedSignal>(OnSceneLoaded);
+            _eventBus.Subscribe<OnRespawnPlayerSignal>(OnRespawnPlayer);
             _eventBus.Subscribe<OnChangeTransitionStateSignal>(OnChangeTransitionState);
         }
 
         private void UnsubscribeFromEventBus()
         {
             _eventBus.Unsubscribe<OnSceneLoadedSignal>(OnSceneLoaded);
+            _eventBus.Unsubscribe<OnRespawnPlayerSignal>(OnRespawnPlayer);
             _eventBus.Unsubscribe<OnChangeTransitionStateSignal>(OnChangeTransitionState);
         }
 
@@ -126,6 +130,12 @@ namespace Managers
             }
         }
 
+        private void RespawnPlayer()
+        {
+            _spawnedPlayerGo.transform.position = Vector3.zero;
+            CinemachineCamera.ForceCameraPosition(spawnManagerSettings.spawnCameraPosition, spawnManagerSettings.spawnCameraRotation);
+        }
+
         #endregion
 
         #region Event Handlers
@@ -136,8 +146,21 @@ namespace Managers
                 SpawnPlayer();
         }
 
+        private void OnRespawnPlayer(OnRespawnPlayerSignal signal)
+        {
+            _cachedRespawn = true;
+        }
+
         private void OnChangeTransitionState(OnChangeTransitionStateSignal signal)
-        { 
+        {
+            if (!signal.IsChangingScene)
+            {
+                if (!_cachedRespawn || signal.TransitionState != TransitionState.Cutout) return;
+                RespawnPlayer();
+                _cachedRespawn = false;
+                return;
+            }
+
             switch (signal.TransitionState)
             {
                 case TransitionState.Started:
@@ -151,7 +174,7 @@ namespace Managers
                     CinemachineCamera.Follow = null;
                     break;
                 case TransitionState.Cutout:
-                    CinemachineCamera.ForceCameraPosition(spawnManagerSettings.spawnCameraPosition, Quaternion.Euler(20,45,0));
+                    CinemachineCamera.ForceCameraPosition(spawnManagerSettings.spawnCameraPosition, spawnManagerSettings.spawnCameraRotation);
                     break;
                 case TransitionState.Finished:
                     break;

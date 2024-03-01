@@ -8,6 +8,7 @@ namespace Managers.Settings
         public GameObject playerPrefab;
         public GameObject cameraPrefab;
         public Vector3 spawnCameraPosition;
+        public Quaternion spawnCameraRotation;
         public GameObject inputPrefab;
     }
 }
