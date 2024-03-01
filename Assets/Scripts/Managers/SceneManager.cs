@@ -43,12 +43,12 @@ namespace Managers
 
         private void SubscribeToEventBus()
         {
-            _eventBus.Subscribe<SetSceneSignal>(OnSetScene);
+            _eventBus.Subscribe<OnSetSceneSignal>(OnSetScene);
         }
 
         private void UnsubscribeFromEventBus()
         {
-            _eventBus.Unsubscribe<SetSceneSignal>(OnSetScene);
+            _eventBus.Unsubscribe<OnSetSceneSignal>(OnSetScene);
         }
         
         private void OnSceneLoaded(Scene loadedScene, LoadSceneMode loadSceneMode)
@@ -56,19 +56,19 @@ namespace Managers
             _eventBus.Invoke(new OnSceneLoadedSignal(loadedScene));
         }
 
-        private void OnSetScene(SetSceneSignal signal)
+        private void OnSetScene(OnSetSceneSignal signal)
         {
-            LoadScene(signal.NewSceneID);
+            LoadScene(signal.NewSceneID, signal.Delay);
         }
 
-        private void LoadScene(int sceneID)
+        private void LoadScene(int sceneID, float delay)
         {
             if (!CheckIfSceneExists(sceneID)) return;
 
             var transitionManager = ServiceLocator.Get<TransitionManager>();
             if (transitionManager != null)
             {
-                transitionManager.Transition(sceneID, 0f);
+                transitionManager.Transition(sceneID, delay);
             }
             else
             {
@@ -106,7 +106,7 @@ namespace Managers
                     helpText: "Scene name to load"),
                 callback: sceneName =>
                 {
-                    LoadScene(SceneUtility.GetBuildIndexByScenePath(sceneName));
+                    LoadScene(SceneUtility.GetBuildIndexByScenePath(sceneName), 0f);
                 }));
 
             if (result)
