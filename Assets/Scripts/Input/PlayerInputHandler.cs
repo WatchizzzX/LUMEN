@@ -38,6 +38,12 @@ namespace Input
         /// </summary>
         [Tooltip("Trigger on interact")]
         public UnityEvent onInteractEvent;
+        
+        /// <summary>
+        /// Trigger on interact
+        /// </summary>
+        [Tooltip("Trigger on pickup")]
+        public UnityEvent onPickupEvent;
 
         #endregion
 
@@ -68,6 +74,11 @@ namespace Input
         /// </summary>
         private InputAction _interactAction;
 
+        /// <summary>
+        /// Action for pickup
+        /// </summary>
+        private InputAction _pickupAction;
+
         private EventBus _eventBus;
 
         private bool _isInputEnabled;
@@ -95,6 +106,11 @@ namespace Input
         /// Interacting state
         /// </summary>
         public bool IsInteracting { get; private set; }
+        
+        /// <summary>
+        /// Pickup state
+        /// </summary>
+        public bool IsPickup { get; private set; }
 
         #endregion
 
@@ -114,6 +130,7 @@ namespace Input
                 _sprintAction = actionMap.FindAction("Sprint", true);
                 _jumpAction = actionMap.FindAction("Jump", true);
                 _interactAction = actionMap.FindAction("Interact", true);
+                _pickupAction = actionMap.FindAction("Pickup", true);
             }
             catch
             {
@@ -134,6 +151,9 @@ namespace Input
             _interactAction.performed += OnInteract;
             _interactAction.canceled += OnInteract;
             
+            _pickupAction.performed += OnPickup;
+            _pickupAction.canceled += OnPickup;
+            
             SubscribeToEventBus();
         }
 
@@ -148,12 +168,12 @@ namespace Input
 
         private void SubscribeToEventBus()
         {
-            _eventBus.Subscribe<DevConsoleSignal>(OnDevConsoleChangeState);
+            _eventBus.Subscribe<OnDevConsoleOpenedSignal>(OnDevConsoleChangeState);
         }
         
         private void UnsubscribeFromEventBus()
         {
-            _eventBus.Unsubscribe<DevConsoleSignal>(OnDevConsoleChangeState);
+            _eventBus.Unsubscribe<OnDevConsoleOpenedSignal>(OnDevConsoleChangeState);
         }
         
         private void ChangeInputState(bool isEnabled)
@@ -168,15 +188,27 @@ namespace Input
             IsInteracting = false;
         }
 
-        private void OnDevConsoleChangeState(DevConsoleSignal signal)
+        private void OnDevConsoleChangeState(OnDevConsoleOpenedSignal openedSignal)
         {
-            ChangeInputState(!signal.IsOpened);
+            ChangeInputState(!openedSignal.IsOpened);
         }
 
         #endregion
 
         #region Events
-
+        
+        /// <summary>
+        /// Event on pickup key pressed or unpressed
+        /// </summary>
+        /// <param name="obj">CallbackContext</param>
+        private void OnPickup(InputAction.CallbackContext obj)
+        {
+            if (!_isInputEnabled) return;
+            IsPickup = obj.ReadValueAsButton();
+            if (IsPickup)
+                onPickupEvent.Invoke();
+        }
+        
         /// <summary>
         /// Event on interact key pressed or unpressed
         /// </summary>
