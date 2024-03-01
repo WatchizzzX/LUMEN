@@ -1,3 +1,26 @@
+# [0.11.0](https://github.com/WatchizzzX/LUMEN/compare/v0.10.0...v0.11.0) (2024-03-01)
+
+
+### Bug Fixes
+
+* Bootstraper now destroying when finished job ([17866b7](https://github.com/WatchizzzX/LUMEN/commit/17866b70c3a1bec00470a0eaa95689ba6f5d683e))
+* Fix checking walls in PickupController ([3d9c071](https://github.com/WatchizzzX/LUMEN/commit/3d9c071ec83a5d3e7af65c3918c3ae1c8c206618))
+* Separate pickup and interact event in input ([e00fd99](https://github.com/WatchizzzX/LUMEN/commit/e00fd990fce6651a33113ba7d6adb6c83e3f0f5c))
+* Update Bootstrapper to new signals and managers ([1dc1b47](https://github.com/WatchizzzX/LUMEN/commit/1dc1b47e13f650b5368a36c76dc6b3d92419e7fc))
+* Update GameManager to new signals ([e28b4c4](https://github.com/WatchizzzX/LUMEN/commit/e28b4c47a88a10fb7546668c1bb179a2e8b870c6))
+* Update SpawnManager to new signals. Add camera caching ([bbd6dd6](https://github.com/WatchizzzX/LUMEN/commit/bbd6dd60b79ef1d75b0d3bf2f0f57590cbe19ff5))
+* Update TransitionManager to new signals ([087f820](https://github.com/WatchizzzX/LUMEN/commit/087f8204f3a63129a97da67cf4b2513ce46e51d8))
+
+
+### Features
+
+* Add CameraManager ([2703e7e](https://github.com/WatchizzzX/LUMEN/commit/2703e7ee85a1f00feeb1882f00e3b34196e712fc))
+* Add few signals to EventBus. Add interface to signals ([f2fd486](https://github.com/WatchizzzX/LUMEN/commit/f2fd48637d3f8ccf6d5ab1aad83eb51f6b6e623d))
+* Add settings to managers ([1b39654](https://github.com/WatchizzzX/LUMEN/commit/1b396545e45ad36e48a84817d2434b81dffcc662))
+* Add skybox shader ([4217537](https://github.com/WatchizzzX/LUMEN/commit/4217537ca0d1ac436522db325b437d75516bc0fb))
+* Add Skybox, Material, Fog animators ([62c1269](https://github.com/WatchizzzX/LUMEN/commit/62c12693abbf0e5d02e1169fd8c174c24dab311c))
+* Add triggers ([423f218](https://github.com/WatchizzzX/LUMEN/commit/423f218fb72bc9b66e99fe89adc00fd30b4e4435))
+
 # [0.10.0](https://github.com/WatchizzzX/LUMEN/compare/v0.9.0...v0.10.0) (2024-02-28)
 
 
