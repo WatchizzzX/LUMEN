@@ -4,6 +4,7 @@ using EventBusSystem.Signals.SceneSignals;
 using EventBusSystem.Signals.TransitionSignals;
 using Input;
 using InteractionSystem;
+using Managers.Settings;
 using PickupSystem;
 using Player;
 using ServiceLocatorSystem;
@@ -23,7 +24,8 @@ namespace Managers
         public PlayerAnimator PlayerAnimator { get; private set; }
         public PickupController PickupController { get; private set; }
         public InteractorController InteractorController { get; private set; }
-        public CinemachineCamera PlayerCamera { get; private set; }
+        public CinemachineCamera CinemachineCamera { get; private set; }
+        public Camera MainCamera { get; private set; }
         public PlayerInputHandler PlayerInputHandler { get; private set; }
 
         #endregion
@@ -69,7 +71,7 @@ namespace Managers
         private void SubscribeToEventBus()
         {
             _eventBus.Subscribe<OnSceneLoadedSignal>(OnSceneLoaded);
-            _eventBus.Subscribe<ChangeTransitionStateSignal>(OnChangeTransitionState);
+            _eventBus.Subscribe<OnChangeTransitionStateSignal>(OnChangeTransitionState);
         }
 
         private void UnsubscribeFromEventBus()
@@ -82,11 +84,12 @@ namespace Managers
             _spawnedPlayerObjectsGo = new GameObject("Player Objects");
             _spawnedPlayerObjectsGo.AddComponent<DontDestroyOnLoad>();
 
-            _spawnedCameraGo = Instantiate(spawnManagerSettings.cameraPrefab, new Vector3(-4f, 3f, -4f),
+            _spawnedCameraGo = Instantiate(spawnManagerSettings.cameraPrefab, Vector3.zero,
                 Quaternion.identity);
             _spawnedCameraGo.name = "Player Camera";
             _spawnedCameraGo.transform.SetParent(_spawnedPlayerObjectsGo.transform);
-            PlayerCamera = _spawnedCameraGo.transform.GetComponentInChildren<CinemachineCamera>();
+            CinemachineCamera = _spawnedCameraGo.transform.GetComponentInChildren<CinemachineCamera>();
+            MainCamera = _spawnedCameraGo.transform.GetComponentInChildren<Camera>();
 
             _spawnedInputGo = Instantiate(spawnManagerSettings.inputPrefab, Vector3.zero, Quaternion.identity);
             _spawnedInputGo.name = "Input";
@@ -105,11 +108,13 @@ namespace Managers
                 InteractorController = _spawnedPlayerGo.GetComponent<InteractorController>();
                 PickupController = _spawnedPlayerGo.GetComponent<PickupController>();
 
-                PlayerCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
+                MainCamera.clearFlags = CameraClearFlags.Skybox;
+
+                CinemachineCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
 
                 PlayerInputHandler.onMoveEvent.AddListener(PlayerController.SetMoveDirection);
                 PlayerInputHandler.onInteractEvent.AddListener(InteractorController.Interact);
-                PlayerInputHandler.onInteractEvent.AddListener(PickupController.OnPickupEvent);
+                PlayerInputHandler.onPickupEvent.AddListener(PickupController.OnPickupEvent);
                 PlayerInputHandler.onJumpEvent.AddListener(PlayerController.CallToJump);
                 PlayerInputHandler.onSprintEvent.AddListener(PlayerController.SetSprint);
             }
@@ -129,7 +134,7 @@ namespace Managers
                 SpawnPlayer();
         }
 
-        private void OnChangeTransitionState(ChangeTransitionStateSignal signal)
+        private void OnChangeTransitionState(OnChangeTransitionStateSignal signal)
         {
             switch (signal.TransitionState)
             {
@@ -141,9 +146,10 @@ namespace Managers
                     PlayerAnimator = null;
                     PlayerController = null;
                     PickupController = null;
+                    CinemachineCamera.Follow = null;
                     break;
                 case TransitionState.Cutout:
-                    PlayerCamera.transform.position = new Vector3(-4f, 3f, -4f);
+                    CinemachineCamera.transform.position = spawnManagerSettings.spawnCameraPosition;
                     break;
                 case TransitionState.Finished:
                     break;
