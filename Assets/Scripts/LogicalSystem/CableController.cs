@@ -84,7 +84,7 @@ namespace LogicalSystem
         /// </summary>
         private void ChangeColor()
         {
-            _meshRenderer.material.DOColor(_isEnabled ? onColor : offColor, changeTime);
+            _meshRenderer.material.DOColor(_isEnabled ? onColor : offColor, "_EmissionColor", changeTime);
         }
 
         #endregion
