@@ -1,6 +1,7 @@
 using EventBusSystem;
 using EventBusSystem.Signals.GameSignals;
 using EventBusSystem.Signals.SceneSignals;
+using Managers;
 using NaughtyAttributes;
 using ServiceLocatorSystem;
 using UnityEngine;
@@ -12,9 +13,9 @@ namespace Triggers
     {
         [SerializeField, Scene] private int sceneToSwitch;
         [SerializeField] private LayerMask layersToReact;
-        [SerializeField] private float transitionDuration = 1f;
-        [SerializeField] private UnityEvent<bool> onTrigger;
+        [SerializeField] private UnityEvent<bool, float> onTrigger;
 
+        private float _transitionDuration;
         private EventBus _eventBus;
 
         private bool _isTriggered;
@@ -22,6 +23,8 @@ namespace Triggers
         private void Awake()
         {
             _eventBus = ServiceLocator.Get<EventBus>();
+            var gameManager = ServiceLocator.Get<GameManager>();
+            _transitionDuration = gameManager.Settings.ExitCutsceneDuration;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -30,13 +33,13 @@ namespace Triggers
             if (layersToReact != (layersToReact | (1 << other.gameObject.layer))) return;
             
             _isTriggered = true;
-            onTrigger.Invoke(true);
+            onTrigger.Invoke(true, _transitionDuration);
             SwitchScene();
         }
 
         private void SwitchScene()
         {
-            _eventBus.Invoke(new OnStartExitCutsceneSignal(sceneToSwitch, transitionDuration));
+            _eventBus.Invoke(new OnStartExitCutsceneSignal(sceneToSwitch, _transitionDuration));
         }
     }
 }
