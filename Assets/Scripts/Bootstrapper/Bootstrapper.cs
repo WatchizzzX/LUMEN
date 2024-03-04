@@ -40,7 +40,7 @@ namespace Bootstrapper
             var gameManagerGo = new GameObject("Game Manager", typeof(GameManager));
             gameManagerGo.transform.SetParent(managersGo.transform);
             var gameManager = gameManagerGo.GetComponent<GameManager>();
-            gameManager.gameManagerSettings = gameManagerSettings;
+            gameManager.Settings = gameManagerSettings;
             ServiceLocator.Register(gameManager);
 
             var sceneManagerGo = new GameObject("Scene Manager", typeof(SceneManager));
@@ -51,19 +51,19 @@ namespace Bootstrapper
             var transitionManagerGo = new GameObject("Transition Manager", typeof(TransitionManager));
             transitionManagerGo.transform.SetParent(managersGo.transform);
             var transitionManager = transitionManagerGo.GetComponent<TransitionManager>();
-            transitionManager.transitionManagerSettings = transitionManagerSettings;
+            transitionManager.Settings = transitionManagerSettings;
             ServiceLocator.Register(transitionManager);
             
             var spawnManagerGo = new GameObject("Spawn Manager", typeof(SpawnManager));
             spawnManagerGo.transform.SetParent(managersGo.transform);
             var spawnManager = spawnManagerGo.GetComponent<SpawnManager>();
-            spawnManager.spawnManagerSettings = spawnManagerSettings;
+            spawnManager.Settings = spawnManagerSettings;
             ServiceLocator.Register(spawnManager);
             
             var cameraManagerGo = new GameObject("Camera Manager", typeof(CameraManager));
             cameraManagerGo.transform.SetParent(managersGo.transform);
             var cameraManager = cameraManagerGo.GetComponent<CameraManager>();
-            cameraManager.cameraManagerSettings = cameraManagerSettings;
+            cameraManager.Settings = cameraManagerSettings;
             ServiceLocator.Register(cameraManager);
         }
 
