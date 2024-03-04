@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab1d2602bf794ea897ad916b477e509a, type: 3}
   m_Name: GameManagerSettings
   m_EditorClassIdentifier: 
-  exitLevelTransitionDuration: 1.5
+  exitCutsceneDuration: 7

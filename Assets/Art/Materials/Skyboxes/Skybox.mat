@@ -25,14 +25,14 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _HorizonLineContribution: 0
-    - _HorizonLineExponent: 5.24
+    - _HorizonLineContribution: 1
+    - _HorizonLineExponent: 2.24
     - _SkyGradientExponent: 6
     - _SunDiscContribution: 1
-    - _SunDiscExponent: 20000
+    - _SunDiscExponent: 1079
     - _SunDiscMultiplier: 5
-    - _SunHaloContribution: 0
-    - _SunHaloExponent: 100
+    - _SunHaloContribution: 1
+    - _SunHaloExponent: 60.72
     - _Title: 0
     - __dirty: 0
     m_Colors:
