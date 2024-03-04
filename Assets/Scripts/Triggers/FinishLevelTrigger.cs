@@ -14,6 +14,11 @@ namespace Triggers
         [SerializeField, Scene] private int sceneToSwitch;
         [SerializeField] private LayerMask layersToReact;
         [SerializeField] private UnityEvent<bool, float> onTrigger;
+        [SerializeField] private ExitCamera exitCamera;
+        [SerializeField] private bool enableCustomDuration;
+
+        [SerializeField, ShowIf(nameof(enableCustomDuration))]
+        private float customTransitionDuration;
 
         private float _transitionDuration;
         private EventBus _eventBus;
@@ -29,17 +34,17 @@ namespace Triggers
 
         private void OnTriggerEnter(Collider other)
         {
-            if(_isTriggered) return;
+            if (_isTriggered) return;
             if (layersToReact != (layersToReact | (1 << other.gameObject.layer))) return;
-            
+
             _isTriggered = true;
-            onTrigger.Invoke(true, _transitionDuration);
-            SwitchScene();
+            onTrigger.Invoke(true, enableCustomDuration ? customTransitionDuration : _transitionDuration);
+            SwitchScene(enableCustomDuration ? customTransitionDuration : _transitionDuration);
         }
 
-        private void SwitchScene()
+        private void SwitchScene(float duration)
         {
-            _eventBus.Invoke(new OnStartExitCutsceneSignal(sceneToSwitch, _transitionDuration));
+            _eventBus.Invoke(new OnStartExitCutsceneSignal(sceneToSwitch, duration, exitCamera));
         }
     }
 }
