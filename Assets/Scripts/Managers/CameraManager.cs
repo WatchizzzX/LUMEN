@@ -36,8 +36,18 @@ namespace Managers
 
         private void OnFinishLevel(OnStartExitCutsceneSignal signal)
         {
-            _spawnManager.FinishCamera.Priority.Value = 1;
-            _spawnManager.PlayerCamera.Priority.Value = 0;
+            switch (signal.ExitCamera)
+            {
+                case ExitCamera.FarView:
+                    _spawnManager.FinishCamera.Priority.Value = 1;
+                    _spawnManager.PlayerCamera.Priority.Value = 0;
+                    break;
+                case ExitCamera.StaticView:
+                    _spawnManager.PlayerCamera.Follow = null;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void OnTransitionCutout(OnChangeTransitionStateSignal signal)
