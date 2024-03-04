@@ -1,3 +1,4 @@
+using Animators.Interfaces;
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
@@ -6,7 +7,7 @@ using UnityEngine.Events;
 
 namespace Animators
 {
-    public class PlatformAnimator : MonoBehaviour
+    public class PlatformAnimator : MonoBehaviour, IAnimator
     {
         #region Serialized Fields
 
@@ -20,6 +21,7 @@ namespace Animators
 
         #region Private Variables
 
+        private bool _isEnabled;
         private float _distance;
         private TweenerCore<Vector3, Vector3, VectorOptions> _tweenerCore;
 
@@ -36,13 +38,33 @@ namespace Animators
 
         #region Methods
 
+        public void Animate()
+        {
+            _isEnabled = !_isEnabled;
+            StartAnimation(transitionDuration);
+        }
+
         public void Animate(bool value)
         {
-            var currentDistance = Vector3.Distance(transform.position, value ? onPosition : offPosition);
-            var calculatedDuration = transitionDuration * (currentDistance / _distance);
+            if (_isEnabled == value) return;
+            _isEnabled = value;
+            StartAnimation(transitionDuration);
+        }
+
+        public void Animate(bool value, float duration)
+        {
+            if (_isEnabled == value) return;
+            _isEnabled = value;
+            StartAnimation(duration);
+        }
+        
+        private void StartAnimation(float duration)
+        {
+            var currentDistance = Vector3.Distance(transform.position, _isEnabled ? onPosition : offPosition);
+            var calculatedDuration = duration * (currentDistance / _distance);
             _tweenerCore?.Kill();
-            _tweenerCore = transform.DOMove(value ? onPosition : offPosition, calculatedDuration)
-                .OnComplete(() => HandleEvent(value)).SetUpdate(UpdateType.Fixed).SetEase(Ease.InOutSine);
+            _tweenerCore = transform.DOMove(_isEnabled ? onPosition : offPosition, calculatedDuration)
+                .OnComplete(() => HandleEvent(_isEnabled)).SetUpdate(UpdateType.Fixed).SetEase(Ease.InOutSine);
         }
 
         private void HandleEvent(bool value)
