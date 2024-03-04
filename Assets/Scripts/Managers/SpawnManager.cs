@@ -11,6 +11,7 @@ using Player;
 using ServiceLocatorSystem;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utils;
 
 namespace Managers
@@ -19,14 +20,16 @@ namespace Managers
     {
         #region Public Variables
 
-        public SpawnManagerSettings spawnManagerSettings;
+        [NonSerialized] public SpawnManagerSettings Settings;
 
         public PlayerController PlayerController { get; private set; }
         public PlayerAnimator PlayerAnimator { get; private set; }
         public PickupController PickupController { get; private set; }
         public InteractorController InteractorController { get; private set; }
-        public CinemachineCamera CinemachineCamera { get; private set; }
+        public CinemachineCamera PlayerCamera { get; private set; }
+        public CinemachineCamera FinishCamera { get; private set; }
         public Camera MainCamera { get; private set; }
+        public CinemachineBrain CameraBrain { get; private set; }
         public PlayerInputHandler PlayerInputHandler { get; private set; }
 
         #endregion
@@ -90,14 +93,21 @@ namespace Managers
             _spawnedPlayerObjectsGo = new GameObject("Player Objects");
             _spawnedPlayerObjectsGo.AddComponent<DontDestroyOnLoad>();
 
-            _spawnedCameraGo = Instantiate(spawnManagerSettings.cameraPrefab, Vector3.zero,
+            _spawnedCameraGo = Instantiate(Settings.CameraPrefab, Vector3.zero,
                 Quaternion.identity);
             _spawnedCameraGo.name = "Player Camera";
             _spawnedCameraGo.transform.SetParent(_spawnedPlayerObjectsGo.transform);
-            CinemachineCamera = _spawnedCameraGo.transform.GetComponentInChildren<CinemachineCamera>();
-            MainCamera = _spawnedCameraGo.transform.GetComponentInChildren<Camera>();
+            PlayerCamera = _spawnedCameraGo.transform.Find("Player Camera").GetComponent<CinemachineCamera>();
+            FinishCamera = _spawnedCameraGo.transform.Find("Finish Camera").GetComponent<CinemachineCamera>();
+            var cameraTransform = _spawnedCameraGo.transform.Find("Main Camera");
+            MainCamera = cameraTransform.GetComponent<Camera>();
+            CameraBrain = cameraTransform.GetComponent<CinemachineBrain>();
 
-            _spawnedInputGo = Instantiate(spawnManagerSettings.inputPrefab, Vector3.zero, Quaternion.identity);
+            var exitTime = ServiceLocator.Get<GameManager>().Settings.ExitCutsceneDuration;
+            CameraBrain.DefaultBlend =
+                new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.EaseInOut, exitTime);
+            
+            _spawnedInputGo = Instantiate(Settings.InputPrefab, Vector3.zero, Quaternion.identity);
             _spawnedInputGo.name = "Input";
             _spawnedInputGo.transform.SetParent(_spawnedPlayerObjectsGo.transform);
             PlayerInputHandler = _spawnedInputGo.GetComponent<PlayerInputHandler>();
@@ -107,7 +117,7 @@ namespace Managers
         {
             try
             {
-                _spawnedPlayerGo = Instantiate(spawnManagerSettings.playerPrefab, Vector3.zero, Quaternion.identity);
+                _spawnedPlayerGo = Instantiate(Settings.PlayerPrefab, Vector3.zero, Quaternion.identity);
                 _spawnedPlayerGo.name = "Player";
                 PlayerAnimator = _spawnedPlayerGo.GetComponent<PlayerAnimator>();
                 PlayerController = _spawnedPlayerGo.GetComponent<PlayerController>();
@@ -116,13 +126,15 @@ namespace Managers
 
                 MainCamera.clearFlags = CameraClearFlags.Skybox;
 
-                CinemachineCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
+                PlayerCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
 
                 PlayerInputHandler.onMoveEvent.AddListener(PlayerController.SetMoveDirection);
                 PlayerInputHandler.onInteractEvent.AddListener(InteractorController.Interact);
                 PlayerInputHandler.onPickupEvent.AddListener(PickupController.OnPickupEvent);
                 PlayerInputHandler.onJumpEvent.AddListener(PlayerController.CallToJump);
                 PlayerInputHandler.onSprintEvent.AddListener(PlayerController.SetSprint);
+                
+                _eventBus.Invoke(new OnSpawnPlayerSignal());
             }
             catch (Exception e)
             {
@@ -133,7 +145,8 @@ namespace Managers
         private void RespawnPlayer()
         {
             _spawnedPlayerGo.transform.position = Vector3.zero;
-            CinemachineCamera.ForceCameraPosition(spawnManagerSettings.spawnCameraPosition, spawnManagerSettings.spawnCameraRotation);
+            PlayerCamera.ForceCameraPosition(Settings.SpawnCameraPosition,
+                Settings.SpawnCameraRotation);
         }
 
         #endregion
@@ -171,10 +184,11 @@ namespace Managers
                     PlayerAnimator = null;
                     PlayerController = null;
                     PickupController = null;
-                    CinemachineCamera.Follow = null;
+                    PlayerCamera.Follow = null;
                     break;
                 case TransitionState.Cutout:
-                    CinemachineCamera.ForceCameraPosition(spawnManagerSettings.spawnCameraPosition, spawnManagerSettings.spawnCameraRotation);
+                    PlayerCamera.ForceCameraPosition(Settings.SpawnCameraPosition,
+                        Settings.SpawnCameraRotation);
                     break;
                 case TransitionState.Finished:
                     break;

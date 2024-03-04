@@ -7,12 +7,14 @@ using EventBusSystem.Signals.SceneSignals;
 using Managers.Settings;
 using ServiceLocatorSystem;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Managers
 {
     public class GameManager : MonoBehaviour, IService
     {
-        public GameManagerSettings gameManagerSettings;
+        [NonSerialized]
+        public GameManagerSettings Settings;
         
         private EventBus _eventBus;
 

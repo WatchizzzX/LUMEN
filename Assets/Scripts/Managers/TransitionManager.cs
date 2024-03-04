@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using EasyTransition;
 using EventBusSystem;
@@ -16,7 +17,8 @@ namespace Managers
     {
         #region Public Variables
 
-        public TransitionManagerSettings transitionManagerSettings;
+        [NonSerialized]
+        public TransitionManagerSettings Settings;
 
         #endregion
 
@@ -65,10 +67,10 @@ namespace Managers
         /// <param name="startDelay">The delay before the transition starts.</param>
         public void Transition(float startDelay)
         {
-            if (!CheckTransition(transitionManagerSettings.defaultTransitionSettings)) return;
+            if (!CheckTransition(Settings.DefaultTransitionSettings)) return;
 
             _runningTransition = true;
-            StartCoroutine(Timer(startDelay, transitionManagerSettings.defaultTransitionSettings));
+            StartCoroutine(Timer(startDelay, Settings.DefaultTransitionSettings));
         }
 
         /// <summary>
@@ -78,10 +80,10 @@ namespace Managers
         /// <param name="startDelay">The delay before the transition starts.</param>
         public void Transition(string sceneName, float startDelay)
         {
-            if (!CheckTransition(transitionManagerSettings.defaultTransitionSettings)) return;
+            if (!CheckTransition(Settings.DefaultTransitionSettings)) return;
 
             _runningTransition = true;
-            StartCoroutine(Timer(sceneName, startDelay, transitionManagerSettings.defaultTransitionSettings));
+            StartCoroutine(Timer(sceneName, startDelay, Settings.DefaultTransitionSettings));
         }
 
         /// <summary>
@@ -91,10 +93,10 @@ namespace Managers
         /// <param name="startDelay">The delay before the transition starts.</param>
         public void Transition(int sceneIndex, float startDelay)
         {
-            if (!CheckTransition(transitionManagerSettings.defaultTransitionSettings)) return;
+            if (!CheckTransition(Settings.DefaultTransitionSettings)) return;
 
             _runningTransition = true;
-            StartCoroutine(Timer(sceneIndex, startDelay, transitionManagerSettings.defaultTransitionSettings));
+            StartCoroutine(Timer(sceneIndex, startDelay, Settings.DefaultTransitionSettings));
         }
 
         /// <summary>
@@ -177,7 +179,7 @@ namespace Managers
 
             _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started, true));
 
-            var template = Instantiate(transitionManagerSettings.transitionPrefab);
+            var template = Instantiate(Settings.TransitionPrefab);
             template.GetComponent<Transition>().transitionSettings = transitionSettings;
 
             var transitionTime = transitionSettings.transitionTime;
@@ -203,7 +205,7 @@ namespace Managers
 
             _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started, true));
 
-            var template = Instantiate(transitionManagerSettings.transitionPrefab);
+            var template = Instantiate(Settings.TransitionPrefab);
             template.GetComponent<Transition>().transitionSettings = transitionSettings;
 
             var transitionTime = transitionSettings.transitionTime;
@@ -229,7 +231,7 @@ namespace Managers
 
             _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started, false));
 
-            var template = Instantiate(transitionManagerSettings.transitionPrefab);
+            var template = Instantiate(Settings.TransitionPrefab);
             template.GetComponent<Transition>().transitionSettings = transitionSettings;
 
             var transitionTime = transitionSettings.transitionTime;
