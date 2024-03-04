@@ -397,7 +397,7 @@ MonoBehaviour:
     type: 2}
   gameManagerSettings: {fileID: 11400000, guid: 1f4ea8ff35928b2bebba14fbc0327f00,
     type: 2}
-  startupScene: 2
+  startupScene: 1
 --- !u!4 &948697616
 Transform:
   m_ObjectHideFlags: 0
