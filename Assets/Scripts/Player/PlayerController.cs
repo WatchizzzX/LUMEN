@@ -1,3 +1,4 @@
+using DavidFDev.DevConsole;
 using TMPro;
 using UnityEngine;
 using Utils;
@@ -69,6 +70,8 @@ namespace Player
         /// </summary>
         [Tooltip("Cooldown for next jump")] [SerializeField, Range(0f, 1f)]
         private float jumpCooldown;
+
+        [SerializeField] private bool enableJumpingFromWalls;
 
         /// <summary>
         /// The maximum angle at which the ground remains the ground"
@@ -268,6 +271,7 @@ namespace Player
 
         private void Awake()
         {
+            RegisterCommands();
             _body = GetComponent<Rigidbody>();
             _cameraPosition = Camera.main?.transform;
 
@@ -275,6 +279,11 @@ namespace Player
                 Logger.Log(LoggerChannel.Player, Priority.Warning,
                     "Controller can't find MainCamera. Rotating input will be not work");
             OnValidate();
+        }
+
+        private void OnDestroy()
+        {
+            UnregisterCommands();
         }
 
         private void OnValidate()
@@ -529,6 +538,7 @@ namespace Player
             }
             else if (OnSteep)
             {
+                if (!enableJumpingFromWalls) return;
                 jumpDirection = _steepNormal;
                 _jumpPhase = 0;
             }
@@ -686,6 +696,28 @@ namespace Player
         public void CallToJump()
         {
             _desiredJump = true;
+        }
+
+        #endregion
+
+        #region Dev-commands
+
+        private void RegisterCommands()
+        {
+            DevConsole.AddCommand(Command.Create(
+                name: "walljump",
+                aliases: "",
+                helpText: "Switch wall jump ability",
+                callback: () =>
+                {
+                    enableJumpingFromWalls = !enableJumpingFromWalls;
+                    DevConsole.Log($"Walljump is {enableJumpingFromWalls}");
+                }));
+        }
+
+        private void UnregisterCommands()
+        {
+            DevConsole.RemoveCommand("walljump");
         }
 
         #endregion
