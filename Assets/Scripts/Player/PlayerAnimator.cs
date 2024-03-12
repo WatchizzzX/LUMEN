@@ -118,9 +118,18 @@ namespace Player
         /// </summary>
         private void SmoothValues()
         {
-            _smoothedWalkingSpeed =
-                Mathf.SmoothDamp(_smoothedWalkingSpeed, _isSprinting ? _walkingSpeed * 2 : _walkingSpeed,
-                    ref _smoothVelocity, smoothTime);
+            if (_smoothedWalkingSpeed < 0.001f)
+            {
+                _smoothedWalkingSpeed =
+                    Mathf.SmoothDamp(_smoothedWalkingSpeed, _isSprinting ? _walkingSpeed * 2 : _walkingSpeed,
+                        ref _smoothVelocity, 0f);
+            }
+            else
+            {
+                _smoothedWalkingSpeed =
+                    Mathf.SmoothDamp(_smoothedWalkingSpeed, _isSprinting ? _walkingSpeed * 2 : _walkingSpeed,
+                        ref _smoothVelocity, smoothTime);
+            }
         }
 
         #endregion
