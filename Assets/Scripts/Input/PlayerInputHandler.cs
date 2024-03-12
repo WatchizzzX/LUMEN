@@ -1,6 +1,7 @@
 using System;
 using EventBusSystem;
 using EventBusSystem.Signals.DeveloperSignals;
+using EventBusSystem.Signals.GameSignals;
 using ServiceLocatorSystem;
 using UnityEngine;
 using UnityEngine.Events;
@@ -169,11 +170,15 @@ namespace Input
         private void SubscribeToEventBus()
         {
             _eventBus.Subscribe<OnDevConsoleOpenedSignal>(OnDevConsoleChangeState);
+            _eventBus.Subscribe<OnStartExitCutsceneSignal>(OnStartExitCutscene);
+            _eventBus.Subscribe<OnSpawnPlayerSignal>(OnSpawnPlayer);
         }
         
         private void UnsubscribeFromEventBus()
         {
             _eventBus.Unsubscribe<OnDevConsoleOpenedSignal>(OnDevConsoleChangeState);
+            _eventBus.Unsubscribe<OnStartExitCutsceneSignal>(OnStartExitCutscene);
+            _eventBus.Unsubscribe<OnSpawnPlayerSignal>(OnSpawnPlayer);
         }
         
         private void ChangeInputState(bool isEnabled)
@@ -186,11 +191,24 @@ namespace Input
             IsJumping = false;
             IsSprinting = false;
             IsInteracting = false;
+            
+            onMoveEvent.Invoke(Move);
+            onSprintEvent.Invoke(IsSprinting);
         }
 
-        private void OnDevConsoleChangeState(OnDevConsoleOpenedSignal openedSignal)
+        private void OnDevConsoleChangeState(OnDevConsoleOpenedSignal signal)
         {
-            ChangeInputState(!openedSignal.IsOpened);
+            ChangeInputState(!signal.IsOpened);
+        }
+
+        private void OnStartExitCutscene(OnStartExitCutsceneSignal signal)
+        {
+            ChangeInputState(false);
+        }
+
+        private void OnSpawnPlayer(OnSpawnPlayerSignal signal)
+        {
+            ChangeInputState(true);
         }
 
         #endregion

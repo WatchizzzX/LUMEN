@@ -1,9 +1,10 @@
 using DG.Tweening;
 using UnityEngine;
+using Animators.Interfaces;
 
 namespace Animators
 {
-    public class LightAnimator : MonoBehaviour
+    public class LightAnimator : MonoBehaviour , IAnimator
     {
         #region Serialized Fields
 
@@ -11,23 +12,49 @@ namespace Animators
         [SerializeField] private float targetRange;
         [SerializeField] private Color targetColor;
         [SerializeField] private Light targetLightSource;
-        
+
         /// <summary>
         /// Duration of transition
         /// </summary>
-        [Tooltip("Duration of transition")]
-        [SerializeField] private float transitionDuration = 0.5f;
+        [Tooltip("Duration of transition")] [SerializeField]
+        private float transitionDuration = 0.5f;
 
         #endregion
 
+        #region Private Variables
+
+        private bool _isEnabled;
+
+        #endregion
+        
         #region Methods
+
+        public void Animate()
+        {
+            _isEnabled = !_isEnabled;
+            StartAnimation(transitionDuration);
+        }
 
         public void Animate(bool value)
         {
-            DOTween.To(() => targetLightSource.range, x => targetLightSource.range = x, value ? targetRange : 0,
-                transitionDuration);
-            targetLightSource.DOIntensity(value ? targetIntensity : 0, transitionDuration);
-            targetLightSource.DOColor(value ? targetColor : Color.black, transitionDuration);
+            if (_isEnabled == value) return;
+            _isEnabled = value;
+            StartAnimation(transitionDuration);
+        }
+
+        public void Animate(bool value, float duration)
+        {
+            if (_isEnabled == value) return;
+            _isEnabled = value;
+            StartAnimation(duration);
+        }
+
+        private void StartAnimation(float duration)
+        {
+            DOTween.To(() => targetLightSource.range, x => targetLightSource.range = x, _isEnabled ? targetRange : 0,
+                duration);
+            targetLightSource.DOIntensity(_isEnabled ? targetIntensity : 0, duration);
+            targetLightSource.DOColor(_isEnabled ? targetColor : Color.black, duration);
         }
 
         #endregion

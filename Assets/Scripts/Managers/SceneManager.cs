@@ -1,3 +1,4 @@
+using System;
 using DavidFDev.DevConsole;
 using EventBusSystem;
 using EventBusSystem.Signals.SceneSignals;
@@ -90,7 +91,7 @@ namespace Managers
             }
 
             Logger.Log(LoggerChannel.SceneManager, Priority.Error,
-                $"{UnityEngine.SceneManagement.SceneManager.GetSceneByBuildIndex(sceneID).name} scene required to load, but this scene doesn't exists in build");
+                $"Scene required to load, but this scene doesn't exists in build");
             return false;
         }
 
@@ -106,6 +107,7 @@ namespace Managers
                     helpText: "Scene name to load"),
                 callback: sceneName =>
                 {
+                    if (!DoesSceneExist(sceneName)) return;
                     LoadScene(SceneUtility.GetBuildIndexByScenePath(sceneName), 0f);
                 }));
 
@@ -122,6 +124,28 @@ namespace Managers
                 Logger.Log(LoggerChannel.SceneManager, Priority.Info, "Unregistering dev-commands was successful");
             else
                 Logger.Log(LoggerChannel.SceneManager, Priority.Warning, "Unregistering dev-commands was failed");
+        }
+
+        #endregion
+
+        #region Utils
+
+        public static bool DoesSceneExist(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return false;
+
+            for (var i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings; i++)
+            {
+                var scenePath = SceneUtility.GetScenePathByBuildIndex(i);
+                var lastSlash = scenePath.LastIndexOf("/", StringComparison.Ordinal);
+                var sceneName = scenePath.Substring(lastSlash + 1, scenePath.LastIndexOf(".", StringComparison.Ordinal) - lastSlash - 1);
+
+                if (string.Compare(name, sceneName, StringComparison.OrdinalIgnoreCase) == 0)
+                    return true;
+            }
+
+            return false;
         }
 
         #endregion

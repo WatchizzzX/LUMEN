@@ -1,4 +1,7 @@
+using System;
+using DavidFDev.DevConsole;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using Utils;
 using Utils.Extensions;
@@ -39,6 +42,12 @@ namespace Player
         private float maxAirAcceleration = 1f;
 
         /// <summary>
+        /// Acceleration force which will be applied when player on slope
+        /// </summary>
+        [Tooltip("Acceleration force to slope")] [SerializeField, Range(0f, 1f)]
+        private float accelerationForceToSlope;
+
+        /// <summary>
         /// The time for which the player turns in desired direction
         /// </summary>
         [Space(2f), Header("Rotation settings")]
@@ -69,6 +78,8 @@ namespace Player
         /// </summary>
         [Tooltip("Cooldown for next jump")] [SerializeField, Range(0f, 1f)]
         private float jumpCooldown;
+
+        [SerializeField] private bool enableJumpingFromWalls;
 
         /// <summary>
         /// The maximum angle at which the ground remains the ground"
@@ -253,6 +264,16 @@ namespace Player
         /// </summary>
         private float _internalJumpCooldownTimer;
 
+        /// <summary>
+        /// Direction in which player slide on slope
+        /// </summary>
+        private Vector3 _slidingDirection;
+
+        /// <summary>
+        /// Cached gravity force
+        /// </summary>
+        private Vector3 _gravityForce;
+
         #endregion
 
         #region Public Fields
@@ -268,6 +289,7 @@ namespace Player
 
         private void Awake()
         {
+            RegisterCommands();
             _body = GetComponent<Rigidbody>();
             _cameraPosition = Camera.main?.transform;
 
@@ -277,10 +299,16 @@ namespace Player
             OnValidate();
         }
 
+        private void OnDestroy()
+        {
+            UnregisterCommands();
+        }
+
         private void OnValidate()
         {
             _minGroundDotProduct = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);
             _minStairsDotProduct = Mathf.Cos(maxStairsAngle * Mathf.Deg2Rad);
+            _gravityForce = Physics.gravity;
         }
 
         private void Update()
@@ -343,7 +371,7 @@ namespace Player
         private void DebugText()
         {
             debugText.text =
-                $"CoyoteTime:{_internalCoyoteTimer:f2}. OnGround:{OnGround}. OnSteep:{OnSteep}. Jump: {_jumpPhase}";
+                $"CoyoteTime:{_internalCoyoteTimer:f2}. OnGround:{OnGround}. OnSteep:{OnSteep}. Jump: {_jumpPhase}. Dot: {Vector3.Dot(transform.up, _steepNormal):f3}";
         }
 
         /// <summary>
@@ -529,6 +557,7 @@ namespace Player
             }
             else if (OnSteep)
             {
+                if (!enableJumpingFromWalls) return;
                 jumpDirection = _steepNormal;
                 _jumpPhase = 0;
             }
@@ -639,12 +668,12 @@ namespace Player
 
         private void DecreaseVelocityOnSteep()
         {
-            var dotProduct = Vector3.Dot(_desiredVelocity, _steepNormal);
+            var dotProduct = Vector3.Dot(transform.up, _steepNormal);
 
-            if (dotProduct < 0)
-            {
-                _desiredVelocity = Vector3.zero;
-            }
+            if (!Physics.Raycast(_body.position, Vector3.down, out _, probeDistance, probeMask)) return;
+            if (!(dotProduct > 0f)) return;
+            _slidingDirection = _gravityForce - _steepNormal * Vector3.Dot(_gravityForce, _steepNormal);
+            _velocity += _slidingDirection.normalized * accelerationForceToSlope;
         }
 
         /// <summary>
@@ -686,6 +715,28 @@ namespace Player
         public void CallToJump()
         {
             _desiredJump = true;
+        }
+
+        #endregion
+
+        #region Dev-commands
+
+        private void RegisterCommands()
+        {
+            DevConsole.AddCommand(Command.Create(
+                name: "walljump",
+                aliases: "",
+                helpText: "Switch wall jump ability",
+                callback: () =>
+                {
+                    enableJumpingFromWalls = !enableJumpingFromWalls;
+                    DevConsole.Log($"Walljump is {enableJumpingFromWalls}");
+                }));
+        }
+
+        private void UnregisterCommands()
+        {
+            DevConsole.RemoveCommand("walljump");
         }
 
         #endregion

@@ -17,5 +17,6 @@ MonoBehaviour:
   cameraPrefab: {fileID: 4632788645370407158, guid: ea7feacc0ac5ca3a082299164ab8eb3b,
     type: 3}
   spawnCameraPosition: {x: -4.107194, y: 3.3042452, z: -4.1071935}
+  spawnCameraRotation: {x: 0.16043, y: 0.37686962, z: -0.06645229, w: 0.9098437}
   inputPrefab: {fileID: 2267453043907785637, guid: f2af77d7ce61a6228a841ce0020d0b13,
     type: 3}

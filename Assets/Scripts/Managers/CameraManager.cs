@@ -6,15 +6,17 @@ using EventBusSystem.Signals.TransitionSignals;
 using Managers.Settings;
 using ServiceLocatorSystem;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Managers
 {
     public class CameraManager : MonoBehaviour, IService
     {
-        public CameraManagerSettings cameraManagerSettings;
+        [NonSerialized]
+        public CameraManagerSettings Settings;
 
         private EventBus _eventBus;
-        private Camera _mainCamera;
+        private SpawnManager _spawnManager;
 
         private void Awake()
         {
@@ -24,8 +26,7 @@ namespace Managers
 
         private void Start()
         {
-            var spawnManager = ServiceLocator.Get<SpawnManager>();
-            _mainCamera = spawnManager.MainCamera;
+            _spawnManager = ServiceLocator.Get<SpawnManager>();
         }
 
         private void OnDestroy()
@@ -35,14 +36,26 @@ namespace Managers
 
         private void OnFinishLevel(OnStartExitCutsceneSignal signal)
         {
-            _mainCamera.DOColor(cameraManagerSettings.finishColor, signal.CutsceneDuration);
+            switch (signal.ExitCamera)
+            {
+                case ExitCamera.FarView:
+                    _spawnManager.FinishCamera.Priority.Value = 1;
+                    _spawnManager.PlayerCamera.Priority.Value = 0;
+                    break;
+                case ExitCamera.StaticView:
+                    _spawnManager.PlayerCamera.Follow = null;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void OnTransitionCutout(OnChangeTransitionStateSignal signal)
         {
             if (signal.TransitionState != TransitionState.Cutout) return;
 
-            _mainCamera.backgroundColor = cameraManagerSettings.startColor;
+            _spawnManager.FinishCamera.Priority.Value = 0;
+            _spawnManager.PlayerCamera.Priority.Value = 1;
         }
 
         private void SubscribeToEventBus()
