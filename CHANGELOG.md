@@ -1,3 +1,37 @@
+# [0.12.0](https://github.com/WatchizzzX/LUMEN/compare/v0.11.0...v0.12.0) (2024-03-12)
+
+
+### Bug Fixes
+
+* Add check scene in SceneManager ([13ce4d2](https://github.com/WatchizzzX/LUMEN/commit/13ce4d235c480e24dbd9a9339be9b4d69156ca96))
+* Add spawnCameraRotation to SpawnManager ([31741e7](https://github.com/WatchizzzX/LUMEN/commit/31741e701df47fac79317cff9a20639be3c121a1))
+* FinishLevel trigger now take duration form gamemanager settings ([9f6ef08](https://github.com/WatchizzzX/LUMEN/commit/9f6ef08753ec3866dcdb139d3acdc8967abd39fc))
+* Fix camera movement on spawn ([d3edf57](https://github.com/WatchizzzX/LUMEN/commit/d3edf571e2060a5e29f3dafbe07f7f7b13642f3e))
+* Make shorter animation from moving to falling ([76c4552](https://github.com/WatchizzzX/LUMEN/commit/76c4552ed9bbfb39e333334a3c1503c647adcaa8))
+* Now CableController work with emission ([14556e5](https://github.com/WatchizzzX/LUMEN/commit/14556e59b12d3dd47f2ea3d34109df46cb43d94a))
+* Some fixes in managers ([98e68c6](https://github.com/WatchizzzX/LUMEN/commit/98e68c6dff7f352db72f103cf07477ee0b42dba9))
+* Update bootstrapper to current managers ([6b6c8dc](https://github.com/WatchizzzX/LUMEN/commit/6b6c8dc6b9a3536d10a41601c7a195f8cd1b39a1))
+* Update CameraManager to new exit cameras ([7703f8f](https://github.com/WatchizzzX/LUMEN/commit/7703f8f31005c89fdbee858daefb6cbd2af963e8))
+* Update input handler to SpawnPlayer signal ([bdd9b60](https://github.com/WatchizzzX/LUMEN/commit/bdd9b603dfb4936c843fdf8852d7b060373b65ad))
+* Update TransitionManager to new signal and respawn event ([70aa6fa](https://github.com/WatchizzzX/LUMEN/commit/70aa6fac01dc8d3ee0f63a033c7c21dc44538636))
+
+
+### Features
+
+* Add changing scene bool to transition signal ([ce78f9d](https://github.com/WatchizzzX/LUMEN/commit/ce78f9d1669d20809ceab90ceb5870f14e4c3f7c))
+* Add custom exit time in FinishLevelTrigger ([898cce1](https://github.com/WatchizzzX/LUMEN/commit/898cce152e42cff1e2983f4464e184ee72580e25))
+* Add EmmisionAnimator ([3f65795](https://github.com/WatchizzzX/LUMEN/commit/3f65795c80f543af1324060d5fc592d7b043e690))
+* Add event for pickable objects ([815e500](https://github.com/WatchizzzX/LUMEN/commit/815e50097acf353371a9e8f0a44010868c0ba954))
+* Add OnRespawnPlayer signal ([35c2857](https://github.com/WatchizzzX/LUMEN/commit/35c28579e85eac74159ada7e5c9b7f334e7d9dc3))
+* Add OnSpawnPlayerSignal ([b94614c](https://github.com/WatchizzzX/LUMEN/commit/b94614c5a3be556ce58b07e7234ccb523cbd5e4b))
+* Add PickupObject for containing start position ([3368d52](https://github.com/WatchizzzX/LUMEN/commit/3368d525c22316402ca1c782238eb540b287bef8))
+* Add RespawnPlayerTrigger ([ea9f534](https://github.com/WatchizzzX/LUMEN/commit/ea9f5348e18a3f411eb0260f6d1641cf0bf15ff7))
+* Add switch for walljump in PlayerController ([5dcc965](https://github.com/WatchizzzX/LUMEN/commit/5dcc965433ad2b64f8b2e0360f4d4d74ef5d2b32))
+* Add two types of exit cameras in signal ([a72fcaa](https://github.com/WatchizzzX/LUMEN/commit/a72fcaa0605dcb68b48f9a62423d316436560416))
+* Added extra acceleration to sliding when the player is on a slope ([da99185](https://github.com/WatchizzzX/LUMEN/commit/da991850fb374ca1b3ad33f4cfdea61399ef76f3))
+* Now animators realize interface ([b81a92a](https://github.com/WatchizzzX/LUMEN/commit/b81a92a5361c2369f2a221f8c5013b126cbe7446))
+* Now settings for managers are readonly in runtime ([549bb39](https://github.com/WatchizzzX/LUMEN/commit/549bb397aa5ca2b05be342d4ad28cf94a0484ccd))
+
 # [0.11.0](https://github.com/WatchizzzX/LUMEN/compare/v0.10.0...v0.11.0) (2024-03-01)
 
 
