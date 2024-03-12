@@ -1915,6 +1915,7 @@ MonoBehaviour:
   runSpeed: 4.1
   maxAcceleration: 10
   maxAirAcceleration: 5
+  accelerationForceToSlope: 0.4
   smoothRotationTime: 0.06
   jumpHeight: 1.3
   maxAirJumps: 0
@@ -1930,7 +1931,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   maxSnapSpeed: 100
-  probeDistance: 2
+  probeDistance: 0.2
   debugText: {fileID: 0}
 --- !u!114 &8888472110445852648
 MonoBehaviour:
