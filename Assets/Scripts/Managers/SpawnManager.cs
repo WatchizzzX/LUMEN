@@ -145,6 +145,7 @@ namespace Managers
         private void RespawnPlayer()
         {
             _spawnedPlayerGo.transform.position = Vector3.zero;
+            PlayerCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
             PlayerCamera.ForceCameraPosition(Settings.SpawnCameraPosition,
                 Settings.SpawnCameraRotation);
         }

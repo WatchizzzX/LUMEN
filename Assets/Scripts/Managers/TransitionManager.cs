@@ -58,7 +58,7 @@ namespace Managers
 
         private void OnRespawnPlayer(OnRespawnPlayerSignal signal)
         {
-            Transition(0f);
+            Transition(signal.TransitionStartDelay);
         }
 
         /// <summary>

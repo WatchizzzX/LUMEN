@@ -17,6 +17,8 @@ namespace Editor
         [FormerlySerializedAs("loggerChannels")] [SerializeField]
         private LoggerChannel loggerLoggerChannels = Logger.KAllChannels;
 
+        private bool onlyErrors;
+
         private void OnGUI()
         {
             EditorGUI.BeginChangeCheck();
@@ -29,6 +31,11 @@ namespace Editor
             if (GUILayout.Button("Select all"))
             {
                 loggerLoggerChannels = Logger.KAllChannels;
+            }
+
+            if (GUILayout.Button(onlyErrors ? "Enable all log info" : "Enable only errors info"))
+            {
+                onlyErrors = !onlyErrors;
             }
 
             EditorGUILayout.EndHorizontal();
@@ -57,6 +64,7 @@ namespace Editor
         private void OnEnable()
         {
             Logger.SetChannels(loggerLoggerChannels);
+            Logger.logOnlyErrors = onlyErrors;
         }
     }
 }

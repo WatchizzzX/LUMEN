@@ -357,11 +357,17 @@ namespace Player
 
         public MovementState GetMovementState()
         {
-            var velocity = _body.velocity;
+            /*var velocity = _body.velocity;
             var isFalling = (OnSteep && !OnGround) || (!OnGround && velocity.y < 0);
             var relativeSpeed = HorizontalVelocity.magnitude / DesiredSpeed;
-            var isJumping = _desiredJump && _internalJumpCooldownTimer <= 0f ||
+            var isJumping = (_desiredJump && _internalJumpCooldownTimer <= 0f) ||
                             (!OnGround && _jumpPhase > 0 && velocity.y >= 0);
+            isFalling = !isJumping && isFalling;*/
+            
+            var velocity = _body.velocity;
+            var isFalling = (OnSteep && !OnGround && Vector3.Dot(transform.up, _steepNormal) > 0f) || (!OnGround && velocity.y < 0);
+            var relativeSpeed = HorizontalVelocity.magnitude / DesiredSpeed;
+            var isJumping = _jumpPhase > 0 && velocity.y > 0.1f;
             return new MovementState(isFalling, relativeSpeed, isJumping, _cachedSprinting);
         }
 

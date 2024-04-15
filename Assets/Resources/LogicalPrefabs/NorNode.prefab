@@ -1,108 +1,75 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &217008359399136223
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4214741916385526374}
-  m_Layer: 0
-  m_Name: NorNode
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
---- !u!4 &4214741916385526374
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 217008359399136223}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2075967247785684905}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &394045753607689798
+--- !u!1001 &8605420187952165181
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 4214741916385526374}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 508476134297004488, guid: d316f5ba019f98a828896ea93549663c,
-        type: 3}
-      propertyPath: m_Name
-      value: LogicalElement
-      objectReference: {fileID: 0}
-    - target: {fileID: 1853442013334469103, guid: d316f5ba019f98a828896ea93549663c,
+    - target: {fileID: 1146979874480027408, guid: 2019fb73e8b03cc458026cd0240c90d8,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1853442013334469103, guid: d316f5ba019f98a828896ea93549663c,
+    - target: {fileID: 1146979874480027408, guid: 2019fb73e8b03cc458026cd0240c90d8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1853442013334469103, guid: d316f5ba019f98a828896ea93549663c,
+    - target: {fileID: 1146979874480027408, guid: 2019fb73e8b03cc458026cd0240c90d8,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1853442013334469103, guid: d316f5ba019f98a828896ea93549663c,
+    - target: {fileID: 1146979874480027408, guid: 2019fb73e8b03cc458026cd0240c90d8,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1853442013334469103, guid: d316f5ba019f98a828896ea93549663c,
+    - target: {fileID: 1146979874480027408, guid: 2019fb73e8b03cc458026cd0240c90d8,
         type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1853442013334469103, guid: d316f5ba019f98a828896ea93549663c,
+    - target: {fileID: 1146979874480027408, guid: 2019fb73e8b03cc458026cd0240c90d8,
         type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1853442013334469103, guid: d316f5ba019f98a828896ea93549663c,
+    - target: {fileID: 1146979874480027408, guid: 2019fb73e8b03cc458026cd0240c90d8,
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1853442013334469103, guid: d316f5ba019f98a828896ea93549663c,
+    - target: {fileID: 1146979874480027408, guid: 2019fb73e8b03cc458026cd0240c90d8,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1853442013334469103, guid: d316f5ba019f98a828896ea93549663c,
+    - target: {fileID: 1146979874480027408, guid: 2019fb73e8b03cc458026cd0240c90d8,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1853442013334469103, guid: d316f5ba019f98a828896ea93549663c,
+    - target: {fileID: 1146979874480027408, guid: 2019fb73e8b03cc458026cd0240c90d8,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4457047770963296676, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: m_Name
+      value: NorNode
+      objectReference: {fileID: 0}
+    - target: {fileID: 6516174006826240173, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: d5aebed952d0b9040a6aec5ef5f62057, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d316f5ba019f98a828896ea93549663c, type: 3}
---- !u!4 &2075967247785684905 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1853442013334469103, guid: d316f5ba019f98a828896ea93549663c,
-    type: 3}
-  m_PrefabInstance: {fileID: 394045753607689798}
-  m_PrefabAsset: {fileID: 0}
+  m_SourcePrefab: {fileID: 100100000, guid: 2019fb73e8b03cc458026cd0240c90d8, type: 3}

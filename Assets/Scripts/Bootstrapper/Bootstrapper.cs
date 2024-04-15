@@ -65,6 +65,11 @@ namespace Bootstrapper
             var cameraManager = cameraManagerGo.GetComponent<CameraManager>();
             cameraManager.Settings = cameraManagerSettings;
             ServiceLocator.Register(cameraManager);
+
+            var animationManagerGo = new GameObject("Animation Manager", typeof(AnimationManager));
+            animationManagerGo.transform.SetParent(managersGo.transform);
+            var animationManager = animationManagerGo.GetComponent<AnimationManager>();
+            ServiceLocator.Register(animationManager);
         }
 
         private void LoadStartupScene()

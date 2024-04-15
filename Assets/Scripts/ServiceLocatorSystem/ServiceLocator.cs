@@ -16,7 +16,22 @@ namespace ServiceLocatorSystem
 
             Logger.Log(LoggerChannel.ServiceLocator, Priority.Error,
                 $"{key} service not registered in ServiceLocator");
-            throw new InvalidOperationException();
+            throw new KeyNotFoundException($"{key} service not registered in ServiceLocator");
+        }
+        
+        public static bool TryGet<T>(out T foundedService) where T : IService
+        {
+            var key = typeof(T).Name;
+            if (Managers.TryGetValue(key, out var manager))
+            {
+                foundedService = (T)manager;
+                return true;
+            }
+
+            Logger.Log(LoggerChannel.ServiceLocator, Priority.Error,
+                $"{key} service not registered in ServiceLocator");
+            foundedService = default;
+            return false;
         }
 
         public static void Register<T>(T service) where T : IService

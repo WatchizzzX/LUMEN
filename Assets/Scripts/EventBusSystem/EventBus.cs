@@ -38,8 +38,9 @@ namespace EventBusSystem
             Logger.Log(LoggerChannel.EventBus, Priority.Info, $"Invoked {key}");
             if (!_signalCallbacks.TryGetValue(key, out var signalCallback)) return;
 
-            foreach (var callback in signalCallback.Select(obj => obj.Callback as Action<T>))
+            foreach (var obj in signalCallback.OrderBy(obj => obj.Priority))
             {
+                var callback = obj.Callback as Action<T>;
                 callback?.Invoke(signal);
             }
         }

@@ -8,14 +8,14 @@ using Managers.Settings;
 using ServiceLocatorSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Logger = Utils.Logger;
 
 namespace Managers
 {
     public class GameManager : MonoBehaviour, IService
     {
-        [NonSerialized]
-        public GameManagerSettings Settings;
-        
+        [NonSerialized] public GameManagerSettings Settings;
+
         private EventBus _eventBus;
 
         private void Awake()
@@ -24,14 +24,52 @@ namespace Managers
 
             DevConsole.OnConsoleOpened += OnDevConsoleChangeState;
             DevConsole.OnConsoleClosed += OnDevConsoleChangeState;
-            
+
             SubscribeToEventBus();
+
+#if UNITY_EDITOR || DEBUG
+
+            AddDevCommands();
+#endif
         }
 
         private void OnDestroy()
         {
             UnsubscribeFromEventBus();
+            
+#if UNITY_EDITOR || DEBUG
+
+            RemoveDevCommands();
+#endif
         }
+
+#if UNITY_EDITOR || DEBUG
+        private void AddDevCommands()
+        {
+            DevConsole.AddCommand(Command.Create<GraphicChanger.GraphicsSettings>(
+                name: "set_settings",
+                aliases: "settings",
+                helpText: "Set graphics settings",
+                p1: Parameter.Create(
+                    name: "Level of graphics", helpText: "Level of graphics"),
+                callback: GraphicChanger.SetQuality));
+            
+            DevConsole.AddCommand(Command.Create<bool>(
+                name: "logging",
+                aliases: "log",
+                helpText: "Enable logging messages",
+                p1: Parameter.Create(
+                    name: "bool",
+                    helpText: "Enable logging"),
+                callback: value => Logger.logOnlyErrors = value));
+        }
+
+        private void RemoveDevCommands()
+        {
+            DevConsole.RemoveCommand("set_settings");
+            DevConsole.RemoveCommand("logging");
+        }
+#endif
 
         private void SubscribeToEventBus()
         {

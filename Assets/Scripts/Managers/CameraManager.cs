@@ -58,16 +58,23 @@ namespace Managers
             _spawnManager.PlayerCamera.Priority.Value = 1;
         }
 
+        private void OnRespawnPlayer(OnRespawnPlayerSignal signal)
+        {
+            _spawnManager.PlayerCamera.Follow = null;
+        }
+
         private void SubscribeToEventBus()
         {
             _eventBus.Subscribe<OnStartExitCutsceneSignal>(OnFinishLevel);
             _eventBus.Subscribe<OnChangeTransitionStateSignal>(OnTransitionCutout);
+            _eventBus.Subscribe<OnRespawnPlayerSignal>(OnRespawnPlayer, 1);
         }
 
         private void UnsubscribeFromEventBus()
         {
             _eventBus.Unsubscribe<OnStartExitCutsceneSignal>(OnFinishLevel);
             _eventBus.Unsubscribe<OnChangeTransitionStateSignal>(OnTransitionCutout);
+            _eventBus.Unsubscribe<OnRespawnPlayerSignal>(OnRespawnPlayer);
         }
     }
 }
