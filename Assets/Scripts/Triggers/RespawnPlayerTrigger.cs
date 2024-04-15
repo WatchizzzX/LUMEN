@@ -4,7 +4,6 @@ using PickupSystem;
 using ServiceLocatorSystem;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 namespace Triggers
 {
@@ -14,6 +13,7 @@ namespace Triggers
         [SerializeField] private LayerMask layersToCallEvent;
         [SerializeField] private UnityEvent<bool> onRespawnPlayer;
         [SerializeField] private UnityEvent onTriggered;
+        [SerializeField] private float startTransitionDelay = 1f;
 
         private EventBus _eventBus;
 
@@ -36,7 +36,7 @@ namespace Triggers
             if (layersToReact != (layersToReact | (1 << other.gameObject.layer))) return;
 
             onRespawnPlayer.Invoke(true);
-            _eventBus.Invoke(new OnRespawnPlayerSignal());
+            _eventBus.Invoke(new OnRespawnPlayerSignal(startTransitionDelay));
         }
     }
 }
