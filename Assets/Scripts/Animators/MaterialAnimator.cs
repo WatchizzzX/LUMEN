@@ -1,64 +1,62 @@
-using Animators.Interfaces;
-using DG.Tweening;
+﻿using System;
+using Animations;
+using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Serialization;
 
 namespace Animators
 {
-    public class MaterialAnimator : MonoBehaviour, IAnimator
+    [RequireComponent(typeof(MeshRenderer))]
+    public class MaterialAnimator : BaseAnimator
     {
-        #region Serialized Fields
-
-        [SerializeField] private Color offColor = Color.black;
-        [SerializeField] private Color onColor = Color.green;
-        [SerializeField] private float transitionDuration = 1.5f;
-        [SerializeField] private Ease easing;
-
-        #endregion
-
-        #region Private Variables
-
-        private bool _isEnabled;
-        private Material _material;
-
-        #endregion
-
-        #region MonoBehaviour
-
-        private void Awake()
+        private enum MaterialAnimationType
         {
-            var meshRenderer = GetComponent<MeshRenderer>();
-            _material = meshRenderer.material;
-            _material.color = offColor;
+            Color,
+            EmissionColor
         }
 
-        #endregion
+        [SerializeField] private MaterialAnimationType animationType;
+
+        [ShowIf(nameof(ShowColorsInInspector))] [SerializeField]
+        private Color onColor;
+
+        [ShowIf(nameof(ShowColorsInInspector))] [SerializeField]
+        private Color offColor;
+
+        [SerializeField] private MeshRenderer meshRenderer;
         
-        #region Methods
+        private Material _material;
+        private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
-        public void Animate()
+        private void OnValidate()
         {
-            _isEnabled = !_isEnabled;
-            StartAnimation(transitionDuration);
+            meshRenderer = GetComponent<MeshRenderer>();
         }
 
-        public void Animate(bool value)
+        protected override void Awake()
         {
-            if (_isEnabled == value) return;
-            _isEnabled = value;
-            StartAnimation(transitionDuration);
+            base.Awake();
+            _material = meshRenderer.material;
         }
 
-        public void Animate(bool value, float duration)
+        protected override BaseAnimation CreateAnimation(bool value, float duration)
         {
-            if (_isEnabled == value) return;
-            _isEnabled = value;
-            StartAnimation(duration);
+            var targetColor = value ? onColor : offColor;
+            return animationType switch
+            {
+                MaterialAnimationType.Color => new ColorAnimation(() => _material.color, x => _material.color = x,
+                    targetColor, duration),
+                MaterialAnimationType.EmissionColor => new ColorAnimation(() => _material.GetColor(EmissionColor),
+                    x => _material.SetColor(EmissionColor, x), targetColor, duration),
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
 
-        private void StartAnimation(float duration)
+        private bool ShowColorsInInspector()
         {
-            _material.DOColor(_isEnabled ? onColor : offColor, duration).SetEase(easing);
+            return animationType is MaterialAnimationType.Color
+                or MaterialAnimationType.EmissionColor;
         }
-        #endregion
     }
 }

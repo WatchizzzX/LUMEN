@@ -4,7 +4,12 @@
     "references": [
         "ExternalPackages",
         "ServiceLocator",
-        "EventBus"
+        "EventBus",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Animations",
+        "Managers",
+        "NaughtyAttributes.Core",
+        "Utils"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
