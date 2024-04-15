@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6953100523360431474
+--- !u!1001 &8072637198319367485
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -61,8 +61,13 @@ PrefabInstance:
     - target: {fileID: 4457047770963296676, guid: 2019fb73e8b03cc458026cd0240c90d8,
         type: 3}
       propertyPath: m_Name
-      value: LogicalNode
+      value: NotNode
       objectReference: {fileID: 0}
+    - target: {fileID: 6516174006826240173, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 57b17f767567959438368ae5173c3f0a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

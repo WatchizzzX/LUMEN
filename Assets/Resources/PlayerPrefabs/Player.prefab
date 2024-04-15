@@ -1923,7 +1923,7 @@ MonoBehaviour:
   jumpCooldown: 0.12
   enableJumpingFromWalls: 0
   maxGroundAngle: 20
-  maxStairsAngle: 45
+  maxStairsAngle: 60
   probeMask:
     serializedVersion: 2
     m_Bits: 1
