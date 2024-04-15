@@ -24,7 +24,8 @@ namespace Utils
         GameManager = 1 << 8,
         TransitionManager = 1 << 9,
         ServiceLocator = 1 << 10,
-        EventBus = 1 << 11
+        EventBus = 1 << 11,
+        AnimationManager = 1 << 12
     }
 
     /// <summary>
@@ -41,7 +42,7 @@ namespace Utils
         // Things have already failed, alert the dev
         Error,
 
-        // Things will not recover, bring up pop up dialog
+        // Things will not recover, bring up popup dialog
         FatalError,
     }
 
@@ -54,6 +55,8 @@ namespace Utils
         ///////////////////////////
 
         private static Logger _instance;
+
+        public static bool logOnlyErrors = true;
 
         private static Logger Instance
         {
@@ -204,10 +207,12 @@ namespace Utils
                     break;
 
                 case Priority.Warning:
+                    if (logOnlyErrors) return;
                     Debug.LogWarning(finalMessage);
                     break;
 
                 case Priority.Info:
+                    if (logOnlyErrors) return;
                     Debug.Log(finalMessage);
                     break;
             }
@@ -256,7 +261,8 @@ namespace Utils
             { LoggerChannel.SceneManager, "#90a955" },
             { LoggerChannel.GameManager, "#90a955" },
             { LoggerChannel.TransitionManager, "#90a955" },
-            { LoggerChannel.EventBus, "#ff4d6d" }
+            { LoggerChannel.EventBus, "#ff4d6d" },
+            { LoggerChannel.AnimationManager, "#84a98c" }
         };
 
         /// <summary>
