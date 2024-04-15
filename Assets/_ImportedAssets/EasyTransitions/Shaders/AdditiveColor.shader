@@ -64,7 +64,7 @@ Shader "UI/AdditiveColor" {
                     UNITY_VERTEX_INPUT_INSTANCE_ID
                 };
 
-                struct v2f
+                struct v2_f
                 {
                     float4 vertex   : SV_POSITION;
                     fixed4 color : COLOR;
@@ -79,9 +79,9 @@ Shader "UI/AdditiveColor" {
                 float4 _ClipRect;
                 float4 _MainTex_ST;
 
-                v2f vert(appdata_t v)
+                v2_f vert(appdata_t v)
                 {
-                    v2f OUT;
+                    v2_f OUT;
                     UNITY_SETUP_INSTANCE_ID(v);
                     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
                     OUT.worldPosition = v.vertex;
@@ -93,7 +93,7 @@ Shader "UI/AdditiveColor" {
                     return OUT;
                 }
 
-                fixed4 frag(v2f IN) : SV_Target
+                fixed4 frag(v2_f IN) : SV_Target
                 {
                     half4 color = (tex2D(_MainTex, IN.texcoord) + _TextureSampleAdd) * IN.color + _Color;
                     color.a = tex2D(_MainTex, IN.texcoord).a;
