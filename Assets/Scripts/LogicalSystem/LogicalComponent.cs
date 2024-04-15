@@ -6,6 +6,7 @@ using LogicalSystem.Utils;
 using TypeReferences;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using Utils;
 using Utils.Extensions;
 using Logger = Utils.Logger;
@@ -63,6 +64,8 @@ namespace LogicalSystem
         #region Public Fields
 
         public TypeReference LogicalType => logicalType;
+
+        public UnityEvent<bool> OnResultChanged;
 
         #endregion
 
@@ -148,6 +151,7 @@ namespace LogicalSystem
 
             Result = _cachedResult;
             OnValueChanged();
+            OnResultChanged.Invoke(Result);
         }
 
         #endregion

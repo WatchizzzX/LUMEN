@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace LogicalSystem
@@ -8,14 +9,9 @@ namespace LogicalSystem
     public abstract class ConnectableComponent : MonoBehaviour
     {
         /// <summary>
-        /// ConnectorEvent delegate
-        /// </summary>
-        public delegate void ConnectorEvent();
-
-        /// <summary>
         /// Event on value changed
         /// </summary>
-        public event ConnectorEvent ValueChanged;
+        public event Action ValueChanged;
 
         /// <summary>
         /// Logical result
