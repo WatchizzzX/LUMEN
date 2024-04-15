@@ -61,23 +61,23 @@
                 float2 uv : TEXCOORD0;
             };
 
-            struct v2f
+            struct v2_f
             {
                 float4 vertex : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 float3 worldPosition : TEXCOORD1;
             };
 
-            v2f vert (appdata v)
+            v2_f vert (appdata v)
             {
-                v2f o;
+                v2_f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
                 o.worldPosition = mul(unity_ObjectToWorld, v.vertex).xyz;
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            fixed4 frag (v2_f i) : SV_Target
             {
                 // Masks.
                 float maskHorizon = dot(normalize(i.worldPosition), float3(0, 1, 0));
