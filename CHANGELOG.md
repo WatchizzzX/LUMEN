@@ -1,3 +1,28 @@
+# [0.13.0](https://github.com/WatchizzzX/LUMEN/compare/v0.12.0...v0.13.0) (2024-04-15)
+
+
+### Bug Fixes
+
+* Add clamp in PlayerAnimator ([c9ab206](https://github.com/WatchizzzX/LUMEN/commit/c9ab206e5bdcf9b6466cf0db3b165cbf846f0c31))
+* Fix bootstraper to new animation system ([5c0fe39](https://github.com/WatchizzzX/LUMEN/commit/5c0fe39b1a1e5603a61acd7dc282438b3dba5ea2))
+* Fix eventbus call with priority ([f923ce3](https://github.com/WatchizzzX/LUMEN/commit/f923ce3d102180d5fa2b858cc0fd61c355e8760b))
+* Fix flickering ([199981c](https://github.com/WatchizzzX/LUMEN/commit/199981cc3a66b4f65a05e39c7fcd217da5729fff))
+* Fix levers on Level 1 ([143b1d0](https://github.com/WatchizzzX/LUMEN/commit/143b1d034e362cad60ab74f339486b8b2918104d))
+* Fix logical component for new animation system ([f0d9a28](https://github.com/WatchizzzX/LUMEN/commit/f0d9a28b54421f643917d22508f6611bba73b3f7))
+* Fix respawn trigger to new respawn signal ([f2540e6](https://github.com/WatchizzzX/LUMEN/commit/f2540e62b3948b1a0aeae8652dc51367b9d7352b))
+* Fix some animations ([bd55933](https://github.com/WatchizzzX/LUMEN/commit/bd55933bb5e2bc10a12f15796c4b67c83bf420ce))
+* Rework cable controller for new animation system ([1f19c2e](https://github.com/WatchizzzX/LUMEN/commit/1f19c2e451d1f92d3b1d8baab60d3e5a7789fcd7))
+
+
+### Features
+
+* Add delay before respawn player ([daaddb0](https://github.com/WatchizzzX/LUMEN/commit/daaddb0658c43d23a03c2758b58c15e41c84aa60))
+* Add graphic changer script ([23d2abf](https://github.com/WatchizzzX/LUMEN/commit/23d2abfe61f7c28d5005dbde011d25d9004153f0))
+* Add new animations system ([83da669](https://github.com/WatchizzzX/LUMEN/commit/83da6690242d606bf50e87231c1ca0dfd4a31e28))
+* Add otion for logger to display only errors ([b53768b](https://github.com/WatchizzzX/LUMEN/commit/b53768b7c346f28254be6497da5eb62a8a68de55))
+* Add some dev commands ([26ac535](https://github.com/WatchizzzX/LUMEN/commit/26ac53552015f5a3cf4ab62449485d4f14c8328b))
+* Add TryGet method for ServiceLocator ([c3e4e4e](https://github.com/WatchizzzX/LUMEN/commit/c3e4e4e1da2cf19c57c096c41b3463a43f895f22))
+
 # [0.12.0](https://github.com/WatchizzzX/LUMEN/compare/v0.11.0...v0.12.0) (2024-03-12)
 
 
