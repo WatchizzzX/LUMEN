@@ -20,3 +20,5 @@ MonoBehaviour:
   spawnCameraRotation: {x: 0.16043, y: 0.37686962, z: -0.06645229, w: 0.9098437}
   inputPrefab: {fileID: 2267453043907785637, guid: f2af77d7ce61a6228a841ce0020d0b13,
     type: 3}
+  inGameUIPrefab: {fileID: 7911813734227393652, guid: 3af1d56e3b58c6440afe02ece0893dcd,
+    type: 3}

@@ -38,8 +38,6 @@ namespace Managers
 
         private EventBus _eventBus;
 
-        private bool _isLevelChanging;
-
         private GameObject _spawnedPlayerGo;
 
         private GameObject _spawnedInputGo;
@@ -48,7 +46,11 @@ namespace Managers
 
         private GameObject _spawnedPlayerObjectsGo;
 
+        private GameObject _spawnedInGameUIGo;
+
         private bool _cachedRespawn;
+
+        private SceneManager _sceneManager;
 
         #endregion
 
@@ -57,6 +59,7 @@ namespace Managers
         private void Awake()
         {
             _eventBus = ServiceLocator.Get<EventBus>();
+            _sceneManager = ServiceLocator.Get<SceneManager>();
             SubscribeToEventBus();
         }
 
@@ -144,10 +147,16 @@ namespace Managers
 
         private void RespawnPlayer()
         {
+            if(_sceneManager.IsSceneLoading) return;
             _spawnedPlayerGo.transform.position = Vector3.zero;
             PlayerCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
             PlayerCamera.ForceCameraPosition(Settings.SpawnCameraPosition,
                 Settings.SpawnCameraRotation);
+        }
+
+        private void SpawnInGameUI()
+        {
+            _spawnedInGameUIGo = Instantiate(Settings.InGameUIPrefab, Vector3.zero, Quaternion.identity);
         }
 
         #endregion
@@ -156,8 +165,11 @@ namespace Managers
 
         private void OnSceneLoaded(OnSceneLoadedSignal signal)
         {
-            if (signal.LoadedScene.name != "Start")
+            if (signal.IsGameLevel)
+            {
                 SpawnPlayer();
+                SpawnInGameUI();
+            }
         }
 
         private void OnRespawnPlayer(OnRespawnPlayerSignal signal)

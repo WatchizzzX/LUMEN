@@ -1,3 +1,4 @@
+using EasyTransition;
 using EventBusSystem;
 using EventBusSystem.Signals.SceneSignals;
 using Managers;
@@ -7,6 +8,7 @@ using ServiceLocatorSystem;
 using UnityEngine;
 using Utils;
 using SceneManager = Managers.SceneManager;
+using TransitionManager = Managers.TransitionManager;
 
 namespace Bootstrapper
 {
@@ -16,7 +18,10 @@ namespace Bootstrapper
         [SerializeField] private SpawnManagerSettings spawnManagerSettings;
         [SerializeField] private CameraManagerSettings cameraManagerSettings;
         [SerializeField] private GameManagerSettings gameManagerSettings;
+        [SerializeField] private SceneManagerSettings sceneManagerSettings;
         [SerializeField, Scene] private int startupScene;
+        [SerializeField] private float delayBeforeLoading;
+        [SerializeField] private TransitionSettings overrideFirstTransition;
 
         private EventBus _eventBus;
         
@@ -46,6 +51,7 @@ namespace Bootstrapper
             var sceneManagerGo = new GameObject("Scene Manager", typeof(SceneManager));
             sceneManagerGo.transform.SetParent(managersGo.transform);
             var sceneManager = sceneManagerGo.GetComponent<SceneManager>();
+            sceneManager.Settings = sceneManagerSettings;
             ServiceLocator.Register(sceneManager);
             
             var transitionManagerGo = new GameObject("Transition Manager", typeof(TransitionManager));
@@ -74,7 +80,7 @@ namespace Bootstrapper
 
         private void LoadStartupScene()
         {
-            _eventBus.Invoke(new OnSetSceneSignal(startupScene, 0f));
+            _eventBus.Invoke(new OnSetSceneSignal(startupScene, delayBeforeLoading, overrideFirstTransition));
             Destroy(this);
         }
     }

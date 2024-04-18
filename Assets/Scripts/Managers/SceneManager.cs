@@ -1,7 +1,10 @@
 using System;
+using System.Linq;
 using DavidFDev.DevConsole;
+using EasyTransition;
 using EventBusSystem;
 using EventBusSystem.Signals.SceneSignals;
+using Managers.Settings;
 using ServiceLocatorSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,20 +15,20 @@ namespace Managers
 {
     public class SceneManager : MonoBehaviour, IService
     {
-        #region Private Variables
+        [NonSerialized] public SceneManagerSettings Settings;
+
+        public bool IsSceneLoading => _isSceneLoading;
 
         private EventBus _eventBus;
 
-        #endregion
-
-        #region MonoBehaviour
+        private bool _isSceneLoading;
 
         private void Awake()
         {
             _eventBus = ServiceLocator.Get<EventBus>();
-            
+
             UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
-            
+
             RegisterCommands();
             SubscribeToEventBus();
         }
@@ -33,14 +36,10 @@ namespace Managers
         private void OnDestroy()
         {
             UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
-            
+
             UnregisterCommands();
             UnsubscribeFromEventBus();
         }
-
-        #endregion
-
-        #region Methods
 
         private void SubscribeToEventBus()
         {
@@ -51,38 +50,40 @@ namespace Managers
         {
             _eventBus.Unsubscribe<OnSetSceneSignal>(OnSetScene);
         }
-        
+
         private void OnSceneLoaded(Scene loadedScene, LoadSceneMode loadSceneMode)
         {
-            _eventBus.Invoke(new OnSceneLoadedSignal(loadedScene));
+            _isSceneLoading = false;
+            var isGameScene = !Settings.NonGameScenes.Contains(loadedScene);
+            _eventBus.Invoke(new OnSceneLoadedSignal(loadedScene, isGameScene));
         }
 
         private void OnSetScene(OnSetSceneSignal signal)
         {
-            LoadScene(signal.NewSceneID, signal.Delay);
+            LoadScene(signal.NewSceneID, signal.Delay, signal.OverrideTransitionSettings);
         }
 
-        private void LoadScene(int sceneID, float delay)
+        private void LoadScene(int sceneID, float delay, TransitionSettings overrideTransitionSettings = null)
         {
             if (!CheckIfSceneExists(sceneID)) return;
 
             var transitionManager = ServiceLocator.Get<TransitionManager>();
             if (transitionManager != null)
             {
-                transitionManager.Transition(sceneID, delay);
+                if (overrideTransitionSettings)
+                    transitionManager.Transition(sceneID, overrideTransitionSettings, delay);
+                else
+                    transitionManager.Transition(sceneID, delay);
             }
             else
             {
                 Logger.Log(LoggerChannel.SceneManager, Priority.Warning,
                     "TransitionManager doesn't find. Start hard loading scene");
+                _isSceneLoading = true;
                 UnityEngine.SceneManagement.SceneManager.LoadScene(sceneID);
             }
         }
 
-        #endregion
-
-        #region Utils
-        
         private static bool CheckIfSceneExists(int sceneID)
         {
             if (sceneID > 0)
@@ -107,7 +108,7 @@ namespace Managers
                     helpText: "Scene name to load"),
                 callback: sceneName =>
                 {
-                    if (!DoesSceneExist(sceneName)) return;
+                    if (!SceneUtils.DoesSceneExist(sceneName)) return;
                     LoadScene(SceneUtility.GetBuildIndexByScenePath(sceneName), 0f);
                 }));
 
@@ -125,29 +126,5 @@ namespace Managers
             else
                 Logger.Log(LoggerChannel.SceneManager, Priority.Warning, "Unregistering dev-commands was failed");
         }
-
-        #endregion
-
-        #region Utils
-
-        public static bool DoesSceneExist(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-                return false;
-
-            for (var i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings; i++)
-            {
-                var scenePath = SceneUtility.GetScenePathByBuildIndex(i);
-                var lastSlash = scenePath.LastIndexOf("/", StringComparison.Ordinal);
-                var sceneName = scenePath.Substring(lastSlash + 1, scenePath.LastIndexOf(".", StringComparison.Ordinal) - lastSlash - 1);
-
-                if (string.Compare(name, sceneName, StringComparison.OrdinalIgnoreCase) == 0)
-                    return true;
-            }
-
-            return false;
-        }
-
-        #endregion
     }
 }

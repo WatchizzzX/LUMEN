@@ -1,0 +1,21 @@
+{
+    "name": "UI",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7dcf4c13a1888f52c9acb9ab4d86e08b",
+        "GUID:00beb293cb837e1e2b6bfd268f32fc83",
+        "GUID:53c4ef596f6edbbe1b5699c9b21281a6",
+        "GUID:13d6f86a1fb9b0b98b0a9c20494da9b3",
+        "GUID:29e7f73ada6d6af429053c011d6a9a2f",
+        "GUID:e07d200add5080734a10bc0952131bcf"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
