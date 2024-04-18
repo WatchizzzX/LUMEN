@@ -1,3 +1,25 @@
+# [0.14.0](https://github.com/WatchizzzX/LUMEN/compare/v0.13.0...v0.14.0) (2024-04-18)
+
+
+### Bug Fixes
+
+* Add SceneManager settings to ignore some levels to spawn player ([226b191](https://github.com/WatchizzzX/LUMEN/commit/226b191d9f0e09a5e68b479fc804d47961d927ba))
+* Rename OnStartExitCutscene to OnExitCutsceneSignal ([53a0035](https://github.com/WatchizzzX/LUMEN/commit/53a0035d4709e18fdacae0f709b7cc6d4bdb505c))
+* Separate enums to individual assembly definition ([46d503f](https://github.com/WatchizzzX/LUMEN/commit/46d503fdb28803c8eedb60d9d15fe7fb9f2a06f4))
+* Separate scene utils from SceneManager ([bc6c1f5](https://github.com/WatchizzzX/LUMEN/commit/bc6c1f508d7c5103e364c752037641cd393090eb))
+* Update DefaultSceneLoader (Editor script) ([bed4d7f](https://github.com/WatchizzzX/LUMEN/commit/bed4d7fd18d0200316bf7498ebde2b5a130825c9))
+* Update logger ([1cbe047](https://github.com/WatchizzzX/LUMEN/commit/1cbe047c8d704da5586cf3ef7ab4f7e77746e3ac))
+
+
+### Features
+
+* Add camera blending settings ([e236cc7](https://github.com/WatchizzzX/LUMEN/commit/e236cc7d8f50ea0f6995f3ce360015791e79a68e))
+* Add loader animations ([cd17a68](https://github.com/WatchizzzX/LUMEN/commit/cd17a6892ed458d295d11872e8e40118c339b2ea))
+* Add main menu ([fe0021c](https://github.com/WatchizzzX/LUMEN/commit/fe0021c8a538e67ffd9e353a6d878d214ee1bd94))
+* Add pause ability ([4d161da](https://github.com/WatchizzzX/LUMEN/commit/4d161da9255fbcd2d2a114706b9edad190cd3a0b))
+* Add UI scripts to interact with game core ([b43322a](https://github.com/WatchizzzX/LUMEN/commit/b43322a1fc4a8fb1a5cb379090e6257780d3b0d7))
+* Bootstraper can override default transition ([a47587c](https://github.com/WatchizzzX/LUMEN/commit/a47587c7d147cb8d5dc71ff35f55bcc42fed4ed7))
+
 # [0.13.0](https://github.com/WatchizzzX/LUMEN/compare/v0.12.0...v0.13.0) (2024-04-15)
 
 
