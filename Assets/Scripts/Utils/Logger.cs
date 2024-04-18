@@ -25,7 +25,8 @@ namespace Utils
         TransitionManager = 1 << 9,
         ServiceLocator = 1 << 10,
         EventBus = 1 << 11,
-        AnimationManager = 1 << 12
+        AnimationManager = 1 << 12,
+        UI = 1 << 13
     }
 
     /// <summary>
@@ -262,7 +263,8 @@ namespace Utils
             { LoggerChannel.GameManager, "#90a955" },
             { LoggerChannel.TransitionManager, "#90a955" },
             { LoggerChannel.EventBus, "#ff4d6d" },
-            { LoggerChannel.AnimationManager, "#84a98c" }
+            { LoggerChannel.AnimationManager, "#84a98c" },
+            { LoggerChannel.UI, "#a7c957" }
         };
 
         /// <summary>
