@@ -2,6 +2,7 @@ using System;
 using EventBusSystem;
 using EventBusSystem.Signals.DeveloperSignals;
 using EventBusSystem.Signals.GameSignals;
+using EventBusSystem.Signals.InputSignals;
 using ServiceLocatorSystem;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,32 +20,27 @@ namespace Input
         /// <summary>
         /// On change move direction
         /// </summary>
-        [Tooltip("On change move direction")]
-        public UnityEvent<Vector2> onMoveEvent;
-        
+        [Tooltip("On change move direction")] public UnityEvent<Vector2> onMoveEvent;
+
         /// <summary>
         /// On change sprint state
         /// </summary>
-        [Tooltip("On change sprint state")]
-        public UnityEvent<bool> onSprintEvent;
-        
+        [Tooltip("On change sprint state")] public UnityEvent<bool> onSprintEvent;
+
         /// <summary>
         /// Trigger on jump
         /// </summary>
-        [Tooltip("Trigger on jump")]
-        public UnityEvent onJumpEvent;
-        
+        [Tooltip("Trigger on jump")] public UnityEvent onJumpEvent;
+
         /// <summary>
         /// Trigger on interact
         /// </summary>
-        [Tooltip("Trigger on interact")]
-        public UnityEvent onInteractEvent;
-        
+        [Tooltip("Trigger on interact")] public UnityEvent onInteractEvent;
+
         /// <summary>
         /// Trigger on interact
         /// </summary>
-        [Tooltip("Trigger on pickup")]
-        public UnityEvent onPickupEvent;
+        [Tooltip("Trigger on pickup")] public UnityEvent onPickupEvent;
 
         #endregion
 
@@ -59,17 +55,17 @@ namespace Input
         /// Action for move direction
         /// </summary>
         private InputAction _moveAction;
-        
+
         /// <summary>
         /// Action for sprint
         /// </summary>
         private InputAction _sprintAction;
-        
+
         /// <summary>
         /// Action for jump
         /// </summary>
         private InputAction _jumpAction;
-        
+
         /// <summary>
         /// Action for interact
         /// </summary>
@@ -79,6 +75,8 @@ namespace Input
         /// Action for pickup
         /// </summary>
         private InputAction _pickupAction;
+
+        private InputAction _pauseAction;
 
         private EventBus _eventBus;
 
@@ -97,17 +95,17 @@ namespace Input
         /// Sprint state
         /// </summary>
         public bool IsSprinting { get; private set; }
-        
+
         /// <summary>
         /// Jumping state
         /// </summary>
         public bool IsJumping { get; private set; }
-        
+
         /// <summary>
         /// Interacting state
         /// </summary>
         public bool IsInteracting { get; private set; }
-        
+
         /// <summary>
         /// Pickup state
         /// </summary>
@@ -132,6 +130,7 @@ namespace Input
                 _jumpAction = actionMap.FindAction("Jump", true);
                 _interactAction = actionMap.FindAction("Interact", true);
                 _pickupAction = actionMap.FindAction("Pickup", true);
+                _pauseAction = actionMap.FindAction("Pause", true);
             }
             catch
             {
@@ -151,10 +150,13 @@ namespace Input
 
             _interactAction.performed += OnInteract;
             _interactAction.canceled += OnInteract;
-            
+
             _pickupAction.performed += OnPickup;
             _pickupAction.canceled += OnPickup;
-            
+
+            _pauseAction.performed += OnPause;
+            _pauseAction.canceled += OnPause;
+
             SubscribeToEventBus();
         }
 
@@ -170,28 +172,28 @@ namespace Input
         private void SubscribeToEventBus()
         {
             _eventBus.Subscribe<OnDevConsoleOpenedSignal>(OnDevConsoleChangeState);
-            _eventBus.Subscribe<OnStartExitCutsceneSignal>(OnStartExitCutscene);
+            _eventBus.Subscribe<OnExitCutsceneSignal>(OnStartExitCutscene);
             _eventBus.Subscribe<OnSpawnPlayerSignal>(OnSpawnPlayer);
         }
-        
+
         private void UnsubscribeFromEventBus()
         {
             _eventBus.Unsubscribe<OnDevConsoleOpenedSignal>(OnDevConsoleChangeState);
-            _eventBus.Unsubscribe<OnStartExitCutsceneSignal>(OnStartExitCutscene);
+            _eventBus.Unsubscribe<OnExitCutsceneSignal>(OnStartExitCutscene);
             _eventBus.Unsubscribe<OnSpawnPlayerSignal>(OnSpawnPlayer);
         }
-        
+
         private void ChangeInputState(bool isEnabled)
         {
             _isInputEnabled = isEnabled;
 
             if (_isInputEnabled) return;
-            
+
             Move = Vector2.zero;
             IsJumping = false;
             IsSprinting = false;
             IsInteracting = false;
-            
+
             onMoveEvent.Invoke(Move);
             onSprintEvent.Invoke(IsSprinting);
         }
@@ -201,7 +203,7 @@ namespace Input
             ChangeInputState(!signal.IsOpened);
         }
 
-        private void OnStartExitCutscene(OnStartExitCutsceneSignal signal)
+        private void OnStartExitCutscene(OnExitCutsceneSignal signal)
         {
             ChangeInputState(false);
         }
@@ -214,7 +216,13 @@ namespace Input
         #endregion
 
         #region Events
-        
+
+        private void OnPause(InputAction.CallbackContext obj)
+        {
+            if (obj.ReadValueAsButton())
+                _eventBus.Invoke(new OnPauseKeyPressedSignal());
+        }
+
         /// <summary>
         /// Event on pickup key pressed or unpressed
         /// </summary>
@@ -226,7 +234,7 @@ namespace Input
             if (IsPickup)
                 onPickupEvent.Invoke();
         }
-        
+
         /// <summary>
         /// Event on interact key pressed or unpressed
         /// </summary>
