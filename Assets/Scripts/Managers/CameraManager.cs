@@ -34,7 +34,7 @@ namespace Managers
             UnsubscribeFromEventBus();
         }
 
-        private void OnFinishLevel(OnStartExitCutsceneSignal signal)
+        private void OnExitCutscene(OnExitCutsceneSignal signal)
         {
             switch (signal.ExitCamera)
             {
@@ -65,14 +65,14 @@ namespace Managers
 
         private void SubscribeToEventBus()
         {
-            _eventBus.Subscribe<OnStartExitCutsceneSignal>(OnFinishLevel);
+            _eventBus.Subscribe<OnExitCutsceneSignal>(OnExitCutscene);
             _eventBus.Subscribe<OnChangeTransitionStateSignal>(OnTransitionCutout);
             _eventBus.Subscribe<OnRespawnPlayerSignal>(OnRespawnPlayer, 1);
         }
 
         private void UnsubscribeFromEventBus()
         {
-            _eventBus.Unsubscribe<OnStartExitCutsceneSignal>(OnFinishLevel);
+            _eventBus.Unsubscribe<OnExitCutsceneSignal>(OnExitCutscene);
             _eventBus.Unsubscribe<OnChangeTransitionStateSignal>(OnTransitionCutout);
             _eventBus.Unsubscribe<OnRespawnPlayerSignal>(OnRespawnPlayer);
         }
