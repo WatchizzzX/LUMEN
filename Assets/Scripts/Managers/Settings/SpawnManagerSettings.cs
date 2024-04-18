@@ -10,6 +10,7 @@ namespace Managers.Settings
         [SerializeField] private Vector3 spawnCameraPosition;
         [SerializeField] private Quaternion spawnCameraRotation;
         [SerializeField] private GameObject inputPrefab;
+        [SerializeField] private GameObject inGameUIPrefab;
 
         public GameObject PlayerPrefab => playerPrefab;
 
@@ -20,5 +21,7 @@ namespace Managers.Settings
         public Quaternion SpawnCameraRotation => spawnCameraRotation;
 
         public GameObject InputPrefab => inputPrefab;
+
+        public GameObject InGameUIPrefab => inGameUIPrefab;
     }
 }

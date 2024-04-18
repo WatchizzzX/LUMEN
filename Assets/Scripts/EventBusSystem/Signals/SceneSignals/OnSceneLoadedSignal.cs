@@ -6,10 +6,12 @@ namespace EventBusSystem.Signals.SceneSignals
     public class OnSceneLoadedSignal : ISignal
     {
         public readonly Scene LoadedScene;
-
-        public OnSceneLoadedSignal(Scene loadedScene)
+        public readonly bool IsGameLevel;
+        
+        public OnSceneLoadedSignal(Scene loadedScene, bool isGameLevel)
         {
             LoadedScene = loadedScene;
+            IsGameLevel = isGameLevel;
         }
     }
 }
