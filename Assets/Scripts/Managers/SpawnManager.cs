@@ -1,4 +1,5 @@
 using System;
+using Enums;
 using EventBusSystem;
 using EventBusSystem.Signals.GameSignals;
 using EventBusSystem.Signals.SceneSignals;
@@ -16,7 +17,7 @@ using Utils;
 
 namespace Managers
 {
-    public class SpawnManager : MonoBehaviour, IService
+    public class SpawnManager : EventBehaviour, IService
     {
         #region Public Variables
 
@@ -36,8 +37,6 @@ namespace Managers
 
         #region Private Variables
 
-        private EventBus _eventBus;
-
         private GameObject _spawnedPlayerGo;
 
         private GameObject _spawnedInputGo;
@@ -56,11 +55,10 @@ namespace Managers
 
         #region MonoBehaviour
 
-        private void Awake()
+        protected override void Awake()
         {
-            _eventBus = ServiceLocator.Get<EventBus>();
+            base.Awake();
             _sceneManager = ServiceLocator.Get<SceneManager>();
-            SubscribeToEventBus();
         }
 
         private void Start()
@@ -68,28 +66,9 @@ namespace Managers
             Initialize();
         }
 
-        private void OnDestroy()
-        {
-            UnsubscribeFromEventBus();
-        }
-
         #endregion
 
         #region Methods
-
-        private void SubscribeToEventBus()
-        {
-            _eventBus.Subscribe<OnSceneLoadedSignal>(OnSceneLoaded);
-            _eventBus.Subscribe<OnRespawnPlayerSignal>(OnRespawnPlayer);
-            _eventBus.Subscribe<OnChangeTransitionStateSignal>(OnChangeTransitionState);
-        }
-
-        private void UnsubscribeFromEventBus()
-        {
-            _eventBus.Unsubscribe<OnSceneLoadedSignal>(OnSceneLoaded);
-            _eventBus.Unsubscribe<OnRespawnPlayerSignal>(OnRespawnPlayer);
-            _eventBus.Unsubscribe<OnChangeTransitionStateSignal>(OnChangeTransitionState);
-        }
 
         private void Initialize()
         {
@@ -109,7 +88,7 @@ namespace Managers
             var exitTime = ServiceLocator.Get<GameManager>().Settings.ExitCutsceneDuration;
             CameraBrain.DefaultBlend =
                 new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.EaseInOut, exitTime);
-            
+
             _spawnedInputGo = Instantiate(Settings.InputPrefab, Vector3.zero, Quaternion.identity);
             _spawnedInputGo.name = "Input";
             _spawnedInputGo.transform.SetParent(_spawnedPlayerObjectsGo.transform);
@@ -136,8 +115,18 @@ namespace Managers
                 PlayerInputHandler.onPickupEvent.AddListener(PickupController.OnPickupEvent);
                 PlayerInputHandler.onJumpEvent.AddListener(PlayerController.CallToJump);
                 PlayerInputHandler.onSprintEvent.AddListener(PlayerController.SetSprint);
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 
                 _eventBus.Invoke(new OnSpawnPlayerSignal());
+=======
+
+                RaiseEvent(SignalEnum.OnSpawnPlayer);
+>>>>>>> Stashed changes
+=======
+
+                RaiseEvent(SignalEnum.OnSpawnPlayerSignal);
+>>>>>>> Stashed changes
             }
             catch (Exception e)
             {
@@ -147,7 +136,7 @@ namespace Managers
 
         private void RespawnPlayer()
         {
-            if(_sceneManager.IsSceneLoading) return;
+            if (_sceneManager.IsSceneLoading) return;
             _spawnedPlayerGo.transform.position = Vector3.zero;
             PlayerCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
             PlayerCamera.ForceCameraPosition(Settings.SpawnCameraPosition,
@@ -163,31 +152,68 @@ namespace Managers
 
         #region Event Handlers
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
         private void OnSceneLoaded(OnSceneLoadedSignal signal)
+=======
+        [ListenTo(SignalEnum.OnSceneLoadedSignal)]
+        public void OnSceneLoaded(EventModel eventModel)
+>>>>>>> Stashed changes
         {
-            if (signal.IsGameLevel)
-            {
-                SpawnPlayer();
-                SpawnInGameUI();
-            }
+            if (!((OnSceneLoadedSignal)eventModel.Payload).IsGameLevel) return;
+            SpawnPlayer();
+            SpawnInGameUI();
         }
 
+<<<<<<< Updated upstream
         private void OnRespawnPlayer(OnRespawnPlayerSignal signal)
+=======
+        [ListenTo(SignalEnum.OnSceneLoaded)]
+        private void OnSceneLoaded(EventModel eventModel)
+        {
+            if (!((OnSceneLoaded)eventModel.Payload).IsGameLevel) return;
+            SpawnPlayer();
+            SpawnInGameUI();
+        }
+
+        [ListenTo(SignalEnum.OnRespawnPlayer)]
+        private void OnRespawnPlayer(EventModel eventModel)
+>>>>>>> Stashed changes
+=======
+        [ListenTo(SignalEnum.OnRespawnPlayerSignal)]
+        public void OnRespawnPlayer(EventModel eventModel)
+>>>>>>> Stashed changes
         {
             _cachedRespawn = true;
         }
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
         private void OnChangeTransitionState(OnChangeTransitionStateSignal signal)
         {
             if (!signal.IsChangingScene)
+=======
+        [ListenTo(SignalEnum.OnChangeTransitionState)]
+        private void OnChangeTransitionState(EventModel eventModel)
+        {
+            var payload = (OnChangeTransitionState)eventModel.Payload;
+            if (!payload.IsChangingScene)
+>>>>>>> Stashed changes
+=======
+        [ListenTo(SignalEnum.OnChangeTransitionStateSignal)]
+        public void OnChangeTransitionState(EventModel eventModel)
+        {
+            var payload = (OnChangeTransitionStateSignal)eventModel.Payload;
+            if (!payload.IsChangingScene)
+>>>>>>> Stashed changes
             {
-                if (!_cachedRespawn || signal.TransitionState != TransitionState.Cutout) return;
+                if (!_cachedRespawn || payload.TransitionState != TransitionState.Cutout) return;
                 RespawnPlayer();
                 _cachedRespawn = false;
                 return;
             }
 
-            switch (signal.TransitionState)
+            switch (payload.TransitionState)
             {
                 case TransitionState.Started:
                     PlayerInputHandler.onMoveEvent.RemoveAllListeners();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using EasyTransition;
+using Enums;
 using EventBusSystem;
 using EventBusSystem.Signals.GameSignals;
 using EventBusSystem.Signals.TransitionSignals;
@@ -13,7 +14,7 @@ using Logger = Utils.Logger;
 
 namespace Managers
 {
-    public class TransitionManager : MonoBehaviour, IService
+    public class TransitionManager : EventBehaviour, IService
     {
         #region Public Variables
 
@@ -25,27 +26,13 @@ namespace Managers
         #region Private Variables
 
         private bool _runningTransition;
-        private EventBus _eventBus;
-
-        #endregion
-
-        #region MonoBehaviour
-
-        private void Awake()
-        {
-            _eventBus = ServiceLocator.Get<EventBus>();
-            SubscribeToEventBus();
-        }
-
-        private void OnDestroy()
-        {
-            UnsubscribeFromEventBus();
-        }
 
         #endregion
 
         #region Methods
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
         private void SubscribeToEventBus()
         {
             _eventBus.Subscribe<OnRespawnPlayerSignal>(OnRespawnPlayer);
@@ -59,6 +46,18 @@ namespace Managers
         private void OnRespawnPlayer(OnRespawnPlayerSignal signal)
         {
             Transition(signal.TransitionStartDelay);
+=======
+        [ListenTo(SignalEnum.OnRespawnPlayer)]
+        private void OnRespawnPlayer(EventModel eventModel)
+        {
+            Transition(((OnRespawnPlayer)eventModel.Payload).TransitionStartDelay);
+>>>>>>> Stashed changes
+=======
+        [ListenTo(SignalEnum.OnRespawnPlayerSignal)]
+        public void OnRespawnPlayer(EventModel eventModel)
+        {
+            Transition(((OnRespawnPlayerSignal)eventModel.Payload).TransitionStartDelay);
+>>>>>>> Stashed changes
         }
 
         /// <summary>
@@ -177,7 +176,15 @@ namespace Managers
         {
             yield return new WaitForSecondsRealtime(startDelay);
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started, true));
+=======
+            RaiseEvent(new OnChangeTransitionState(TransitionState.Started, true));
+>>>>>>> Stashed changes
+=======
+            RaiseEvent(new OnChangeTransitionStateSignal(TransitionState.Started, true));
+>>>>>>> Stashed changes
 
             var template = Instantiate(Settings.TransitionPrefab);
             template.GetComponent<Transition>().transitionSettings = transitionSettings;
@@ -188,13 +195,29 @@ namespace Managers
 
             yield return new WaitForSecondsRealtime(transitionTime);
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Cutout, true));
+=======
+            RaiseEvent(new OnChangeTransitionState(TransitionState.Cutout, true));
+>>>>>>> Stashed changes
+=======
+            RaiseEvent(new OnChangeTransitionStateSignal(TransitionState.Cutout, true));
+>>>>>>> Stashed changes
 
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
 
             yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Finished, true));
+=======
+            RaiseEvent(new OnChangeTransitionState(TransitionState.Finished, true));
+>>>>>>> Stashed changes
+=======
+            RaiseEvent(new OnChangeTransitionStateSignal(TransitionState.Finished, true));
+>>>>>>> Stashed changes
 
             _runningTransition = false;
         }
@@ -203,7 +226,15 @@ namespace Managers
         {
             yield return new WaitForSecondsRealtime(startDelay);
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started, true));
+=======
+            RaiseEvent(new OnChangeTransitionState(TransitionState.Started, true));
+>>>>>>> Stashed changes
+=======
+            RaiseEvent(new OnChangeTransitionStateSignal(TransitionState.Started, true));
+>>>>>>> Stashed changes
 
             var template = Instantiate(Settings.TransitionPrefab);
             template.GetComponent<Transition>().transitionSettings = transitionSettings;
@@ -214,13 +245,29 @@ namespace Managers
 
             yield return new WaitForSecondsRealtime(transitionTime);
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Cutout, true));
+=======
+            RaiseEvent(new OnChangeTransitionState(TransitionState.Cutout, true));
+>>>>>>> Stashed changes
+=======
+            RaiseEvent(new OnChangeTransitionStateSignal(TransitionState.Cutout, true));
+>>>>>>> Stashed changes
 
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
 
             yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Finished, true));
+=======
+            RaiseEvent(new OnChangeTransitionState(TransitionState.Finished, true));
+>>>>>>> Stashed changes
+=======
+            RaiseEvent(new OnChangeTransitionStateSignal(TransitionState.Finished, true));
+>>>>>>> Stashed changes
 
             _runningTransition = false;
         }
@@ -229,7 +276,15 @@ namespace Managers
         {
             yield return new WaitForSecondsRealtime(delay);
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Started, false));
+=======
+            RaiseEvent(new OnChangeTransitionState(TransitionState.Started, false));
+>>>>>>> Stashed changes
+=======
+            RaiseEvent(new OnChangeTransitionStateSignal(TransitionState.Started, false));
+>>>>>>> Stashed changes
 
             var template = Instantiate(Settings.TransitionPrefab);
             template.GetComponent<Transition>().transitionSettings = transitionSettings;
@@ -240,14 +295,30 @@ namespace Managers
 
             yield return new WaitForSecondsRealtime(transitionTime);
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Cutout, false));
+=======
+            RaiseEvent(new OnChangeTransitionState(TransitionState.Cutout, false));
+>>>>>>> Stashed changes
+=======
+            RaiseEvent(new OnChangeTransitionStateSignal(TransitionState.Cutout, false));
+>>>>>>> Stashed changes
 
             template.GetComponent<Transition>().OnSceneLoad(UnityEngine.SceneManagement.SceneManager.GetActiveScene(),
                 LoadSceneMode.Single);
 
             yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             _eventBus.Invoke(new OnChangeTransitionStateSignal(TransitionState.Finished, false));
+=======
+            RaiseEvent(new OnChangeTransitionState(TransitionState.Finished, false));
+>>>>>>> Stashed changes
+=======
+            RaiseEvent(new OnChangeTransitionStateSignal(TransitionState.Finished, false));
+>>>>>>> Stashed changes
 
             _runningTransition = false;
         }

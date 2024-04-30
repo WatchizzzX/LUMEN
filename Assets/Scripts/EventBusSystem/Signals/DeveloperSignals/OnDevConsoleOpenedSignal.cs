@@ -1,8 +1,10 @@
+using System;
 using EventBusSystem.Interfaces;
 
 namespace EventBusSystem.Signals.DeveloperSignals
 {
-    public class OnDevConsoleOpenedSignal : ISignal
+    [Serializable]
+    public class OnDevConsoleOpenedSignal : Signal
     {
         public readonly bool IsOpened;
 

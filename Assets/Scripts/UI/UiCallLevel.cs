@@ -1,17 +1,14 @@
 ﻿using EventBusSystem;
 using EventBusSystem.Signals.SceneSignals;
-using ServiceLocatorSystem;
-using UnityEngine;
 using UnityEngine.SceneManagement;
-using Utils;
-using Logger = Utils.Logger;
 
 namespace UI
 {
-    public class UiCallLevel : MonoBehaviour
+    public class UiCallLevel : EventBehaviour
     {
         public void CallToLoadLevel(string levelName)
         {
+<<<<<<< Updated upstream
             if (!ServiceLocator.TryGet(out EventBus eventBus))
             {
                 Logger.Log(LoggerChannel.UI, Priority.Error, "Can't find EventBus. Loading level is impossible");
@@ -25,7 +22,14 @@ namespace UI
                 return;
             }
 
+<<<<<<< Updated upstream
             eventBus.Invoke(new OnSetSceneSignal(SceneUtility.GetBuildIndexByScenePath(levelName), 0f));
+=======
+            RaiseEvent(new OnSetScene(SceneUtility.GetBuildIndexByScenePath(levelName), 0f));
+>>>>>>> Stashed changes
+=======
+            eventBus.RaiseEvent(new OnSetSceneSignal(SceneUtility.GetBuildIndexByScenePath(levelName), 0f));
+>>>>>>> Stashed changes
         }
     }
 }

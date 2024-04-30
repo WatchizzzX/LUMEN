@@ -1,6 +1,9 @@
+using System;
+
 namespace EventBusSystem.Interfaces
 {
-    public interface ISignal
+    [Serializable]
+    public class Signal
     {
         
     }

@@ -1,8 +1,10 @@
+using System;
 using EventBusSystem.Interfaces;
 
 namespace EventBusSystem.Signals.TransitionSignals
 {
-    public class OnChangeTransitionStateSignal : ISignal
+    [Serializable]
+    public class OnChangeTransitionStateSignal : Signal
     {
         public readonly TransitionState TransitionState;
         public readonly bool IsChangingScene;

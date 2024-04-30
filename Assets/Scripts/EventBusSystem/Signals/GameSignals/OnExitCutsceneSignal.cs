@@ -1,8 +1,11 @@
+using System;
 using EventBusSystem.Interfaces;
+using UnityEngine;
 
 namespace EventBusSystem.Signals.GameSignals
 {
-    public class OnExitCutsceneSignal : ISignal
+    [Serializable]
+    public class OnExitCutsceneSignal : Signal
     {
         public readonly int NextSceneID;
         public readonly float CutsceneDuration;

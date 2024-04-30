@@ -13,54 +13,63 @@ using Logger = Utils.Logger;
 
 namespace Managers
 {
-    public class SceneManager : MonoBehaviour, IService
+    public class SceneManager : EventBehaviour, IService
     {
         [NonSerialized] public SceneManagerSettings Settings;
 
         public bool IsSceneLoading => _isSceneLoading;
 
-        private EventBus _eventBus;
-
         private bool _isSceneLoading;
 
-        private void Awake()
+        protected override void Awake()
         {
-            _eventBus = ServiceLocator.Get<EventBus>();
-
             UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
 
             RegisterCommands();
-            SubscribeToEventBus();
+
+            base.Awake();
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
 
             UnregisterCommands();
-            UnsubscribeFromEventBus();
-        }
-
-        private void SubscribeToEventBus()
-        {
-            _eventBus.Subscribe<OnSetSceneSignal>(OnSetScene);
-        }
-
-        private void UnsubscribeFromEventBus()
-        {
-            _eventBus.Unsubscribe<OnSetSceneSignal>(OnSetScene);
+            
+            base.OnDestroy();
         }
 
         private void OnSceneLoaded(Scene loadedScene, LoadSceneMode loadSceneMode)
         {
             _isSceneLoading = false;
             var isGameScene = !Settings.NonGameScenes.Contains(loadedScene);
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             _eventBus.Invoke(new OnSceneLoadedSignal(loadedScene, isGameScene));
+=======
+            RaiseEvent(new OnSceneLoadedSignal(loadedScene, isGameScene));
+>>>>>>> Stashed changes
         }
 
-        private void OnSetScene(OnSetSceneSignal signal)
+        [ListenTo(SignalEnum.OnSetSceneSignal)]
+        public void OnSetScene(EventModel eventModel)
         {
+<<<<<<< Updated upstream
             LoadScene(signal.NewSceneID, signal.Delay, signal.OverrideTransitionSettings);
+=======
+            RaiseEvent(new OnSceneLoaded(loadedScene, isGameScene));
+        }
+
+        [ListenTo(SignalEnum.OnSetScene)]
+        private void OnSetScene(EventModel eventModel)
+        {
+            var payload = (OnSetScene)eventModel.Payload;
+            LoadScene(payload.NewSceneID, payload.Delay, payload.OverrideTransitionSettings);
+>>>>>>> Stashed changes
+=======
+            var payload = (OnSetSceneSignal)eventModel.Payload;
+            LoadScene(payload.NewSceneID, payload.Delay, payload.OverrideTransitionSettings);
+>>>>>>> Stashed changes
         }
 
         private void LoadScene(int sceneID, float delay, TransitionSettings overrideTransitionSettings = null)

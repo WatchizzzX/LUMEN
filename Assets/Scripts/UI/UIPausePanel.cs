@@ -1,17 +1,15 @@
-﻿using System;
-using Enums;
+﻿using Enums;
 using EventBusSystem;
 using EventBusSystem.Signals.GameSignals;
-using ServiceLocatorSystem;
 using UnityEngine;
-using Utils;
-using Logger = Utils.Logger;
 
 namespace UI
 {
-    public class UIPausePanel : MonoBehaviour
+    public class UIPausePanel : EventBehaviour
     {
         [SerializeField] private GameObject uiPausePanel;
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
         
         private void Awake()
         {
@@ -23,9 +21,13 @@ namespace UI
             
             eventBus.Subscribe<OnGameStateChangedSignal>(OnGameStateChanged);
         }
+=======
+>>>>>>> Stashed changes
 
-        private void OnDestroy()
+        [ListenTo(SignalEnum.OnGameStateChangedSignal)]
+        public void OnGameStateChanged(EventModel eventModel)
         {
+<<<<<<< Updated upstream
             if (!ServiceLocator.TryGet(out EventBus eventBus))
             {
                 Logger.Log(LoggerChannel.UI, Priority.Error, "Can't find EventBus. Pause panel can't unsubscribe");
@@ -38,6 +40,16 @@ namespace UI
         private void OnGameStateChanged(OnGameStateChangedSignal signal)
         {
             switch (signal.GameState)
+=======
+
+        [ListenTo(SignalEnum.OnGameStateChanged)]
+        private void OnGameStateChanged(EventModel eventModel)
+        {
+            switch (((OnGameStateChanged)eventModel.Payload).GameState)
+>>>>>>> Stashed changes
+=======
+            switch (((OnGameStateChangedSignal)eventModel.Payload).GameState)
+>>>>>>> Stashed changes
             {
                 case GameState.Normal:
                     uiPausePanel.SetActive(false);

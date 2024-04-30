@@ -1,8 +1,10 @@
+using System;
 using EventBusSystem.Interfaces;
 
 namespace EventBusSystem.Signals.GameSignals
 {
-    public class OnRespawnPlayerSignal : ISignal
+    [Serializable]
+    public class OnRespawnPlayerSignal : Signal
     {
         public readonly float TransitionStartDelay;
 

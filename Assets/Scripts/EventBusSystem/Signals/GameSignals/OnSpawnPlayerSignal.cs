@@ -1,8 +1,10 @@
+using System;
 using EventBusSystem.Interfaces;
 
 namespace EventBusSystem.Signals.GameSignals
 {
-    public class OnSpawnPlayerSignal : ISignal
+    [Serializable]
+    public class OnSpawnPlayerSignal : Signal
     {
         
     }

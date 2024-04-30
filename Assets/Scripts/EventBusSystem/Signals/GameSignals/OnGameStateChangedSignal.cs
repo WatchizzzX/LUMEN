@@ -1,9 +1,11 @@
-﻿using Enums;
+﻿using System;
+using Enums;
 using EventBusSystem.Interfaces;
 
 namespace EventBusSystem.Signals.GameSignals
 {
-    public class OnGameStateChangedSignal : ISignal
+    [Serializable]
+    public class OnGameStateChangedSignal : Signal
     {
         public readonly GameState GameState;
 

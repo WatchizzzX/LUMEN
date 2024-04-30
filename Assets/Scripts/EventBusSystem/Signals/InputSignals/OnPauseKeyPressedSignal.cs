@@ -1,8 +1,10 @@
-﻿using EventBusSystem.Interfaces;
+﻿using System;
+using EventBusSystem.Interfaces;
 
 namespace EventBusSystem.Signals.InputSignals
 {
-    public class OnPauseKeyPressedSignal : ISignal
+    [Serializable]
+    public class OnPauseKeyPressedSignal : Signal
     {
         
     }

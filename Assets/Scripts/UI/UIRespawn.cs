@@ -1,23 +1,27 @@
 ﻿using EventBusSystem;
 using EventBusSystem.Signals.GameSignals;
-using ServiceLocatorSystem;
-using UnityEngine;
-using Utils;
-using Logger = Utils.Logger;
 
 namespace UI
 {
-    public class UIRespawn : MonoBehaviour
+    public class UIRespawn : EventBehaviour
     {
         public void RespawnPlayer()
         {
+<<<<<<< Updated upstream
             if (!ServiceLocator.TryGet(out EventBus eventBus))
             {
                 Logger.Log(LoggerChannel.UI, Priority.Error, "Can't find EventBus. Loading level is impossible");
                 return;
             }
             
+<<<<<<< Updated upstream
             eventBus.Invoke(new OnRespawnPlayerSignal());
+=======
+            RaiseEvent(new OnRespawnPlayer());
+>>>>>>> Stashed changes
+=======
+            eventBus.RaiseEvent(new OnRespawnPlayerSignal());
+>>>>>>> Stashed changes
         }
     }
 }

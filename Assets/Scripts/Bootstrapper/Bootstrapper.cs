@@ -37,10 +37,12 @@ namespace Bootstrapper
 
         private void Initialize()
         {
-            _eventBus = new EventBus();
-            ServiceLocator.Register(_eventBus);
-
             var managersGo = new GameObject("Managers", typeof(DontDestroyOnLoad));
+
+            var eventBusGo = new GameObject("Event Bus", typeof(EventBus));
+            eventBusGo.transform.SetParent(managersGo.transform);
+            _eventBus = eventBusGo.GetComponent<EventBus>();
+            ServiceLocator.Register(_eventBus);
             
             var gameManagerGo = new GameObject("Game Manager", typeof(GameManager));
             gameManagerGo.transform.SetParent(managersGo.transform);
@@ -80,7 +82,15 @@ namespace Bootstrapper
 
         private void LoadStartupScene()
         {
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             _eventBus.Invoke(new OnSetSceneSignal(startupScene, delayBeforeLoading, overrideFirstTransition));
+=======
+            _eventBus.RaiseEvent(new OnSetScene(startupScene, delayBeforeLoading, overrideFirstTransition));
+>>>>>>> Stashed changes
+=======
+            _eventBus.RaiseEvent(new OnSetSceneSignal(startupScene, delayBeforeLoading, overrideFirstTransition));
+>>>>>>> Stashed changes
             Destroy(this);
         }
     }
