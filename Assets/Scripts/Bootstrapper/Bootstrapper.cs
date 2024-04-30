@@ -82,15 +82,7 @@ namespace Bootstrapper
 
         private void LoadStartupScene()
         {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-            _eventBus.Invoke(new OnSetSceneSignal(startupScene, delayBeforeLoading, overrideFirstTransition));
-=======
             _eventBus.RaiseEvent(new OnSetScene(startupScene, delayBeforeLoading, overrideFirstTransition));
->>>>>>> Stashed changes
-=======
-            _eventBus.RaiseEvent(new OnSetSceneSignal(startupScene, delayBeforeLoading, overrideFirstTransition));
->>>>>>> Stashed changes
             Destroy(this);
         }
     }

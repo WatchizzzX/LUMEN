@@ -1,8 +1,5 @@
 using System;
-<<<<<<< Updated upstream
-=======
 using System.Reflection;
->>>>>>> Stashed changes
 using EventBusSystem.Interfaces;
 
 namespace EventBusSystem.SerializedSignals
@@ -10,11 +7,7 @@ namespace EventBusSystem.SerializedSignals
     [Serializable]
     public abstract class SerializedSignal
     {
-<<<<<<< Updated upstream
         public ISignal ConvertToSignal()
-=======
-        public Signal ConvertToSignal()
->>>>>>> Stashed changes
         {
             var targetType = SignalDictionary.SerializedTypeToType[this.GetType()];
 
@@ -37,11 +30,7 @@ namespace EventBusSystem.SerializedSignals
             }
 
             // Создаем экземпляр объекта
-<<<<<<< Updated upstream
             return (ISignal)constructor.Invoke(paramValues);
-=======
-            return (Signal)constructor.Invoke(paramValues);
->>>>>>> Stashed changes
         }
     }
 }

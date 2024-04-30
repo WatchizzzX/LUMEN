@@ -7,16 +7,6 @@ namespace EventBusSystem
 {
     public abstract class EventBehaviour : MonoBehaviour
     {
-<<<<<<< Updated upstream
-        private bool _isEventBusInitialized;
-        private EventBus _eventBus;
-
-        protected virtual void Awake()
-        {
-            _isEventBusInitialized = ServiceLocatorSystem.ServiceLocator.TryGet(out _eventBus);
-
-            if (_isEventBusInitialized)
-=======
         protected bool IsEventBusInitialized;
         protected EventBus _eventBus;
 
@@ -25,7 +15,6 @@ namespace EventBusSystem
             IsEventBusInitialized = ServiceLocatorSystem.ServiceLocator.TryGet(out _eventBus);
 
             if (IsEventBusInitialized)
->>>>>>> Stashed changes
             {
                 _eventBus.Register(this);
             }
@@ -36,11 +25,7 @@ namespace EventBusSystem
 
         protected virtual void OnDestroy()
         {
-<<<<<<< Updated upstream
-            if (_isEventBusInitialized)
-=======
             if (IsEventBusInitialized)
->>>>>>> Stashed changes
                 _eventBus.RemoveListener(this);
         }
 
@@ -56,22 +41,14 @@ namespace EventBusSystem
                 _eventBus.RaiseEvent(eventName, this, delay);
         }
 
-<<<<<<< Updated upstream
         protected virtual void RaiseEvent(ISignal payload)
-=======
-        protected virtual void RaiseEvent(Signal payload)
->>>>>>> Stashed changes
         {
             if (CheckEventBus())
                 
                 _eventBus.RaiseEvent(payload, this);
         }
 
-<<<<<<< Updated upstream
         protected virtual void RaiseEvent(ISignal payload, float delay)
-=======
-        protected virtual void RaiseEvent(Signal payload, float delay)
->>>>>>> Stashed changes
         {
             if (CheckEventBus())
                 _eventBus.RaiseEvent(payload, this, delay);
@@ -79,11 +56,7 @@ namespace EventBusSystem
         
         protected bool CheckEventBus()
         {
-<<<<<<< Updated upstream
-            if (_isEventBusInitialized)
-=======
             if (IsEventBusInitialized)
->>>>>>> Stashed changes
                 return true;
             Logger.Log(LoggerChannel.EventBus, Priority.Warning,
                 $"{name} try to raise event, but EventBus on this object doesn't initialized. Please check initialize on {name}");

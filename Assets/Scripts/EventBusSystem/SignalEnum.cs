@@ -6,7 +6,6 @@ namespace EventBusSystem
 {
    public enum SignalEnum
    {
-<<<<<<< Updated upstream
       OnChangeTransitionState,
       OnSceneLoaded,
       OnSetScene,
@@ -16,16 +15,5 @@ namespace EventBusSystem
       OnRespawnPlayer,
       OnSpawnPlayer,
       OnDevConsoleOpened,
-=======
-      OnChangeTransitionStateSignal,
-      OnSceneLoadedSignal,
-      OnSetSceneSignal,
-      OnPauseKeyPressedSignal,
-      OnExitCutsceneSignal,
-      OnGameStateChangedSignal,
-      OnRespawnPlayerSignal,
-      OnSpawnPlayerSignal,
-      OnDevConsoleOpenedSignal,
->>>>>>> Stashed changes
    }
 }

@@ -6,7 +6,6 @@ using EventBusSystem;
 using EventBusSystem.Signals.SceneSignals;
 using Managers.Settings;
 using ServiceLocatorSystem;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
 using Logger = Utils.Logger;
@@ -43,20 +42,6 @@ namespace Managers
         {
             _isSceneLoading = false;
             var isGameScene = !Settings.NonGameScenes.Contains(loadedScene);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-            _eventBus.Invoke(new OnSceneLoadedSignal(loadedScene, isGameScene));
-=======
-            RaiseEvent(new OnSceneLoadedSignal(loadedScene, isGameScene));
->>>>>>> Stashed changes
-        }
-
-        [ListenTo(SignalEnum.OnSetSceneSignal)]
-        public void OnSetScene(EventModel eventModel)
-        {
-<<<<<<< Updated upstream
-            LoadScene(signal.NewSceneID, signal.Delay, signal.OverrideTransitionSettings);
-=======
             RaiseEvent(new OnSceneLoaded(loadedScene, isGameScene));
         }
 
@@ -65,11 +50,6 @@ namespace Managers
         {
             var payload = (OnSetScene)eventModel.Payload;
             LoadScene(payload.NewSceneID, payload.Delay, payload.OverrideTransitionSettings);
->>>>>>> Stashed changes
-=======
-            var payload = (OnSetSceneSignal)eventModel.Payload;
-            LoadScene(payload.NewSceneID, payload.Delay, payload.OverrideTransitionSettings);
->>>>>>> Stashed changes
         }
 
         private void LoadScene(int sceneID, float delay, TransitionSettings overrideTransitionSettings = null)

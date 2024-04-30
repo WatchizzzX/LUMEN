@@ -36,15 +36,7 @@ namespace Triggers
             if (layersToReact != (layersToReact | (1 << other.gameObject.layer))) return;
 
             onRespawnPlayer.Invoke(true);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-            _eventBus.Invoke(new OnRespawnPlayerSignal(startTransitionDelay));
-=======
             _eventBus.RaiseEvent(new OnRespawnPlayer(startTransitionDelay));
->>>>>>> Stashed changes
-=======
-            //_eventBus.Invoke(new OnRespawnPlayerSignal(startTransitionDelay));
->>>>>>> Stashed changes
         }
     }
 }

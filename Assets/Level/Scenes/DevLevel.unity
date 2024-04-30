@@ -10522,7 +10522,7 @@ PrefabInstance:
         type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2146589515}
+      objectReference: {fileID: 0}
     - target: {fileID: 3550007318351031421, guid: 4380a02ca5ccbec44b56db32772a4dea,
         type: 3}
       propertyPath: onClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -10620,11 +10620,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d7805744674f4484c60bb8d1e35370, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
 --- !u!1 &2146589514 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2077306282887745115, guid: 4380a02ca5ccbec44b56db32772a4dea,
@@ -10646,35 +10641,18 @@ MonoBehaviour:
   delay: 0
   raiseOnEnable: 0
   raiseOnStart: 0
-<<<<<<< Updated upstream
   eventName: 0
   signal:
-    rid: 9107841541681709608
+    rid: 9107841541681709610
   references:
     version: 2
     RefIds:
-    - rid: 9107841541681709608
-      type: {class: SerializedOnChangeTransitionStateSignal, ns: EventBusSystem.SerializedSignals,
+    - rid: 9107841541681709610
+      type: {class: SerializedOnChangeTransitionState, ns: EventBusSystem.SerializedSignals,
         asm: EventBus}
       data:
         TransitionState: 0
         IsChangingScene: 0
->>>>>>> Stashed changes
-=======
-  eventName: 2
-  signal:
-    rid: 9107841529634357255
-  references:
-    version: 2
-    RefIds:
-    - rid: 9107841529634357255
-      type: {class: SerializedOnSetSceneSignal, ns: EventBusSystem.SerializedSignals,
-        asm: EventBus}
-      data:
-        NewSceneID: 1
-        Delay: 0
-        OverrideTransitionSettings: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

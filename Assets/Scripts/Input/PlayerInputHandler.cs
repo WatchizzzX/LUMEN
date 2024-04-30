@@ -175,20 +175,6 @@ namespace Input
             onSprintEvent.Invoke(IsSprinting);
         }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        private void OnDevConsoleChangeState(OnDevConsoleOpenedSignal signal)
-=======
-        [ListenTo(SignalEnum.OnDevConsoleOpenedSignal)]
-        public void OnDevConsoleChangeState(EventModel eventModel)
->>>>>>> Stashed changes
-        {
-            ChangeInputState(!((OnDevConsoleOpenedSignal)eventModel.Payload).IsOpened);
-        }
-
-<<<<<<< Updated upstream
-        private void OnStartExitCutscene(OnExitCutsceneSignal signal)
-=======
         [ListenTo(SignalEnum.OnDevConsoleOpened)]
         private void OnDevConsoleChangeState(EventModel eventModel)
         {
@@ -196,27 +182,13 @@ namespace Input
         }
 
         [ListenTo(SignalEnum.OnExitCutscene)]
-        private void OnStartExitCutscene(OnExitCutscene signal)
->>>>>>> Stashed changes
-=======
-        [ListenTo(SignalEnum.OnExitCutsceneSignal)]
-        public void OnStartExitCutscene(OnExitCutsceneSignal signal)
->>>>>>> Stashed changes
+        private void OnStartExitCutscene(EventModel eventModel)
         {
             ChangeInputState(false);
         }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        private void OnSpawnPlayer(OnSpawnPlayerSignal signal)
-=======
         [ListenTo(SignalEnum.OnSpawnPlayer)]
-        private void OnSpawnPlayer(OnSpawnPlayer signal)
->>>>>>> Stashed changes
-=======
-        [ListenTo(SignalEnum.OnSpawnPlayerSignal)]
-        public void OnSpawnPlayer(OnSpawnPlayerSignal signal)
->>>>>>> Stashed changes
+        private void OnSpawnPlayer(EventModel eventModel)
         {
             ChangeInputState(true);
         }
@@ -228,15 +200,7 @@ namespace Input
         private void OnPause(InputAction.CallbackContext obj)
         {
             if (obj.ReadValueAsButton())
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                _eventBus.Invoke(new OnPauseKeyPressedSignal());
-=======
                 RaiseEvent(SignalEnum.OnPauseKeyPressed);
->>>>>>> Stashed changes
-=======
-                RaiseEvent(SignalEnum.OnPauseKeyPressedSignal);
->>>>>>> Stashed changes
         }
 
         /// <summary>

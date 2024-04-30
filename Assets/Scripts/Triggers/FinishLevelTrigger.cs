@@ -1,6 +1,7 @@
 using Enums;
 using EventBusSystem;
 using EventBusSystem.Signals.GameSignals;
+using EventBusSystem.Signals.SceneSignals;
 using Managers;
 using NaughtyAttributes;
 using ServiceLocatorSystem;
@@ -44,15 +45,7 @@ namespace Triggers
 
         private void SwitchScene(float duration)
         {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-            _eventBus.Invoke(new OnExitCutsceneSignal(sceneToSwitch, duration, exitCamera));
-=======
             _eventBus.RaiseEvent(new OnExitCutscene(sceneToSwitch, duration, exitCamera));
->>>>>>> Stashed changes
-=======
-            //_eventBus.Invoke(new OnExitCutsceneSignal(sceneToSwitch, duration, exitCamera));
->>>>>>> Stashed changes
         }
     }
 }

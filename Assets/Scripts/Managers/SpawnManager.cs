@@ -115,18 +115,8 @@ namespace Managers
                 PlayerInputHandler.onPickupEvent.AddListener(PickupController.OnPickupEvent);
                 PlayerInputHandler.onJumpEvent.AddListener(PlayerController.CallToJump);
                 PlayerInputHandler.onSprintEvent.AddListener(PlayerController.SetSprint);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-                
-                _eventBus.Invoke(new OnSpawnPlayerSignal());
-=======
 
                 RaiseEvent(SignalEnum.OnSpawnPlayer);
->>>>>>> Stashed changes
-=======
-
-                RaiseEvent(SignalEnum.OnSpawnPlayerSignal);
->>>>>>> Stashed changes
             }
             catch (Exception e)
             {
@@ -152,22 +142,6 @@ namespace Managers
 
         #region Event Handlers
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        private void OnSceneLoaded(OnSceneLoadedSignal signal)
-=======
-        [ListenTo(SignalEnum.OnSceneLoadedSignal)]
-        public void OnSceneLoaded(EventModel eventModel)
->>>>>>> Stashed changes
-        {
-            if (!((OnSceneLoadedSignal)eventModel.Payload).IsGameLevel) return;
-            SpawnPlayer();
-            SpawnInGameUI();
-        }
-
-<<<<<<< Updated upstream
-        private void OnRespawnPlayer(OnRespawnPlayerSignal signal)
-=======
         [ListenTo(SignalEnum.OnSceneLoaded)]
         private void OnSceneLoaded(EventModel eventModel)
         {
@@ -178,34 +152,15 @@ namespace Managers
 
         [ListenTo(SignalEnum.OnRespawnPlayer)]
         private void OnRespawnPlayer(EventModel eventModel)
->>>>>>> Stashed changes
-=======
-        [ListenTo(SignalEnum.OnRespawnPlayerSignal)]
-        public void OnRespawnPlayer(EventModel eventModel)
->>>>>>> Stashed changes
         {
             _cachedRespawn = true;
         }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        private void OnChangeTransitionState(OnChangeTransitionStateSignal signal)
-        {
-            if (!signal.IsChangingScene)
-=======
         [ListenTo(SignalEnum.OnChangeTransitionState)]
         private void OnChangeTransitionState(EventModel eventModel)
         {
             var payload = (OnChangeTransitionState)eventModel.Payload;
             if (!payload.IsChangingScene)
->>>>>>> Stashed changes
-=======
-        [ListenTo(SignalEnum.OnChangeTransitionStateSignal)]
-        public void OnChangeTransitionState(EventModel eventModel)
-        {
-            var payload = (OnChangeTransitionStateSignal)eventModel.Payload;
-            if (!payload.IsChangingScene)
->>>>>>> Stashed changes
             {
                 if (!_cachedRespawn || payload.TransitionState != TransitionState.Cutout) return;
                 RespawnPlayer();
