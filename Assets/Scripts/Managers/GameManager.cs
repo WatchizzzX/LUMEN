@@ -4,7 +4,6 @@ using Enums;
 using EventBusSystem;
 using EventBusSystem.Signals.DeveloperSignals;
 using EventBusSystem.Signals.GameSignals;
-using EventBusSystem.Signals.InputSignals;
 using EventBusSystem.Signals.SceneSignals;
 using Managers.Settings;
 using ServiceLocatorSystem;
@@ -13,24 +12,20 @@ using Logger = Utils.Logger;
 
 namespace Managers
 {
-    public class GameManager : MonoBehaviour, IService
+    public class GameManager : EventBehaviour, IService
     {
         [NonSerialized] public GameManagerSettings Settings;
 
-        private EventBus _eventBus;
-
         private GameState _gameState;
 
-        private void Awake()
+        protected override void Awake()
         {
-            _eventBus = ServiceLocator.Get<EventBus>();
+            base.Awake();
 
             _gameState = GameState.Normal;
 
             DevConsole.OnConsoleOpened += OnDevConsoleChangeState;
             DevConsole.OnConsoleClosed += OnDevConsoleChangeState;
-
-            SubscribeToEventBus();
 
 #if UNITY_EDITOR || DEBUG
 
@@ -38,9 +33,9 @@ namespace Managers
 #endif
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
-            UnsubscribeFromEventBus();
+            base.OnDestroy();
 
 #if UNITY_EDITOR || DEBUG
 
@@ -76,37 +71,21 @@ namespace Managers
         }
 #endif
 
-        private void SubscribeToEventBus()
+        [ListenTo(SignalEnum.OnExitCutscene)]
+        private void OnExitCutscene(EventModel eventModel)
         {
-            _eventBus.Subscribe<OnSceneLoadedSignal>(OnSceneLoaded);
-            _eventBus.Subscribe<OnExitCutsceneSignal>(OnExitCutscene);
-            _eventBus.Subscribe<OnPauseKeyPressedSignal>(OnPauseKeyPressed);
-            _eventBus.Subscribe<OnGameStateChangedSignal>(OnGameStateChanged);
-            _eventBus.Subscribe<OnRespawnPlayerSignal>(OnRespawnPlayer);
-            _eventBus.Subscribe<OnSetSceneSignal>(OnSetScene);
+            var payload = (OnExitCutscene)eventModel.Payload;
+            RaiseEvent(new OnSetScene(payload.NextSceneID, payload.CutsceneDuration));
         }
 
-        private void UnsubscribeFromEventBus()
-        {
-            _eventBus.Unsubscribe<OnSceneLoadedSignal>(OnSceneLoaded);
-            _eventBus.Unsubscribe<OnExitCutsceneSignal>(OnExitCutscene);
-            _eventBus.Unsubscribe<OnPauseKeyPressedSignal>(OnPauseKeyPressed);
-            _eventBus.Unsubscribe<OnGameStateChangedSignal>(OnGameStateChanged);
-            _eventBus.Unsubscribe<OnRespawnPlayerSignal>(OnRespawnPlayer);
-            _eventBus.Unsubscribe<OnSetSceneSignal>(OnSetScene);
-        }
-
-        private void OnExitCutscene(OnExitCutsceneSignal signal)
-        {
-            _eventBus.Invoke(new OnSetSceneSignal(signal.NextSceneID, signal.CutsceneDuration));
-        }
-
-        private void OnSceneLoaded(OnSceneLoadedSignal signal)
+        [ListenTo(SignalEnum.OnSceneLoaded)]
+        private void OnSceneLoaded(EventModel eventModel)
         {
             DevConsole.CloseConsole();
         }
 
-        private void OnPauseKeyPressed(OnPauseKeyPressedSignal signal)
+        [ListenTo(SignalEnum.OnPauseKeyPressed)]
+        private void OnPauseKeyPressed(EventModel eventModel)
         {
             ChangeGameState(_gameState switch
             {
@@ -116,9 +95,10 @@ namespace Managers
             });
         }
 
-        private void OnGameStateChanged(OnGameStateChangedSignal signal)
+        [ListenTo(SignalEnum.OnGameStateChanged)]
+        private void OnGameStateChanged(EventModel eventModel)
         {
-            switch (signal.GameState)
+            switch (((OnGameStateChanged)eventModel.Payload).GameState)
             {
                 case GameState.Normal:
                     Time.timeScale = 1f;
@@ -129,25 +109,27 @@ namespace Managers
             }
         }
 
-        private void OnRespawnPlayer(OnRespawnPlayerSignal signal)
+        [ListenTo(SignalEnum.OnRespawnPlayer)]
+        private void OnRespawnPlayer(EventModel eventModel)
         {
             ChangeGameState(GameState.Normal);
         }
 
-        private void OnSetScene(OnSetSceneSignal signal)
+        [ListenTo(SignalEnum.OnSetScene)]
+        private void OnSetScene(EventModel eventModel)
         {
             ChangeGameState(GameState.Normal);
         }
 
         private void OnDevConsoleChangeState()
         {
-            _eventBus.Invoke(new OnDevConsoleOpenedSignal(DevConsole.IsOpen));
+            RaiseEvent(new OnDevConsoleOpened(DevConsole.IsOpen));
         }
 
         private void ChangeGameState(GameState newGameState)
         {
             _gameState = newGameState;
-            _eventBus.Invoke(new OnGameStateChangedSignal(_gameState));
+            RaiseEvent(new OnGameStateChanged(_gameState));
         }
     }
 }

@@ -26,7 +26,8 @@ namespace Utils
         ServiceLocator = 1 << 10,
         EventBus = 1 << 11,
         AnimationManager = 1 << 12,
-        UI = 1 << 13
+        UI = 1 << 13,
+        EditorTools = 1 << 14
     }
 
     /// <summary>
@@ -264,7 +265,8 @@ namespace Utils
             { LoggerChannel.TransitionManager, "#90a955" },
             { LoggerChannel.EventBus, "#ff4d6d" },
             { LoggerChannel.AnimationManager, "#84a98c" },
-            { LoggerChannel.UI, "#a7c957" }
+            { LoggerChannel.UI, "#a7c957" },
+            { LoggerChannel.EditorTools, "#ccd5ae" }
         };
 
         /// <summary>

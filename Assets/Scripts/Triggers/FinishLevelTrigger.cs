@@ -1,3 +1,4 @@
+using Enums;
 using EventBusSystem;
 using EventBusSystem.Signals.GameSignals;
 using EventBusSystem.Signals.SceneSignals;
@@ -44,7 +45,7 @@ namespace Triggers
 
         private void SwitchScene(float duration)
         {
-            _eventBus.Invoke(new OnExitCutsceneSignal(sceneToSwitch, duration, exitCamera));
+            _eventBus.RaiseEvent(new OnExitCutscene(sceneToSwitch, duration, exitCamera));
         }
     }
 }

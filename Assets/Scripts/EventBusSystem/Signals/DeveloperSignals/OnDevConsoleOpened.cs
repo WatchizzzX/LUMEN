@@ -2,11 +2,11 @@ using EventBusSystem.Interfaces;
 
 namespace EventBusSystem.Signals.DeveloperSignals
 {
-    public class OnDevConsoleOpenedSignal : ISignal
+    public class OnDevConsoleOpened : ISignal
     {
         public readonly bool IsOpened;
 
-        public OnDevConsoleOpenedSignal(bool isOpened)
+        public OnDevConsoleOpened(bool isOpened)
         {
             IsOpened = isOpened;
         }

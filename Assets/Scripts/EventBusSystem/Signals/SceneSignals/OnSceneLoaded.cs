@@ -3,12 +3,12 @@ using UnityEngine.SceneManagement;
 
 namespace EventBusSystem.Signals.SceneSignals
 {
-    public class OnSceneLoadedSignal : ISignal
+    public class OnSceneLoaded : ISignal
     {
         public readonly Scene LoadedScene;
         public readonly bool IsGameLevel;
-        
-        public OnSceneLoadedSignal(Scene loadedScene, bool isGameLevel)
+
+        public OnSceneLoaded(Scene loadedScene, bool isGameLevel)
         {
             LoadedScene = loadedScene;
             IsGameLevel = isGameLevel;

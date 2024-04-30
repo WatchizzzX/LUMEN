@@ -17,7 +17,7 @@ namespace UI
                 return;
             }
             
-            eventBus.Invoke(new OnRespawnPlayerSignal());
+            eventBus.RaiseEvent(new OnRespawnPlayer());
         }
     }
 }

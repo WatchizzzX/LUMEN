@@ -13,7 +13,7 @@ using Logger = Utils.Logger;
 namespace Input
 {
     [RequireComponent(typeof(PlayerInput))]
-    public class PlayerInputHandler : MonoBehaviour
+    public class PlayerInputHandler : EventBehaviour
     {
         #region Serialized Fields
 
@@ -78,8 +78,6 @@ namespace Input
 
         private InputAction _pauseAction;
 
-        private EventBus _eventBus;
-
         private bool _isInputEnabled;
 
         #endregion
@@ -115,9 +113,9 @@ namespace Input
 
         #region MonoBehaviour
 
-        private void Awake()
+        protected override void Awake()
         {
-            _eventBus = ServiceLocator.Get<EventBus>();
+            base.Awake();
             _input = GetComponent<PlayerInput>();
             _isInputEnabled = true;
 
@@ -156,32 +154,11 @@ namespace Input
 
             _pauseAction.performed += OnPause;
             _pauseAction.canceled += OnPause;
-
-            SubscribeToEventBus();
-        }
-
-        private void OnDestroy()
-        {
-            UnsubscribeFromEventBus();
         }
 
         #endregion
 
         #region Methods
-
-        private void SubscribeToEventBus()
-        {
-            _eventBus.Subscribe<OnDevConsoleOpenedSignal>(OnDevConsoleChangeState);
-            _eventBus.Subscribe<OnExitCutsceneSignal>(OnStartExitCutscene);
-            _eventBus.Subscribe<OnSpawnPlayerSignal>(OnSpawnPlayer);
-        }
-
-        private void UnsubscribeFromEventBus()
-        {
-            _eventBus.Unsubscribe<OnDevConsoleOpenedSignal>(OnDevConsoleChangeState);
-            _eventBus.Unsubscribe<OnExitCutsceneSignal>(OnStartExitCutscene);
-            _eventBus.Unsubscribe<OnSpawnPlayerSignal>(OnSpawnPlayer);
-        }
 
         private void ChangeInputState(bool isEnabled)
         {
@@ -198,17 +175,20 @@ namespace Input
             onSprintEvent.Invoke(IsSprinting);
         }
 
-        private void OnDevConsoleChangeState(OnDevConsoleOpenedSignal signal)
+        [ListenTo(SignalEnum.OnDevConsoleOpened)]
+        private void OnDevConsoleChangeState(EventModel eventModel)
         {
-            ChangeInputState(!signal.IsOpened);
+            ChangeInputState(!((OnDevConsoleOpened)eventModel.Payload).IsOpened);
         }
 
-        private void OnStartExitCutscene(OnExitCutsceneSignal signal)
+        [ListenTo(SignalEnum.OnExitCutscene)]
+        private void OnStartExitCutscene(EventModel eventModel)
         {
             ChangeInputState(false);
         }
 
-        private void OnSpawnPlayer(OnSpawnPlayerSignal signal)
+        [ListenTo(SignalEnum.OnSpawnPlayer)]
+        private void OnSpawnPlayer(EventModel eventModel)
         {
             ChangeInputState(true);
         }
@@ -220,7 +200,7 @@ namespace Input
         private void OnPause(InputAction.CallbackContext obj)
         {
             if (obj.ReadValueAsButton())
-                _eventBus.Invoke(new OnPauseKeyPressedSignal());
+                RaiseEvent(SignalEnum.OnPauseKeyPressed);
         }
 
         /// <summary>

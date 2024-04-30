@@ -2,8 +2,7 @@
 
 namespace EventBusSystem.Signals.InputSignals
 {
-    public class OnPauseKeyPressedSignal : ISignal
+    public class OnPauseKeyPressed : ISignal
     {
-        
     }
 }

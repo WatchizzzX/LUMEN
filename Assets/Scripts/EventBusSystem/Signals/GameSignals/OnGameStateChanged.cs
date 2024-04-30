@@ -3,11 +3,11 @@ using EventBusSystem.Interfaces;
 
 namespace EventBusSystem.Signals.GameSignals
 {
-    public class OnGameStateChangedSignal : ISignal
+    public class OnGameStateChanged : ISignal
     {
         public readonly GameState GameState;
 
-        public OnGameStateChangedSignal(GameState gameState)
+        public OnGameStateChanged(GameState gameState)
         {
             GameState = gameState;
         }
