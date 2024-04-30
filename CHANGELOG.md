@@ -1,3 +1,10 @@
+# [0.15.0](https://github.com/l0nnes/LUMEN/compare/v0.14.0...v0.15.0) (2024-04-30)
+
+
+### Features
+
+* Rework of EventBus ([0a9cdfe](https://github.com/l0nnes/LUMEN/commit/0a9cdfe00a040013670e2f52710046b0e0c1e41c))
+
 # [0.14.0](https://github.com/WatchizzzX/LUMEN/compare/v0.13.0...v0.14.0) (2024-04-18)
 
 
