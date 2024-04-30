@@ -1,6 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using Utils;
+using Utils.Extensions;
 using Logger = Utils.Logger;
 
 namespace InteractionSystem
@@ -23,6 +24,9 @@ namespace InteractionSystem
         /// </summary>
         [Tooltip("Range in which InteractorController work")] [SerializeField, Range(0.1f, 5f)]
         private float interactiveRange = 0.5f;
+
+        [SerializeField, Range(1f, 360f)]
+        private int angleInteractiveRange = 45;
 
         /// <summary>
         /// A buffer into which all interactive objects found in the area will be placed. Size affects performance
@@ -85,6 +89,15 @@ namespace InteractionSystem
             ).First().gameObject;
 
             _interactable = _closestInteractableObject.GetComponent<IInteractable>();
+
+            var directionToInteractable =
+                (_closestInteractableObject.transform.position.ToXZVector2() - transform.position.ToXZVector2()).normalized;
+
+            var angle = Mathf.Abs(Vector2.Angle(transform.forward.ToXZVector2(), directionToInteractable));
+            
+            Debug.Log(angle);
+            
+            if (angle > angleInteractiveRange) return;
 
             if (_interactable == null)
             {
