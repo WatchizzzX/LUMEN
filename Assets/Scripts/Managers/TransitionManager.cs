@@ -21,6 +21,8 @@ namespace Managers
         [NonSerialized]
         public TransitionManagerSettings Settings;
 
+        public bool IsTransitionStarted => _runningTransition;
+
         #endregion
 
         #region Private Variables

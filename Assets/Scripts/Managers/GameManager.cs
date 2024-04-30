@@ -18,6 +18,8 @@ namespace Managers
 
         private GameState _gameState;
 
+        private TransitionManager _transitionManager;
+
         protected override void Awake()
         {
             base.Awake();
@@ -87,6 +89,11 @@ namespace Managers
         [ListenTo(SignalEnum.OnPauseKeyPressed)]
         private void OnPauseKeyPressed(EventModel eventModel)
         {
+            if (_transitionManager == null)
+                _transitionManager = ServiceLocator.Get<TransitionManager>();
+
+            if (_transitionManager.IsTransitionStarted) return;
+            
             ChangeGameState(_gameState switch
             {
                 GameState.Normal => GameState.Paused,
