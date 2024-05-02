@@ -14,7 +14,7 @@ namespace UI
         {
             switch (((OnGameStateChanged)eventModel.Payload).GameState)
             {
-                case GameState.Normal:
+                case GameState.Level:
                     uiPausePanel.SetActive(false);
                     break;
                 case GameState.Paused:
