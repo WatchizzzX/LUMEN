@@ -24,6 +24,11 @@ namespace Managers
         {
             base.Awake();
 
+            if (!PlayerPrefs.HasKey("DevConsole"))
+            {
+                DevConsole.DisableConsole();
+            }
+
             _gameState = GameState.Normal;
 
             DevConsole.OnConsoleOpened += OnDevConsoleChangeState;
