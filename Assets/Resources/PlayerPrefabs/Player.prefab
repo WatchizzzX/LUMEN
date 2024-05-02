@@ -1961,7 +1961,8 @@ MonoBehaviour:
   interactableLayer:
     serializedVersion: 2
     m_Bits: 128
-  interactiveRange: 1.5
+  interactiveRange: 1.2
+  angleInteractiveRange: 65
   bufferSize: 3
 --- !u!114 &9101354309280680423
 MonoBehaviour:

@@ -37,6 +37,8 @@ namespace Managers
 
         #region Private Variables
 
+        private Transform _spawnPoint;
+
         private GameObject _spawnedPlayerGo;
 
         private GameObject _spawnedInputGo;
@@ -99,7 +101,13 @@ namespace Managers
         {
             try
             {
-                _spawnedPlayerGo = Instantiate(Settings.PlayerPrefab, Vector3.zero, Quaternion.identity);
+                var spawnPoint = FindFirstObjectByType<SpawnPoint>(FindObjectsInactive.Exclude);
+
+                if (spawnPoint)
+                    _spawnPoint = spawnPoint.transform;
+
+                _spawnedPlayerGo = Instantiate(Settings.PlayerPrefab,
+                    !_spawnPoint ? Vector3.zero : _spawnPoint.transform.position, Quaternion.identity);
                 _spawnedPlayerGo.name = "Player";
                 PlayerAnimator = _spawnedPlayerGo.GetComponent<PlayerAnimator>();
                 PlayerController = _spawnedPlayerGo.GetComponent<PlayerController>();

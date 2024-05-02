@@ -1,4 +1,5 @@
 using System;
+using Enums;
 using EventBusSystem;
 using EventBusSystem.Signals.DeveloperSignals;
 using EventBusSystem.Signals.GameSignals;
@@ -163,6 +164,7 @@ namespace Input
         private void ChangeInputState(bool isEnabled)
         {
             _isInputEnabled = isEnabled;
+            ChangeCursorVisible(false);
 
             if (_isInputEnabled) return;
 
@@ -173,6 +175,14 @@ namespace Input
 
             onMoveEvent.Invoke(Move);
             onSprintEvent.Invoke(IsSprinting);
+            
+            ChangeCursorVisible(true);
+        }
+
+        private void ChangeCursorVisible(bool value)
+        {
+            Cursor.visible = value;
+            Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
         }
 
         [ListenTo(SignalEnum.OnDevConsoleOpened)]
@@ -191,6 +201,26 @@ namespace Input
         private void OnSpawnPlayer(EventModel eventModel)
         {
             ChangeInputState(true);
+        }
+
+        [ListenTo(SignalEnum.OnGameStateChanged)]
+        private void OnGameStateChanged(EventModel eventModel)
+        {
+            var payload = (OnGameStateChanged)eventModel.Payload;
+            switch (payload.GameState)
+            {
+                case GameState.Level:
+                    ChangeInputState(true);
+                    break;
+                case GameState.Paused:
+                    ChangeInputState(false);
+                    break;
+                case GameState.MainMenu:
+                    ChangeInputState(false);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         #endregion

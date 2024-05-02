@@ -2,7 +2,8 @@
 {
     public enum GameState
     {
-        Normal,
+        MainMenu,
+        Level,
         Paused
     }
 }

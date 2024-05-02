@@ -18,11 +18,18 @@ namespace Managers
 
         private GameState _gameState;
 
+        private TransitionManager _transitionManager;
+
         protected override void Awake()
         {
             base.Awake();
 
-            _gameState = GameState.Normal;
+            if (!PlayerPrefs.HasKey("DevConsole"))
+            {
+                DevConsole.DisableConsole();
+            }
+
+            _gameState = GameState.MainMenu;
 
             DevConsole.OnConsoleOpened += OnDevConsoleChangeState;
             DevConsole.OnConsoleClosed += OnDevConsoleChangeState;
@@ -82,43 +89,55 @@ namespace Managers
         private void OnSceneLoaded(EventModel eventModel)
         {
             DevConsole.CloseConsole();
+
+            var payload = (OnSceneLoaded)eventModel.Payload;
+
+            if (!payload.IsGameLevel)
+            {
+                ChangeGameState(GameState.MainMenu);
+            }
         }
 
         [ListenTo(SignalEnum.OnPauseKeyPressed)]
         private void OnPauseKeyPressed(EventModel eventModel)
         {
-            ChangeGameState(_gameState switch
+            if (_transitionManager == null)
+                _transitionManager = ServiceLocator.Get<TransitionManager>();
+
+            if (_transitionManager.IsTransitionStarted) return;
+
+            switch (_gameState)
             {
-                GameState.Normal => GameState.Paused,
-                GameState.Paused => GameState.Normal,
-                _ => _gameState
-            });
+                case GameState.Level:
+                    ChangeGameState(GameState.Paused);
+                    break;
+                case GameState.Paused:
+                    ChangeGameState(GameState.Level);
+                    break;
+            }
         }
 
         [ListenTo(SignalEnum.OnGameStateChanged)]
         private void OnGameStateChanged(EventModel eventModel)
         {
-            switch (((OnGameStateChanged)eventModel.Payload).GameState)
+            Time.timeScale = ((OnGameStateChanged)eventModel.Payload).GameState switch
             {
-                case GameState.Normal:
-                    Time.timeScale = 1f;
-                    break;
-                case GameState.Paused:
-                    Time.timeScale = 0f;
-                    break;
-            }
+                GameState.MainMenu or GameState.Level => 1f,
+                GameState.Paused => 0f,
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
 
         [ListenTo(SignalEnum.OnRespawnPlayer)]
         private void OnRespawnPlayer(EventModel eventModel)
         {
-            ChangeGameState(GameState.Normal);
+            ChangeGameState(GameState.Level);
         }
 
         [ListenTo(SignalEnum.OnSetScene)]
         private void OnSetScene(EventModel eventModel)
         {
-            ChangeGameState(GameState.Normal);
+            ChangeGameState(GameState.Level);
         }
 
         private void OnDevConsoleChangeState()
