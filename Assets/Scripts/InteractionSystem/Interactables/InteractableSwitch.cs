@@ -16,8 +16,8 @@ namespace InteractionSystem.Interactables
         /// <summary>
         /// Disable interacting with object through InteractorController?
         /// </summary>
-        [Tooltip("Disable interacting with object through InteractorController?")]
-        [SerializeField] private bool disableInteractingWithController;
+        [Tooltip("Disable interacting with object through InteractorController?")] [SerializeField]
+        private bool disableInteractingWithController;
 
         #endregion
 
@@ -32,6 +32,7 @@ namespace InteractionSystem.Interactables
         public override void Interact(InteractorController interactor)
         {
             if (disableInteractingWithController) return;
+            if (IsInCooldown) return;
             
             base.Interact(interactor);
             InteractSwitch(!IsEnabled);

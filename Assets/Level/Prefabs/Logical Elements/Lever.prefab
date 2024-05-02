@@ -55,6 +55,7 @@ MonoBehaviour:
   onClick:
     m_PersistentCalls:
       m_Calls: []
+  cooldownTimer: 1
   onValueChanged:
     m_PersistentCalls:
       m_Calls:

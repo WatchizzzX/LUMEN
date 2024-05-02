@@ -95,8 +95,6 @@ namespace InteractionSystem
 
             var angle = Mathf.Abs(Vector2.Angle(transform.forward.ToXZVector2(), directionToInteractable));
             
-            Debug.Log(angle);
-            
             if (angle > angleInteractiveRange) return;
 
             if (_interactable == null)

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,6 +7,7 @@ namespace InteractionSystem.Interactables
     /// <summary>
     /// Standard implementation of interactable button with event OnClick 
     /// </summary>
+    [SelectionBase]
     public class InteractableButton : BasicInteractable
     {
         #region Serialized Fields
@@ -16,7 +18,11 @@ namespace InteractionSystem.Interactables
         [Space(2f)] [Header("Interactable Button settings")] [SerializeField]
         private UnityEvent onClick;
 
+        [SerializeField] private float cooldownTimer;
+
         #endregion
+
+        protected bool IsInCooldown;
 
         #region Interface Realizations
 
@@ -32,7 +38,18 @@ namespace InteractionSystem.Interactables
 
         protected override void OnInteract()
         {
+            if (IsInCooldown) return;
             onClick.Invoke();
+            StartCoroutine(StartCooldownTimer());
+        }
+
+        private IEnumerator StartCooldownTimer()
+        {
+            IsInCooldown = true;
+
+            yield return new WaitForSecondsRealtime(cooldownTimer);
+
+            IsInCooldown = false;
         }
 
         #endregion
