@@ -1,3 +1,24 @@
+# [0.16.0](https://github.com/l0nnes/LUMEN/compare/v0.15.0...v0.16.0) (2024-05-02)
+
+
+### Bug Fixes
+
+* Add cooldown to interactable button ([968335c](https://github.com/l0nnes/LUMEN/commit/968335c2001996f70a3110291986846c88bbed3e))
+* Another fix for player animator) ([0b29476](https://github.com/l0nnes/LUMEN/commit/0b29476e8defa51abd95e5c5d3f5a29106c9e3bb))
+* FIx activating object when player turned away ([6570e36](https://github.com/l0nnes/LUMEN/commit/6570e36fadb715bd67d1a3be555556040e6453ed))
+* Fix bug when you can pause when transition started ([24436df](https://github.com/l0nnes/LUMEN/commit/24436dfdfb24063953d5a4c18956890461bc31b2))
+* Fix camera damping when avoid obstacles ([12716ff](https://github.com/l0nnes/LUMEN/commit/12716ffd0128be7ee3ba93ceac0830976da0bfad))
+* Fix flickering player animation ([c56d467](https://github.com/l0nnes/LUMEN/commit/c56d4670c974fd68bc134868d6cd571a74f96240))
+* Fix player animator ([730dd3e](https://github.com/l0nnes/LUMEN/commit/730dd3e2e467895f6044558a237c621103194b1a))
+* InputHandler now respond to cursor visibility ([d9803c3](https://github.com/l0nnes/LUMEN/commit/d9803c3ee074e06333158cc1d457c328e9886a9d))
+
+
+### Features
+
+* Add CheatCodeHandler and first cheat) ([c17a182](https://github.com/l0nnes/LUMEN/commit/c17a182a936b10e564a9bb125f8fb89eb3f25707))
+* Add SpawnPoint ([c07a91f](https://github.com/l0nnes/LUMEN/commit/c07a91f3265ced367f6241b640457f031e4f0db4))
+* Rework camera from fixed to orbit ([f6a4e90](https://github.com/l0nnes/LUMEN/commit/f6a4e906c768cbbd4ffe4090360d41a9288e6d96))
+
 # [0.15.0](https://github.com/l0nnes/LUMEN/compare/v0.14.0...v0.15.0) (2024-04-30)
 
 
