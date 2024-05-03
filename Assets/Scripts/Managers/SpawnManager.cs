@@ -114,8 +114,6 @@ namespace Managers
                 InteractorController = _spawnedPlayerGo.GetComponent<InteractorController>();
                 PickupController = _spawnedPlayerGo.GetComponent<PickupController>();
 
-                MainCamera.clearFlags = CameraClearFlags.Skybox;
-
                 PlayerCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
 
                 PlayerInputHandler.onMoveEvent.AddListener(PlayerController.SetMoveDirection);
