@@ -133,7 +133,7 @@ namespace Managers
         private void RespawnPlayer()
         {
             if (_sceneManager.IsSceneLoading) return;
-            _spawnedPlayerGo.transform.position = Vector3.zero;
+            _spawnedPlayerGo.transform.position = _spawnPoint ? _spawnPoint.position : Vector3.zero;
             PlayerCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
             PlayerCamera.ForceCameraPosition(Settings.SpawnCameraPosition,
                 Settings.SpawnCameraRotation);
