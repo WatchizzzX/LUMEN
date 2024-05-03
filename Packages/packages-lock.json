@@ -7,6 +7,13 @@
       "dependencies": {},
       "hash": "0128f8c70b1799b87a344c3f315163fa70613ac5"
     },
+    "com.marijnzwemmer.unity-toolbar-extender": {
+      "version": "https://github.com/marijnz/unity-toolbar-extender.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "dbd76ed996483d219c39d240f785b1790aa039ed"
+    },
     "com.solidalloy.type-references": {
       "version": "2.16.0",
       "depth": 0,
