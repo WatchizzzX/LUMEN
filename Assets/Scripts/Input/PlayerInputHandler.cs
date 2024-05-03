@@ -81,6 +81,8 @@ namespace Input
 
         private bool _isInputEnabled;
 
+        private GameState _lastGameState;
+
         #endregion
 
         #region Public Fields
@@ -188,6 +190,7 @@ namespace Input
         [ListenTo(SignalEnum.OnDevConsoleOpened)]
         private void OnDevConsoleChangeState(EventModel eventModel)
         {
+            if (_lastGameState is GameState.MainMenu or GameState.Paused) return;
             ChangeInputState(!((OnDevConsoleOpened)eventModel.Payload).IsOpened);
         }
 
@@ -207,6 +210,7 @@ namespace Input
         private void OnGameStateChanged(EventModel eventModel)
         {
             var payload = (OnGameStateChanged)eventModel.Payload;
+            _lastGameState = payload.GameState;
             switch (payload.GameState)
             {
                 case GameState.Level:
