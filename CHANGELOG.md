@@ -1,3 +1,10 @@
+## [0.16.1](https://github.com/l0nnes/LUMEN/compare/v0.16.0...v0.16.1) (2024-05-03)
+
+
+### Bug Fixes
+
+* Fix bug with main menu and devconsole ([a0ed022](https://github.com/l0nnes/LUMEN/commit/a0ed0222408d75ccb96c6dc88e194b3011122664))
+
 # [0.16.0](https://github.com/l0nnes/LUMEN/compare/v0.15.0...v0.16.0) (2024-05-02)
 
 
