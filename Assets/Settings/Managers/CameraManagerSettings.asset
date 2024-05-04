@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8006935e45dc4075888b1658a6f6fe73, type: 3}
   m_Name: CameraManagerSettings
   m_EditorClassIdentifier: 
-  startColor: {r: 0, g: 0, b: 0, a: 0}
-  finishColor: {r: 0.9339623, g: 0.46257564, b: 0.6940675, a: 1}
-  transitionDuration: 1.5
+  finishCameraDuration: 3
