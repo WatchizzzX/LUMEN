@@ -64,6 +64,19 @@ namespace Managers
                         rotationAnimations[0].TargetRotation,
                         rotationAnimations[0].Duration).plugOptions.rotateMode = rotationAnimations[0].RotateMode;
                     break;
+                case AnimationParameterType.Position:
+                    var positionAnimations = Array.ConvertAll(animations, x => (PositionAnimation)x);
+                    DOTween.To(() => positionAnimations[0].Position,
+                        x =>
+                        {
+                            foreach (var positionAnimation in positionAnimations)
+                            {
+                                positionAnimation.Position = x;
+                            }
+                        },
+                        positionAnimations[0].TargetPosition,
+                        positionAnimations[0].Duration);
+                    break;
                 case AnimationParameterType.Float:
                     var floatAnimations = Array.ConvertAll(animations, x => (FloatAnimation)x);
                     DOTween.To(() => floatAnimations[0].Value,
