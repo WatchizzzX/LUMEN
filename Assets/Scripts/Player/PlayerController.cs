@@ -1,5 +1,6 @@
 using System;
 using DavidFDev.DevConsole;
+using EventBusSystem;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -699,6 +700,12 @@ namespace Player
             _desiredVelocity = cameraRotation * _desiredVelocity;
         }
 
+        private void ResetVelocity()
+        {
+            _desiredVelocity = Vector3.zero;
+            _velocity = Vector3.zero;
+        }
+
         #endregion
 
         #region Callbacks
@@ -721,6 +728,12 @@ namespace Player
         public void CallToJump()
         {
             _desiredJump = true;
+        }
+
+        [ListenTo(SignalEnum.OnExitCutscene)]
+        private void OnExitCutscene(EventModel eventModel)
+        {
+            ResetVelocity();
         }
 
         #endregion
