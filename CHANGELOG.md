@@ -1,3 +1,18 @@
+# [0.17.0](https://github.com/l0nnes/LUMEN/compare/v0.16.1...v0.17.0) (2024-05-04)
+
+
+### Bug Fixes
+
+* Add reset player velocity on finish trigger ([86dfa3d](https://github.com/l0nnes/LUMEN/commit/86dfa3d88548e518e441d909080abb3b338079c5))
+* Fix bug when called ExitCutscene signal ([ff608b1](https://github.com/l0nnes/LUMEN/commit/ff608b1af3a0c4ba2df716f2b42799aac0e4d26e))
+* Fix respawn in spawnpoint ([dadd6aa](https://github.com/l0nnes/LUMEN/commit/dadd6aae9b3b92207bdbd49f54ddc76ad6da55eb))
+
+
+### Features
+
+* Add new position animator ([88f2663](https://github.com/l0nnes/LUMEN/commit/88f2663f60aa1e16225bdccc90511ec0b53f2635))
+* Rework exit camera work ([d9053c9](https://github.com/l0nnes/LUMEN/commit/d9053c9ba1a35a6a08ff7c5b4e79b25c3634a1f6))
+
 ## [0.16.1](https://github.com/l0nnes/LUMEN/compare/v0.16.0...v0.16.1) (2024-05-03)
 
 
