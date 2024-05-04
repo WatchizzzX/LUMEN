@@ -17,13 +17,13 @@ MonoBehaviour:
     To: Finish Camera
     Blend:
       Style: 1
-      Time: 7
+      Time: 4
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
         m_PreInfinity: 0
         m_PostInfinity: 0
-        m_RotationOrder: 0
+        m_RotationOrder: 4
   - From: Finish Camera
     To: Player Camera
     Blend:
@@ -34,4 +34,4 @@ MonoBehaviour:
         m_Curve: []
         m_PreInfinity: 0
         m_PostInfinity: 0
-        m_RotationOrder: 0
+        m_RotationOrder: 4

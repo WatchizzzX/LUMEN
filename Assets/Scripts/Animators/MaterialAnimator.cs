@@ -38,6 +38,8 @@ namespace Animators
         {
             base.Awake();
             _material = meshRenderer.material;
+            if(animationType == MaterialAnimationType.EmissionColor)
+                _material.EnableKeyword("_Emission");
         }
 
         protected override BaseAnimation CreateAnimation(bool value, float duration)

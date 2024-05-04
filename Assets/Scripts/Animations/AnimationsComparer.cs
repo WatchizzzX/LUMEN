@@ -28,6 +28,9 @@ namespace Animations
                 case AnimationParameterType.Float:
                     if (!CompareFloat(x as FloatAnimation, y as FloatAnimation)) return false;
                     break;
+                case AnimationParameterType.Position:
+                    if (!ComparePosition(x as PositionAnimation, y as PositionAnimation)) return false;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -45,6 +48,8 @@ namespace Animations
                     ((RotationAnimation)obj).Rotation, ((RotationAnimation)obj).TargetRotation, ((RotationAnimation)obj).RotateMode),
                 AnimationParameterType.Float => HashCode.Combine((int)obj.AnimationParameterType, obj.Duration,
                     ((FloatAnimation)obj).Value, ((FloatAnimation)obj).TargetValue),
+                AnimationParameterType.Position => HashCode.Combine((int)obj.AnimationParameterType, obj.Duration,
+                    ((PositionAnimation)obj).Position, ((PositionAnimation)obj).TargetPosition),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -68,6 +73,15 @@ namespace Animations
             
             var rotateModeComparison = x.RotateMode.Equals(y.RotateMode);
             return rotateModeComparison;
+        }
+        
+        private static bool ComparePosition(PositionAnimation x, PositionAnimation y)
+        {
+            var initialPositionComparison = x.Position.Equals(y.Position);
+            if (!initialPositionComparison) return false;
+            
+            var targetPositionComparison = x.TargetPosition.Equals(y.TargetPosition);
+            return targetPositionComparison;
         }
         
         private static bool CompareFloat(FloatAnimation x, FloatAnimation y)

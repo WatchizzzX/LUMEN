@@ -45,7 +45,7 @@ namespace Triggers
 
         private void SwitchScene(float duration)
         {
-            _eventBus.RaiseEvent(new OnExitCutscene(sceneToSwitch, duration, exitCamera));
+            _eventBus.RaiseEvent(new OnExitCutscene(sceneToSwitch, duration, exitCamera), this);
         }
     }
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerNames:
   - Map
-  - layer2
+  - Extras
   - layer3
   - layer4
   - layer5

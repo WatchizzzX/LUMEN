@@ -29,6 +29,7 @@ namespace Managers
         public InteractorController InteractorController { get; private set; }
         public CinemachineCamera PlayerCamera { get; private set; }
         public CinemachineCamera FinishCamera { get; private set; }
+        public CinemachineTargetGroup FinishCameraTargetGroup { get; private set; }
         public Camera MainCamera { get; private set; }
         public CinemachineBrain CameraBrain { get; private set; }
         public PlayerInputHandler PlayerInputHandler { get; private set; }
@@ -83,6 +84,7 @@ namespace Managers
             _spawnedCameraGo.transform.SetParent(_spawnedPlayerObjectsGo.transform);
             PlayerCamera = _spawnedCameraGo.transform.Find("Player Camera").GetComponent<CinemachineCamera>();
             FinishCamera = _spawnedCameraGo.transform.Find("Finish Camera").GetComponent<CinemachineCamera>();
+            FinishCameraTargetGroup = _spawnedCameraGo.transform.Find("Finish Camera Target Group").GetComponent<CinemachineTargetGroup>();
             var cameraTransform = _spawnedCameraGo.transform.Find("Main Camera");
             MainCamera = cameraTransform.GetComponent<Camera>();
             CameraBrain = cameraTransform.GetComponent<CinemachineBrain>();
@@ -133,7 +135,7 @@ namespace Managers
         private void RespawnPlayer()
         {
             if (_sceneManager.IsSceneLoading) return;
-            _spawnedPlayerGo.transform.position = Vector3.zero;
+            _spawnedPlayerGo.transform.position = _spawnPoint ? _spawnPoint.position : Vector3.zero;
             PlayerCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
             PlayerCamera.ForceCameraPosition(Settings.SpawnCameraPosition,
                 Settings.SpawnCameraRotation);

@@ -3,6 +3,7 @@
     public enum AnimationParameterType
     {
         Color,
+        Position,
         Rotation,
         Float
     }
