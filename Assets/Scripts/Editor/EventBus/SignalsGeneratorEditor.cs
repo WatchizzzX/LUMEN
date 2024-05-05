@@ -116,9 +116,7 @@ namespace Editor.EventBus
                 serializedSignals.AppendLine("using System;");
                 serializedSignals.AppendLine("using EasyTransition;");
                 serializedSignals.AppendLine("using Enums;");
-                serializedSignals.AppendLine("using EventBusSystem.SerializedSignals;");
-                serializedSignals.AppendLine("using EventBusSystem.Signals.GameSignals;");
-                serializedSignals.AppendLine("using EventBusSystem.Signals.TransitionSignals;");
+                serializedSignals.AppendLine("using Unity.Cinemachine;");
                 serializedSignals.AppendLine("using NaughtyAttributes;");
                 serializedSignals.AppendLine("using UnityEngine;");
                 serializedSignals.AppendLine();

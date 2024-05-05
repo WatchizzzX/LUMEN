@@ -595,8 +595,8 @@ MonoBehaviour:
     type: 2}
   sceneManagerSettings: {fileID: 11400000, guid: 303320b809b18f74e82f2b0df1f22742,
     type: 2}
-  startupScene: 1
-  delayBeforeLoading: 2
+  startupScene: 3
+  delayBeforeLoading: 0
   overrideFirstTransition: {fileID: 11400000, guid: 013263c83b6a84c4d95beaa8bd163ac8,
     type: 2}
 --- !u!4 &948697616

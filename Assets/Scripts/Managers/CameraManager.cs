@@ -67,5 +67,22 @@ namespace Managers
         {
             _spawnManager.PlayerCamera.Follow = null;
         }
+
+        [ListenTo(SignalEnum.OnLevelCameraChange)]
+        private void OnLevelCameraChange(EventModel eventModel)
+        {
+            var payload = (OnLevelCameraChange)eventModel.Payload;
+
+            if (payload.TargetCamera.Priority.Value == 1)
+            {
+                _spawnManager.PlayerCamera.Priority.Value = 1;
+                payload.TargetCamera.Priority.Value = 0;
+            }
+            else
+            {
+                _spawnManager.PlayerCamera.Priority.Value = 0;
+                payload.TargetCamera.Priority.Value = 1;
+            }
+        }
     }
 }

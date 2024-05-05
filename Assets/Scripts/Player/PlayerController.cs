@@ -275,6 +275,8 @@ namespace Player
         /// </summary>
         private Vector3 _gravityForce;
 
+        private Vector3 _lastGroundPoint;
+
         #endregion
 
         #region Public Fields
@@ -364,9 +366,10 @@ namespace Player
             var isJumping = (_desiredJump && _internalJumpCooldownTimer <= 0f) ||
                             (!OnGround && _jumpPhase > 0 && velocity.y >= 0);
             isFalling = !isJumping && isFalling;*/
-            
+
             var velocity = _body.velocity;
-            var isFalling = (OnSteep && !OnGround && Vector3.Dot(transform.up, _steepNormal) > 0f) || (!OnGround && velocity.y < 0);
+            var isFalling = (OnSteep && !OnGround && Vector3.Dot(transform.up, _steepNormal) > 0f) ||
+                            (!OnGround && velocity.y < 0);
             var relativeSpeed = HorizontalVelocity.magnitude / DesiredSpeed;
             var isJumping = _jumpPhase > 0 && velocity.y > 0.1f;
             return new MovementState(isFalling, relativeSpeed, isJumping, _cachedSprinting);
@@ -558,6 +561,7 @@ namespace Player
             if (_internalJumpCooldownTimer > 0f) return;
 
             Vector3 jumpDirection;
+            var isCoyoteJump = false;
             if (OnGround)
             {
                 jumpDirection = _contactNormal;
@@ -580,6 +584,7 @@ namespace Player
             else if (_internalCoyoteTimer > 0)
             {
                 jumpDirection = Vector3.up;
+                isCoyoteJump = true;
             }
             else
             {
@@ -588,7 +593,10 @@ namespace Player
 
             _stepsSinceLastJump = 0;
             _jumpPhase += 1;
-            var jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
+
+            var heightDifference = _lastGroundPoint.y - transform.position.y;
+            var jumpSpeed = Mathf.Sqrt(-2f * _gravityForce.y *
+                                       (isCoyoteJump ? jumpHeight + heightDifference * 3.5f : jumpHeight));
             jumpDirection = (jumpDirection + Vector3.up).normalized;
             var alignedSpeed = Vector3.Dot(_velocity, jumpDirection);
             if (alignedSpeed > 0f)
@@ -613,6 +621,7 @@ namespace Player
                 {
                     _groundContactCount += 1;
                     _contactNormal += normal;
+                    _lastGroundPoint = collision.GetContact(i).point;
                 }
                 else if (normal.y > -0.01f)
                 {
