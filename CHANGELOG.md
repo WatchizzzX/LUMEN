@@ -1,3 +1,18 @@
+# [0.18.0](https://github.com/l0nnes/LUMEN/compare/v0.17.0...v0.18.0) (2024-05-05)
+
+
+### Bug Fixes
+
+* Fix coyote jump height ([ea10572](https://github.com/l0nnes/LUMEN/commit/ea10572a4b23538e2635ccd18cad6de87e68e0fd))
+* Update SignalGenerator for new signals ([a5a20a4](https://github.com/l0nnes/LUMEN/commit/a5a20a4ac76952a60eac4aafef600592b01429d1))
+
+
+### Features
+
+* Add CameraManager handler for change level camera ([ada8257](https://github.com/l0nnes/LUMEN/commit/ada825761b84784d7279dd2eb8a5413e640eb6f2))
+* Add new signal for change level camera ([3a26e6c](https://github.com/l0nnes/LUMEN/commit/3a26e6cdf573702236176d71782ee6c241033dfe))
+* Add player jump from wall ([b7b2d99](https://github.com/l0nnes/LUMEN/commit/b7b2d990d96d6198c363b1449c724bf3aba198cd))
+
 # [0.17.0](https://github.com/l0nnes/LUMEN/compare/v0.16.1...v0.17.0) (2024-05-04)
 
 
