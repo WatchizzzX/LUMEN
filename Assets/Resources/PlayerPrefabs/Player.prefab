@@ -1921,7 +1921,7 @@ MonoBehaviour:
   maxAirJumps: 0
   coyoteTime: 0.3
   jumpCooldown: 0.12
-  enableJumpingFromWalls: 0
+  enableJumpingFromWalls: 1
   maxGroundAngle: 20
   maxStairsAngle: 60
   probeMask:
