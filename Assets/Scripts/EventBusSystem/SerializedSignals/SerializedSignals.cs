@@ -4,9 +4,7 @@
 using System;
 using EasyTransition;
 using Enums;
-using EventBusSystem.SerializedSignals;
-using EventBusSystem.Signals.GameSignals;
-using EventBusSystem.Signals.TransitionSignals;
+using Unity.Cinemachine;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -52,6 +50,12 @@ namespace EventBusSystem.SerializedSignals
   public class SerializedOnGameStateChanged : SerializedSignal
   {
       [SerializeField] public GameState GameState;
+  }
+
+  [Serializable]
+  public class SerializedOnLevelCameraChange : SerializedSignal
+  {
+      [SerializeField] public CinemachineCamera TargetCamera;
   }
 
   [Serializable]

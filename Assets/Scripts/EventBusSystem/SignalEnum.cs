@@ -12,6 +12,7 @@ namespace EventBusSystem
       OnPauseKeyPressed,
       OnExitCutscene,
       OnGameStateChanged,
+      OnLevelCameraChange,
       OnRespawnPlayer,
       OnSpawnPlayer,
       OnDevConsoleOpened,
