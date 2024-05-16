@@ -7,6 +7,7 @@ namespace Managers.Settings
         order = 0)]
     public class TransitionManagerSettings : ScriptableObject
     {
+        [Header("Transition Settings")]
         [SerializeField] private GameObject transitionPrefab;
         [SerializeField] private TransitionSettings defaultTransitionSettings;
 

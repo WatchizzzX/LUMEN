@@ -9,7 +9,7 @@ namespace Managers.Settings
     [CreateAssetMenu(fileName = "SceneManagerSettings", menuName = "Settings/Create SceneManager settings", order = 0)]
     public class SceneManagerSettings : ScriptableObject
     {
-        
+        [Header("Level Settings")]
         [SerializeField, Scene] private string[] nonGameScenes;
         
         public IReadOnlyCollection<Scene> NonGameScenes
