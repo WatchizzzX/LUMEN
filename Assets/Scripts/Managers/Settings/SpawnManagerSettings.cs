@@ -5,6 +5,7 @@ namespace Managers.Settings
     [CreateAssetMenu(fileName = "SpawnManagerSettings", menuName = "Settings/Create SpawnManager settings", order = 0)]
     public class SpawnManagerSettings : ScriptableObject
     {
+        [Header("Spawn Settings")]
         [SerializeField] private GameObject playerPrefab;
         [SerializeField] private GameObject cameraPrefab;
         [SerializeField] private Vector3 spawnCameraPosition;

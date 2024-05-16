@@ -380,8 +380,7 @@ namespace Player
         /// </summary>
         private void DebugText()
         {
-            debugText.text =
-                $"CoyoteTime:{_internalCoyoteTimer:f2}. OnGround:{OnGround}. OnSteep:{OnSteep}. Jump: {_jumpPhase}. Dot: {Vector3.Dot(transform.up, _steepNormal):f3}";
+            debugText.text = $"cont normal: {_contactNormal.normalized}";
         }
 
         /// <summary>
@@ -657,7 +656,7 @@ namespace Player
         /// <returns>Projected vector</returns>
         private Vector3 ProjectOnContactPlane(Vector3 vector)
         {
-            return vector - _contactNormal * Vector3.Dot(vector, _contactNormal);
+            return vector - _contactNormal.normalized * Vector3.Dot(vector, _contactNormal.normalized);
         }
 
         /// <summary>
