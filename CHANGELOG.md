@@ -1,3 +1,18 @@
+# [0.19.0](https://github.com/l0nnes/LUMEN/compare/v0.18.0...v0.19.0) (2024-05-16)
+
+
+### Bug Fixes
+
+* Fix strange walking on stairs ([1bc0f56](https://github.com/l0nnes/LUMEN/commit/1bc0f5690ec6ffb4bc42fbaedb9552d950940561))
+* Fix UI background translucency ([31e9c52](https://github.com/l0nnes/LUMEN/commit/31e9c523849c7ed281eb8ecdad69533adca17de0))
+
+
+### Features
+
+* Add custom editor script for BootstrapperSettings ([d1919db](https://github.com/l0nnes/LUMEN/commit/d1919db1731f1b2cdfb916b8cd0720ebcfd78804))
+* Add range in InteractionController when it always work ([f6baf9f](https://github.com/l0nnes/LUMEN/commit/f6baf9fce0b87930abf4b145bce8c8f19ca72a6b))
+* Add settings to Bootstrapper ([e85af08](https://github.com/l0nnes/LUMEN/commit/e85af089b36d062e2d407093b76b2504556e2266))
+
 # [0.18.0](https://github.com/l0nnes/LUMEN/compare/v0.17.0...v0.18.0) (2024-05-05)
 
 
