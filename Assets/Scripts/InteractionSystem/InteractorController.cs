@@ -25,8 +25,13 @@ namespace InteractionSystem
         [Tooltip("Range in which InteractorController work")] [SerializeField, Range(0.1f, 5f)]
         private float interactiveRange = 0.5f;
 
-        [SerializeField, Range(1f, 360f)]
-        private int angleInteractiveRange = 45;
+        /// <summary>
+        /// Always interaction range
+        /// </summary>
+        [Tooltip("Range in which InteractorController always work")] [SerializeField, Range(0.1f, 5f)]
+        private float alwaysInteractiveRange = 0.2f;
+
+        [SerializeField, Range(1f, 360f)] private int angleInteractiveRange = 45;
 
         /// <summary>
         /// A buffer into which all interactive objects found in the area will be placed. Size affects performance
@@ -91,12 +96,23 @@ namespace InteractionSystem
             _interactable = _closestInteractableObject.GetComponent<IInteractable>();
 
             var directionToInteractable =
-                (_closestInteractableObject.transform.position.ToXZVector2() - transform.position.ToXZVector2()).normalized;
+                (_closestInteractableObject.transform.position.ToXZVector2() - transform.position.ToXZVector2())
+                .normalized;
+
+            if (Vector3.Distance(_closestInteractableObject.transform.position, transform.position) <=
+                alwaysInteractiveRange)
+            {
+                CallToInteract();
+                return;
+            }
 
             var angle = Mathf.Abs(Vector2.Angle(transform.forward.ToXZVector2(), directionToInteractable));
-            
-            if (angle > angleInteractiveRange) return;
 
+            if (angle < angleInteractiveRange) CallToInteract();
+        }
+
+        private void CallToInteract()
+        {
             if (_interactable == null)
             {
                 Logger.Log(LoggerChannel.InteractableSystem, Priority.Warning,
