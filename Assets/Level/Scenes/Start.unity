@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731713, g: 0.13414738, b: 0.121078536, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -585,20 +585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94aa374bb5da44edbb55fb0d8cf60017, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transitionManagerSettings: {fileID: 11400000, guid: b4597af3c68280f4bacbf914173bc12a,
-    type: 2}
-  spawnManagerSettings: {fileID: 11400000, guid: a5d88e236bc7eb10eb8d4e0f8360d9dd,
-    type: 2}
-  cameraManagerSettings: {fileID: 11400000, guid: 4d4a6496e9347e0649eb058c9c1a9a2c,
-    type: 2}
-  gameManagerSettings: {fileID: 11400000, guid: 1f4ea8ff35928b2bebba14fbc0327f00,
-    type: 2}
-  sceneManagerSettings: {fileID: 11400000, guid: 303320b809b18f74e82f2b0df1f22742,
-    type: 2}
-  startupScene: 3
-  delayBeforeLoading: 0
-  overrideFirstTransition: {fileID: 11400000, guid: 013263c83b6a84c4d95beaa8bd163ac8,
-    type: 2}
+  Settings: {fileID: 11400000, guid: 3eb5b77fcbb482b46a18cbd365471863, type: 2}
 --- !u!4 &948697616
 Transform:
   m_ObjectHideFlags: 0

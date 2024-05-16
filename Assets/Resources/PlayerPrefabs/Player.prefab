@@ -1922,8 +1922,8 @@ MonoBehaviour:
   coyoteTime: 0.3
   jumpCooldown: 0.12
   enableJumpingFromWalls: 1
-  maxGroundAngle: 20
-  maxStairsAngle: 60
+  maxGroundAngle: 45
+  maxStairsAngle: 90
   probeMask:
     serializedVersion: 2
     m_Bits: 1
@@ -1931,7 +1931,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   maxSnapSpeed: 100
-  probeDistance: 0.2
+  probeDistance: 0.4
   debugText: {fileID: 0}
 --- !u!114 &8888472110445852648
 MonoBehaviour:
