@@ -14,17 +14,10 @@ namespace Bootstrapper
 {
     public class Bootstrapper : MonoBehaviour
     {
-        [SerializeField] private TransitionManagerSettings transitionManagerSettings;
-        [SerializeField] private SpawnManagerSettings spawnManagerSettings;
-        [SerializeField] private CameraManagerSettings cameraManagerSettings;
-        [SerializeField] private GameManagerSettings gameManagerSettings;
-        [SerializeField] private SceneManagerSettings sceneManagerSettings;
-        [SerializeField, Scene] private int startupScene;
-        [SerializeField] private float delayBeforeLoading;
-        [SerializeField] private TransitionSettings overrideFirstTransition;
+        public BootstrapperSettings Settings;
 
         private EventBus _eventBus;
-        
+
         private void Awake()
         {
             Initialize();
@@ -43,35 +36,35 @@ namespace Bootstrapper
             eventBusGo.transform.SetParent(managersGo.transform);
             _eventBus = eventBusGo.GetComponent<EventBus>();
             ServiceLocator.Register(_eventBus);
-            
+
             var gameManagerGo = new GameObject("Game Manager", typeof(GameManager));
             gameManagerGo.transform.SetParent(managersGo.transform);
             var gameManager = gameManagerGo.GetComponent<GameManager>();
-            gameManager.Settings = gameManagerSettings;
+            gameManager.Settings = Settings.GameManagerSettings;
             ServiceLocator.Register(gameManager);
 
             var sceneManagerGo = new GameObject("Scene Manager", typeof(SceneManager));
             sceneManagerGo.transform.SetParent(managersGo.transform);
             var sceneManager = sceneManagerGo.GetComponent<SceneManager>();
-            sceneManager.Settings = sceneManagerSettings;
+            sceneManager.Settings = Settings.SceneManagerSettings;
             ServiceLocator.Register(sceneManager);
-            
+
             var transitionManagerGo = new GameObject("Transition Manager", typeof(TransitionManager));
             transitionManagerGo.transform.SetParent(managersGo.transform);
             var transitionManager = transitionManagerGo.GetComponent<TransitionManager>();
-            transitionManager.Settings = transitionManagerSettings;
+            transitionManager.Settings = Settings.TransitionManagerSettings;
             ServiceLocator.Register(transitionManager);
-            
+
             var spawnManagerGo = new GameObject("Spawn Manager", typeof(SpawnManager));
             spawnManagerGo.transform.SetParent(managersGo.transform);
             var spawnManager = spawnManagerGo.GetComponent<SpawnManager>();
-            spawnManager.Settings = spawnManagerSettings;
+            spawnManager.Settings = Settings.SpawnManagerSettings;
             ServiceLocator.Register(spawnManager);
-            
+
             var cameraManagerGo = new GameObject("Camera Manager", typeof(CameraManager));
             cameraManagerGo.transform.SetParent(managersGo.transform);
             var cameraManager = cameraManagerGo.GetComponent<CameraManager>();
-            cameraManager.Settings = cameraManagerSettings;
+            cameraManager.Settings = Settings.CameraManagerSettings;
             ServiceLocator.Register(cameraManager);
 
             var animationManagerGo = new GameObject("Animation Manager", typeof(AnimationManager));
@@ -82,7 +75,8 @@ namespace Bootstrapper
 
         private void LoadStartupScene()
         {
-            _eventBus.RaiseEvent(new OnSetScene(startupScene, delayBeforeLoading, overrideFirstTransition));
+            _eventBus.RaiseEvent(new OnSetScene(Settings.StartupScene, Settings.DelayBeforeLoading,
+                Settings.OverrideFirstTransition));
             Destroy(this);
         }
     }
