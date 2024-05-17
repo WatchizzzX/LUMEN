@@ -29,6 +29,10 @@ namespace Managers
                 DevConsole.DisableConsole();
             }
 
+#if UNITY_EDITOR
+            DevConsole.EnableConsole();
+#endif
+
             _gameState = GameState.MainMenu;
 
             DevConsole.OnConsoleOpened += OnDevConsoleChangeState;
