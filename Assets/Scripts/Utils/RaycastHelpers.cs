@@ -20,7 +20,12 @@ namespace Utils
             Debug.DrawRay(ray.origin, ray.direction, color, distance, true);
         }
 
-        public static bool ExecuteAllRays(IEnumerable<Ray> rays, float distance, LayerMask layerMask)
+        public static bool CheckAnyRays(IEnumerable<Ray> rays, float distance, LayerMask layerMask)
+        {
+            return rays.Any(ray => Physics.Raycast(ray, distance, layerMask));
+        }
+        
+        public static bool CheckAllRays(IEnumerable<Ray> rays, float distance, LayerMask layerMask)
         {
             return rays.Any(ray => Physics.Raycast(ray, distance, layerMask));
         }
