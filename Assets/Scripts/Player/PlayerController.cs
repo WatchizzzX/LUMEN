@@ -1,4 +1,5 @@
 using System;
+using Baracuda.Monitoring;
 using DavidFDev.DevConsole;
 using EventBusSystem;
 using TMPro;
@@ -109,6 +110,12 @@ namespace Player
         private LayerMask stairsMask = -1;
 
         /// <summary>
+        /// Layer for sliding ground
+        /// </summary>
+        [Tooltip("Layer for sliding ground")] [SerializeField]
+        private LayerMask slidingMask = -1;
+
+        /// <summary>
         /// The maximum speed at which the player will be pressed to the ground
         /// </summary>
         [Space(2f), Header("Snap settings")]
@@ -122,9 +129,6 @@ namespace Player
         [Tooltip("The maximum distance to the ground at which the player will still be attracted to the ground")]
         [SerializeField, Min(0f)]
         private float probeDistance = 1f;
-
-        [Tooltip("Debug text")] [SerializeField]
-        private TextMeshProUGUI debugText;
 
         #endregion
 
@@ -148,7 +152,7 @@ namespace Player
         /// <summary>
         /// Calculated velocity
         /// </summary>
-        private Vector3 _velocity;
+        [Monitor] private Vector3 _velocity;
 
         /// <summary>
         /// Relative velocity in local space
@@ -173,7 +177,7 @@ namespace Player
         /// <summary>
         /// Desired velocity according to input
         /// </summary>
-        private Vector3 _desiredVelocity;
+        [Monitor] private Vector3 _desiredVelocity;
 
         /// <summary>
         /// Cached jump state
@@ -203,12 +207,12 @@ namespace Player
         /// <summary>
         /// Count of contacts with ground
         /// </summary>
-        private int _groundContactCount;
+        [Monitor] private int _groundContactCount;
 
         /// <summary>
         /// Count of contacts with steep
         /// </summary>
-        private int _steepContactCount;
+        [Monitor] private int _steepContactCount;
 
         /// <summary>
         /// Cached input move
@@ -256,9 +260,14 @@ namespace Player
         private float _minStairsDotProduct;
 
         /// <summary>
+        /// Calculated internal value to check sliding
+        /// </summary>
+        private float _minSlidingDotProduct;
+
+        /// <summary>
         /// Internal timer for coyote jump
         /// </summary>
-        private float _internalCoyoteTimer;
+        [Monitor] private float _internalCoyoteTimer;
 
         /// <summary>
         /// Internal timer for jump
@@ -277,14 +286,18 @@ namespace Player
 
         private Vector3 _lastGroundPoint;
 
+        [Monitor] private bool _isRaycastGrounded;
+        
+        [Monitor] private bool _isRaycastSliding;
+
         #endregion
 
         #region Public Fields
 
-        public bool OnGround => _groundContactCount > 0;
-        public bool OnSteep => _steepContactCount > 0;
-        public float DesiredSpeed => _cachedSprinting ? runSpeed : walkSpeed;
-        public Vector3 HorizontalVelocity => new(_relativeVelocity.x, 0f, _relativeVelocity.z);
+        [Monitor] public bool OnGround => _groundContactCount > 0;
+        [Monitor] public bool OnSteep => _steepContactCount > 0;
+        [Monitor] public float DesiredSpeed => _cachedSprinting ? runSpeed : walkSpeed;
+        [Monitor] public Vector3 HorizontalVelocity => new(_relativeVelocity.x, 0f, _relativeVelocity.z);
 
         #endregion
 
@@ -292,25 +305,35 @@ namespace Player
 
         private void Awake()
         {
-            RegisterCommands();
             _body = GetComponent<Rigidbody>();
             _cameraPosition = Camera.main?.transform;
+
+            Monitor.StartMonitoring(this);
 
             if (_cameraPosition == null)
                 Logger.Log(LoggerChannel.Player, Priority.Warning,
                     "Controller can't find MainCamera. Rotating input will be not work");
             OnValidate();
+
+#if UNITY_EDITOR || DEBUG
+            RegisterCommands();
+            ChangeMonitoring(true);
+#endif
         }
 
         private void OnDestroy()
         {
+#if UNITY_EDITOR || DEBUG
             UnregisterCommands();
+            ChangeMonitoring(false);
+#endif
         }
 
         private void OnValidate()
         {
             _minGroundDotProduct = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);
             _minStairsDotProduct = Mathf.Cos(maxStairsAngle * Mathf.Deg2Rad);
+            _minSlidingDotProduct = Mathf.Cos(1f * Mathf.Deg2Rad);
             _gravityForce = Physics.gravity;
         }
 
@@ -320,16 +343,15 @@ namespace Player
             RotateVelocityAccordingToCamera();
             RotateToVelocity();
             UpdateTimers();
-            if (debugText)
-                DebugText();
         }
 
         private void FixedUpdate()
         {
             UpdateState();
 
-            if (OnSteep && !OnGround)
-                DecreaseVelocityOnSteep();
+            RaycastCheckGround();
+
+            IncreaseSlideOnSlope();
 
             AdjustVelocity();
 
@@ -360,27 +382,12 @@ namespace Player
 
         public MovementState GetMovementState()
         {
-            /*var velocity = _body.velocity;
-            var isFalling = (OnSteep && !OnGround) || (!OnGround && velocity.y < 0);
-            var relativeSpeed = HorizontalVelocity.magnitude / DesiredSpeed;
-            var isJumping = (_desiredJump && _internalJumpCooldownTimer <= 0f) ||
-                            (!OnGround && _jumpPhase > 0 && velocity.y >= 0);
-            isFalling = !isJumping && isFalling;*/
-
             var velocity = _body.velocity;
             var isFalling = (OnSteep && !OnGround && Vector3.Dot(transform.up, _steepNormal) > 0f) ||
                             (!OnGround && velocity.y < 0);
             var relativeSpeed = HorizontalVelocity.magnitude / DesiredSpeed;
             var isJumping = _jumpPhase > 0 && velocity.y > 0.1f;
             return new MovementState(isFalling, relativeSpeed, isJumping, _cachedSprinting);
-        }
-
-        /// <summary>
-        /// Draw debug info
-        /// </summary>
-        private void DebugText()
-        {
-            debugText.text = $"cont normal: {_contactNormal.normalized}";
         }
 
         /// <summary>
@@ -464,12 +471,10 @@ namespace Player
                 _contactNormal = Vector3.up;
             }
 
-            if (_connectedRigidbody)
+            if (!_connectedRigidbody) return;
+            if (_connectedRigidbody.isKinematic || _connectedRigidbody.mass >= _body.mass)
             {
-                if (_connectedRigidbody.isKinematic || _connectedRigidbody.mass >= _body.mass)
-                {
-                    UpdateConnectionState();
-                }
+                UpdateConnectionState();
             }
         }
 
@@ -508,7 +513,7 @@ namespace Player
                 _velocity = (_velocity - hit.normal * dot).normalized * speed;
             }
 
-            if (hit.rigidbody != null)
+            if (hit.rigidbody)
                 _connectedRigidbody = hit.rigidbody;
             return true;
         }
@@ -522,12 +527,15 @@ namespace Player
             if (_steepContactCount <= 1) return false;
 
             _steepNormal.Normalize();
-            if (!(_steepNormal.y >= _minGroundDotProduct)) return false;
+            if (_steepNormal.y >= _minGroundDotProduct)
+            {
+                _steepContactCount = 0;
+                _groundContactCount = 1;
+                _contactNormal = _steepNormal;
+                return true;
+            }
 
-            _steepContactCount = 0;
-            _groundContactCount = 1;
-            _contactNormal = _steepNormal;
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -618,6 +626,12 @@ namespace Player
                 var normal = collision.GetContact(i).normal;
                 if (normal.y >= minDot)
                 {
+                    if (_isRaycastSliding)
+                    {
+                        _groundContactCount = 0;
+                        _contactNormal = Vector3.up;
+                        return;
+                    }
                     _groundContactCount += 1;
                     _contactNormal += normal;
                     _lastGroundPoint = collision.GetContact(i).point;
@@ -631,6 +645,21 @@ namespace Player
 
             if (collision.rigidbody == null) return;
             _connectedRigidbody = collision.rigidbody;
+        }
+
+        private void RaycastCheckGround()
+        {
+            var probeRays = new Ray[]
+            {
+                new(_body.position, Vector3.down),
+                new(_body.position.AddX(0.25f), Vector3.down),
+                new(_body.position.AddX(-0.25f), Vector3.down),
+                new(_body.position.AddZ(0.25f), Vector3.down),
+                new(_body.position.AddZ(-0.25f), Vector3.down)
+            };
+
+            _isRaycastGrounded = RaycastHelpers.CheckAllRays(probeRays, probeDistance, probeMask);
+            _isRaycastSliding = RaycastHelpers.CheckAnyRays(probeRays, probeDistance, slidingMask);
         }
 
         /// <summary>
@@ -666,7 +695,22 @@ namespace Player
         /// <returns></returns>
         private float GetMinDot(int layer)
         {
-            return (stairsMask & (1 << layer)) == 0 ? _minGroundDotProduct : _minStairsDotProduct;
+            if ((probeMask.value & (1 << layer)) != 0)
+            {
+                return _minGroundDotProduct;
+            }
+
+            if ((stairsMask.value & (1 << layer)) != 0)
+            {
+                return _minStairsDotProduct;
+            }
+
+            if ((slidingMask.value & (1 << layer)) != 0)
+            {
+                return _minSlidingDotProduct;
+            }
+
+            return _minGroundDotProduct;
         }
 
         /// <summary>
@@ -681,14 +725,17 @@ namespace Player
             _desiredVelocity = new Vector3(convertedDirection.x, 0, convertedDirection.z);
         }
 
-        private void DecreaseVelocityOnSteep()
+        private void IncreaseSlideOnSlope()
         {
-            var dotProduct = Vector3.Dot(transform.up, _steepNormal);
+            if (_isRaycastSliding || !_isRaycastGrounded)
+            {
+                if (!(Vector3.Dot(transform.up, _steepNormal) > 0f)) return;
+                _groundContactCount = 0;
+                _slidingDirection = _gravityForce - _steepNormal * Vector3.Dot(_gravityForce, _steepNormal);
+                _desiredVelocity = Vector3.zero;
 
-            if (!Physics.Raycast(_body.position, Vector3.down, out _, probeDistance, probeMask)) return;
-            if (!(dotProduct > 0f)) return;
-            _slidingDirection = _gravityForce - _steepNormal * Vector3.Dot(_gravityForce, _steepNormal);
-            _velocity += _slidingDirection.normalized * accelerationForceToSlope;
+                _velocity += _slidingDirection.normalized * accelerationForceToSlope;
+            }
         }
 
         /// <summary>
@@ -748,6 +795,8 @@ namespace Player
 
         #region Dev-commands
 
+#if UNITY_EDITOR || DEBUG
+
         private void RegisterCommands()
         {
             DevConsole.AddCommand(Command.Create(
@@ -765,6 +814,16 @@ namespace Player
         {
             DevConsole.RemoveCommand("walljump");
         }
+
+        private void ChangeMonitoring(bool enable)
+        {
+            if (enable)
+                Monitor.StartMonitoring(this);
+            else
+                Monitor.StopMonitoring(this);
+        }
+
+#endif
 
         #endregion
     }
