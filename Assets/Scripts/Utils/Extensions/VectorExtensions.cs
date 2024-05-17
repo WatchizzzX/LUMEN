@@ -35,13 +35,25 @@ namespace Utils.Extensions
         public static void SetZ(this Vector3 self, float z) => self.z = z;
 
         /// <summary> Add X to vector </summary>
-        public static void AddX(this Vector3 self, float x) => self.x += x;
+        public static Vector3 AddX(this Vector3 self, float x)
+        {
+            self.x += x;
+            return self;
+        }
 
         /// <summary> Add Y to vector </summary>
-        public static void AddY(this Vector3 self, float y) => self.y += y;
+        public static Vector3 AddY(this Vector3 self, float y)
+        {
+            self.y += y;
+            return self;
+        }
 
         /// <summary> Add Z to vector </summary>
-        public static void AddZ(this Vector3 self, float z) => self.z += z;
+        public static Vector3 AddZ(this Vector3 self, float z)
+        {
+            self.z += z;
+            return self;
+        }
 
         public static Vector2 RotateVector2(this Vector2 v, float degrees)
         {
