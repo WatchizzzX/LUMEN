@@ -1911,8 +1911,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6467f1130c92453fa9f91b8426696284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 3.2
-  runSpeed: 4.1
+  walkSpeed: 4.8
+  runSpeed: 6.15
   maxAcceleration: 10
   maxAirAcceleration: 5
   accelerationForceToSlope: 0.4
@@ -1935,7 +1935,6 @@ MonoBehaviour:
     m_Bits: 4096
   maxSnapSpeed: 100
   probeDistance: 0.4
-  debugText: {fileID: 0}
 --- !u!114 &8888472110445852648
 MonoBehaviour:
   m_ObjectHideFlags: 0
