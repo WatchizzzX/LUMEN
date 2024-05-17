@@ -290,6 +290,8 @@ namespace Player
         
         [Monitor] private bool _isRaycastSliding;
 
+        private bool _isWallJumping;
+
         #endregion
 
         #region Public Fields
@@ -425,6 +427,7 @@ namespace Player
             _contactNormal = _steepNormal = _connectedVelocity = Vector3.zero;
             _previousConnectedRigidbody = _connectedRigidbody;
             _connectedRigidbody = null;
+            _isWallJumping = false;
         }
 
         /// <summary>
@@ -578,6 +581,7 @@ namespace Player
                 if (!enableJumpingFromWalls) return;
                 jumpDirection = _steepNormal;
                 _jumpPhase = 0;
+                _isWallJumping = true;
             }
             else if (maxAirJumps > 0 && _jumpPhase <= maxAirJumps)
             {
@@ -604,6 +608,11 @@ namespace Player
             var heightDifference = _lastGroundPoint.y - transform.position.y;
             var jumpSpeed = Mathf.Sqrt(-2f * _gravityForce.y *
                                        (isCoyoteJump ? jumpHeight + heightDifference * 3.5f : jumpHeight));
+            if (_isWallJumping)
+            {
+                jumpSpeed *= 1.25f;
+                _velocity.y = 0;
+            }
             jumpDirection = (jumpDirection + Vector3.up).normalized;
             var alignedSpeed = Vector3.Dot(_velocity, jumpDirection);
             if (alignedSpeed > 0f)
@@ -727,7 +736,7 @@ namespace Player
 
         private void IncreaseSlideOnSlope()
         {
-            if (_isRaycastSliding || !_isRaycastGrounded)
+            if (_isRaycastSliding && !_isRaycastGrounded)
             {
                 if (!(Vector3.Dot(transform.up, _steepNormal) > 0f)) return;
                 _groundContactCount = 0;
