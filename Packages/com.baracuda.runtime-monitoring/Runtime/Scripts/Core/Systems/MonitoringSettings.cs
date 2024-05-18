@@ -516,7 +516,7 @@ namespace Baracuda.Monitoring.Systems
         {
             get => singleton
                 ? singleton
-                : singleton = Resources.LoadAll<MonitoringSettings>(string.Empty).FirstOrDefault();
+                : singleton = Resources.LoadAll<MonitoringSettings>("Settings/Package Settings" ).FirstOrDefault();
             private set => singleton = value;
         }
 
