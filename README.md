@@ -2,7 +2,6 @@
 ![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/WatchizzzX/LUMEN)
 
-# LUMEN
 ![Logo](Assets/Art/UI/LumenLogo.png)
 
 ## Intro
