@@ -3,22 +3,14 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/WatchizzzX/LUMEN)
 
 # LUMEN
-![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
+![Logo](Assets/Art/UI/LumenLogo.png)
 
 ## Intro
 This is an game with a top view in which you play as a robot and solve logic puzzles based on logical operators.
 
 ## Tech Stack
 
-- Unity 2022.3.20f1
-
-## Architecture features
-
-- EventBus (Allows classes to communicate without unnecessary connectivity between each other)
-- ServiceLocator (Allows you to find game managers and controllers anywhere in the code)
-- InteractionSystem (Allows the player to interact with objects. A lightweight and simple system that allows you to quickly expand the functionality of interacted objects through abstraction and generalization)
-- LogicalSystem (Implements logical operators and is responsible for their calculations)
-- Bootstrapper (A small script that creates and initializes game controllers and manages them)
+- Unity 2023.2.0f1
 
 ## Features
 
@@ -32,7 +24,23 @@ During the brainstorming process, we added features such as interacting with obj
 
 ## Authors
 
-- [@WatchizzzX (Zahar Czembrowicz)](https://www.github.com/WatchizzzX)
+- [@l0nnes (Zahar Czembrowicz)](https://www.github.com/l0nnes)
+
+## Usages
+
+- [Tiny Character Controller](https://github.com/unity3d-jp/Project_TCC)
+- [DOTween](https://dotween.demigiant.com/)
+- [Unity-Chan!](https://unity-chan.com/contents/guideline_en/)
+- [David-F Dev Console](https://github.com/DavidF-Dev/Unity-DeveloperConsole)
+- [Dreamteck Splines](https://assetstore.unity.com/packages/tools/utilities/dreamteck-splines-61926)
+- [Easy Transitions](https://assetstore.unity.com/packages/tools/gui/easy-transitions-225607)
+- [Fast Script Reload](https://assetstore.unity.com/packages/tools/utilities/fast-script-reload-239351)
+- [Jammo Character](https://assetstore.unity.com/packages/3d/characters/jammo-character-mix-and-jam-158456)
+- [NaughtyAttributes](https://assetstore.unity.com/packages/tools/utilities/naughtyattributes-129996)
+- [QuickSave](https://assetstore.unity.com/packages/tools/utilities/quick-save-107676)
+- [Runtime Monitoring](https://assetstore.unity.com/packages/tools/integration/runtime-monitoring-222328)
+- [Toolbar Extended](https://github.com/marijnz/unity-toolbar-extender.git)
+- [Unity Dropdown](https://github.com/SolidAlloy/UnityDropdown)
 
 ## License
 
