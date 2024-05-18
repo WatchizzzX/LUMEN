@@ -197,11 +197,13 @@ namespace Player
         /// <summary>
         /// Normal of contact point
         /// </summary>
+        [Monitor]
         private Vector3 _contactNormal;
 
         /// <summary>
         /// Normal of contact, when player on steep
         /// </summary>
+        [Monitor]
         private Vector3 _steepNormal;
 
         /// <summary>
@@ -287,10 +289,12 @@ namespace Player
         private Vector3 _lastGroundPoint;
 
         [Monitor] private bool _isRaycastGrounded;
-        
+
         [Monitor] private bool _isRaycastSliding;
 
         private bool _isWallJumping;
+
+        [Monitor] private bool _isSnappingToGround;
 
         #endregion
 
@@ -438,7 +442,8 @@ namespace Player
             _stepsSinceLastGrounded += 1;
             _stepsSinceLastJump += 1;
             _velocity = _body.velocity;
-            if (OnGround || SnapToGround() || CheckSteepContacts())
+            _isSnappingToGround = SnapToGround();
+            if (OnGround || _isSnappingToGround || CheckSteepContacts())
             {
                 if (_stepsSinceLastGrounded > 1)
                     _internalJumpCooldownTimer = jumpCooldown;
@@ -498,12 +503,24 @@ namespace Player
                 return false;
             }
 
-            if (!Physics.Raycast(_body.position, Vector3.down, out var hit, probeDistance, probeMask))
+            if (!_isRaycastGrounded)
             {
                 return false;
             }
 
-            if (hit.normal.y < GetMinDot(hit.collider.gameObject.layer))
+            var probeRays = new Ray[]
+            {
+                new(_body.position, Vector3.down),
+                new(_body.position.AddX(0.25f), Vector3.down),
+                new(_body.position.AddX(-0.25f), Vector3.down),
+                new(_body.position.AddZ(0.25f), Vector3.down),
+                new(_body.position.AddZ(-0.25f), Vector3.down)
+            };
+
+            var foundedRaycast =
+                RaycastHelpers.TryGetFirstRaycastHit(probeRays, probeDistance, probeMask | stairsMask, out var hit);
+
+            if (foundedRaycast && hit.normal.y < GetMinDot(hit.collider.gameObject.layer))
             {
                 return false;
             }
@@ -610,9 +627,10 @@ namespace Player
                                        (isCoyoteJump ? jumpHeight + heightDifference * 3.5f : jumpHeight));
             if (_isWallJumping)
             {
-                jumpSpeed *= 1.25f;
+                jumpSpeed *= 1.35f;
                 _velocity.y = 0;
             }
+
             jumpDirection = (jumpDirection + Vector3.up).normalized;
             var alignedSpeed = Vector3.Dot(_velocity, jumpDirection);
             if (alignedSpeed > 0f)
@@ -641,6 +659,7 @@ namespace Player
                         _contactNormal = Vector3.up;
                         return;
                     }
+
                     _groundContactCount += 1;
                     _contactNormal += normal;
                     _lastGroundPoint = collision.GetContact(i).point;
@@ -651,6 +670,12 @@ namespace Player
                     _steepNormal += normal;
                 }
             }
+
+            /*if (_groundContactCount == 0 && _isRaycastGrounded)
+            {
+                _groundContactCount = 1;
+                _contactNormal = Vector3.up;
+            }*/
 
             if (collision.rigidbody == null) return;
             _connectedRigidbody = collision.rigidbody;
@@ -667,7 +692,7 @@ namespace Player
                 new(_body.position.AddZ(-0.25f), Vector3.down)
             };
 
-            _isRaycastGrounded = RaycastHelpers.CheckAllRays(probeRays, probeDistance, probeMask);
+            _isRaycastGrounded = RaycastHelpers.CheckAllRays(probeRays, probeDistance, probeMask | stairsMask);
             _isRaycastSliding = RaycastHelpers.CheckAnyRays(probeRays, probeDistance, slidingMask);
         }
 

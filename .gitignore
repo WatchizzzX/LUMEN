@@ -79,3 +79,4 @@ crashlytics-build.properties
 *.blob
 /ProjectSettings/Packages/com.unity.probuilder/Settings.json
 /Assets/Level/Scenes/Level 1
+/Assets/Level/Scenes/Level 2

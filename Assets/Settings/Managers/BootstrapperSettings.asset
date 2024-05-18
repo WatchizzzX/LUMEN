@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7894750f080b4be5a86158edba907d7d, type: 3}
   m_Name: BootstrapperSettings
   m_EditorClassIdentifier: 
+  startupScene: 3
+  delayBeforeLoading: 0
+  overrideFirstTransition: {fileID: 11400000, guid: 013263c83b6a84c4d95beaa8bd163ac8,
+    type: 2}
   transitionManagerSettings: {fileID: 11400000, guid: b4597af3c68280f4bacbf914173bc12a,
     type: 2}
   spawnManagerSettings: {fileID: 11400000, guid: a5d88e236bc7eb10eb8d4e0f8360d9dd,
@@ -21,8 +25,4 @@ MonoBehaviour:
   gameManagerSettings: {fileID: 11400000, guid: 1f4ea8ff35928b2bebba14fbc0327f00,
     type: 2}
   sceneManagerSettings: {fileID: 11400000, guid: 303320b809b18f74e82f2b0df1f22742,
-    type: 2}
-  startupScene: 1
-  delayBeforeLoading: 0
-  overrideFirstTransition: {fileID: 11400000, guid: 013263c83b6a84c4d95beaa8bd163ac8,
     type: 2}
