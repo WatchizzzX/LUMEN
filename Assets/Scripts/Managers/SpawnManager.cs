@@ -23,7 +23,7 @@ namespace Managers
 
         [NonSerialized] public SpawnManagerSettings Settings;
 
-        public PlayerController PlayerController { get; private set; }
+        public PlayerControllerTcc PlayerController { get; private set; }
         public PlayerAnimator PlayerAnimator { get; private set; }
         public PickupController PickupController { get; private set; }
         public InteractorController InteractorController { get; private set; }
@@ -111,18 +111,18 @@ namespace Managers
                 _spawnedPlayerGo = Instantiate(Settings.PlayerPrefab,
                     !_spawnPoint ? Vector3.zero : _spawnPoint.transform.position, Quaternion.identity);
                 _spawnedPlayerGo.name = "Player";
-                PlayerAnimator = _spawnedPlayerGo.GetComponent<PlayerAnimator>();
-                PlayerController = _spawnedPlayerGo.GetComponent<PlayerController>();
+                //PlayerAnimator = _spawnedPlayerGo.GetComponent<PlayerAnimator>();
+                PlayerController = _spawnedPlayerGo.GetComponent<PlayerControllerTcc>();
                 InteractorController = _spawnedPlayerGo.GetComponent<InteractorController>();
                 PickupController = _spawnedPlayerGo.GetComponent<PickupController>();
 
                 PlayerCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
 
-                PlayerInputHandler.onMoveEvent.AddListener(PlayerController.SetMoveDirection);
+                PlayerInputHandler.onMoveEvent.AddListener(PlayerController.Move);
                 PlayerInputHandler.onInteractEvent.AddListener(InteractorController.Interact);
                 PlayerInputHandler.onPickupEvent.AddListener(PickupController.OnPickupEvent);
-                PlayerInputHandler.onJumpEvent.AddListener(PlayerController.CallToJump);
-                PlayerInputHandler.onSprintEvent.AddListener(PlayerController.SetSprint);
+                PlayerInputHandler.onJumpEvent.AddListener(PlayerController.Jump);
+                PlayerInputHandler.onSprintEvent.AddListener(PlayerController.Sprint);
 
                 RaiseEvent(SignalEnum.OnSpawnPlayer);
             }

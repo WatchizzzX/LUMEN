@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7894750f080b4be5a86158edba907d7d, type: 3}
   m_Name: BootstrapperSettings
   m_EditorClassIdentifier: 
-  startupScene: 3
+  startupScene: 1
   delayBeforeLoading: 0
   overrideFirstTransition: {fileID: 11400000, guid: 013263c83b6a84c4d95beaa8bd163ac8,
     type: 2}
