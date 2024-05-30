@@ -5,7 +5,7 @@
 //---------- -------------------------- -------
 
 //Runtime Monitoring
-//File generated: 2024-05-20 15:13:18Z
+//File generated: 2024-05-30 13:45:00Z
 //Please dont change the contents of this file. Otherwise IL2CPP runtime may not work with runtime monitoring!
 //Ensure that this file is located in Assembly-CSharp. Otherwise this file may not compile.
 //If this file contains any errors please contact me and/or create an issue in the linked repository.
@@ -13,7 +13,7 @@
 
 #if ENABLE_IL2CPP && !DISABLE_MONITORING
 
-internal class IL2CPP_AOT_6XZWPJIOSH0037GXWGO2
+internal class IL2CPP_AOT_XD21QDFT9HY26YCNBMLB
 {
     //Value Processor Method Definitions
 
@@ -22,15 +22,6 @@ internal class IL2CPP_AOT_6XZWPJIOSH0037GXWGO2
     private static void AOT()
     {
         //  [Field Definitions] 
-
-        // Player.PlayerController::_isRaycastGrounded (System.Boolean)
-        // Player.PlayerController::_isRaycastSliding (System.Boolean)
-        // Player.PlayerController::_isSnappingToGround (System.Boolean)
-        Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefField<System.Object, System.Boolean>();
-
-        // Player.PlayerController::_groundContactCount (System.Int32)
-        // Player.PlayerController::_steepContactCount (System.Int32)
-        Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefField<System.Object, System.Int32>();
 
         // Baracuda.Monitoring.Modules.SystemMonitor::_operatingSystem (System.String)
         // Baracuda.Monitoring.Modules.SystemMonitor::_operatingSystemFamily (System.String)
@@ -55,37 +46,25 @@ internal class IL2CPP_AOT_6XZWPJIOSH0037GXWGO2
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefField<System.Object, System.Object>();
 
         // Baracuda.Monitoring.Modules.FPSMonitor::_fps (System.Single)
-        // Player.PlayerController::_internalCoyoteTimer (System.Single)
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefField<System.Object, System.Single>();
-
-        // Player.PlayerController::_velocity (UnityEngine.Vector3)
-        // Player.PlayerController::_desiredVelocity (UnityEngine.Vector3)
-        // Player.PlayerController::_contactNormal (UnityEngine.Vector3)
-        // Player.PlayerController::_steepNormal (UnityEngine.Vector3)
-        Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefField<System.Object, UnityEngine.Vector3>();
 
         //  [Property Definitions] 
 
-        // Player.PlayerController::OnGround (System.Boolean)
-        // Player.PlayerController::OnSteep (System.Boolean)
+        // Player.PlayerController::IsContactWall (System.Boolean)
+        // Player.PlayerController::IsGrounded (System.Boolean)
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, System.Boolean>();
 
         // Baracuda.Monitoring.Modules.FPSMonitor::TargetFrameRate (System.Int32)
         // Baracuda.Monitoring.Modules.FPSMonitor::Vsync (System.Int32)
+        // Player.PlayerController::AerialJumpCount (System.Int32)
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, System.Int32>();
 
         // Baracuda.Monitoring.Modules.ConsoleMonitor::Console (System.Collections.Generic.Queue<System.String>)
         // Baracuda.Monitoring.Modules.ConsoleMonitor::LastLogStacktrace (System.String)
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, System.Object>();
 
-        // Player.PlayerController::DesiredSpeed (System.Single)
-        Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, System.Single>();
-
-        // PlayerControllerTcc::WallNormal (UnityEngine.Vector3)
-        // PlayerControllerTcc::InvertWallNormal (UnityEngine.Vector3)
-        // PlayerControllerTcc::MovementForceOnWallAxis (UnityEngine.Vector3)
-        // Player.PlayerController::HorizontalVelocity (UnityEngine.Vector3)
-        Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, UnityEngine.Vector3>();
+        // Player.PlayerController::GravityState (Unity.TinyCharacterController.Effect.Gravity.State)
+        Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, Unity.TinyCharacterController.Effect.Gravity.State>();
 
         //  [Collection Definitions] 
 
@@ -102,24 +81,24 @@ internal class IL2CPP_AOT_6XZWPJIOSH0037GXWGO2
 
 //General
 
-//Monitored Member:               42
-//Monitored Member Instance:      42
+//Monitored Member:               29
+//Monitored Member Instance:      29
 
 //MemberInfo
 
-//Monitored Fields:               31
-//Monitored Fields Instance:      31
-//Monitored Properties:           11
-//Monitored Properties Instance:  11
+//Monitored Fields:               21
+//Monitored Fields Instance:      21
+//Monitored Properties:            8
+//Monitored Properties Instance:   8
 
 //Monitored Types
 
-//Monitored bool:                  5
-//Monitored float:                 3
-//Monitored int:                   4
+//Monitored bool:                  2
+//Monitored float:                 1
+//Monitored int:                   3
 //Monitored Queue<string>:         1
+//Monitored State:                 1
 //Monitored string:               21
-//Monitored Vector3:               8
 
 //----------------------------------------------------------------------------------------------------------------------
 
