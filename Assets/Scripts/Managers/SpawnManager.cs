@@ -1,7 +1,6 @@
 using System;
 using Enums;
 using EventBusSystem;
-using EventBusSystem.Signals.GameSignals;
 using EventBusSystem.Signals.SceneSignals;
 using EventBusSystem.Signals.TransitionSignals;
 using Input;
@@ -12,7 +11,6 @@ using Player;
 using ServiceLocatorSystem;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utils;
 
 namespace Managers
@@ -23,8 +21,7 @@ namespace Managers
 
         [NonSerialized] public SpawnManagerSettings Settings;
 
-        public PlayerControllerTcc PlayerController { get; private set; }
-        public PlayerAnimator PlayerAnimator { get; private set; }
+        public PlayerController PlayerController { get; private set; }
         public PickupController PickupController { get; private set; }
         public InteractorController InteractorController { get; private set; }
         public CinemachineCamera PlayerCamera { get; private set; }
@@ -112,7 +109,7 @@ namespace Managers
                     !_spawnPoint ? Vector3.zero : _spawnPoint.transform.position, Quaternion.identity);
                 _spawnedPlayerGo.name = "Player";
                 //PlayerAnimator = _spawnedPlayerGo.GetComponent<PlayerAnimator>();
-                PlayerController = _spawnedPlayerGo.GetComponent<PlayerControllerTcc>();
+                PlayerController = _spawnedPlayerGo.GetComponent<PlayerController>();
                 InteractorController = _spawnedPlayerGo.GetComponent<InteractorController>();
                 PickupController = _spawnedPlayerGo.GetComponent<PickupController>();
 
@@ -183,7 +180,6 @@ namespace Managers
                     PlayerInputHandler.onInteractEvent.RemoveAllListeners();
                     PlayerInputHandler.onJumpEvent.RemoveAllListeners();
                     PlayerInputHandler.onSprintEvent.RemoveAllListeners();
-                    PlayerAnimator = null;
                     PlayerController = null;
                     PickupController = null;
                     PlayerCamera.Follow = null;
