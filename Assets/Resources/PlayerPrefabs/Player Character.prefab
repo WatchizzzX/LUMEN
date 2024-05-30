@@ -1823,13 +1823,13 @@ GameObject:
   - component: {fileID: 5495655506845518208}
   - component: {fileID: 4516902429805995037}
   - component: {fileID: 2563880665537550153}
-  - component: {fileID: 337378061202305958}
   - component: {fileID: 3111380247874356799}
+  - component: {fileID: 121128162071316928}
   - component: {fileID: 3936294129903394615}
   - component: {fileID: -1689060175449006688}
   - component: {fileID: 7397897660623768360}
   m_Layer: 3
-  m_Name: Player
+  m_Name: Player Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2161,53 +2161,6 @@ MonoBehaviour:
   _onChangeInRange:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &337378061202305958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6799271142619480867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb26f97f867c74630ad14ef36e85a3f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _wallAngleRange: {x: 75, y: 115}
-  _wallDetectionDistance: 0.1
-  OnWallContacted:
-    m_PersistentCalls:
-      m_Calls: []
-  OnWallLeft:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: -1689060175449006688}
-        m_TargetAssemblyTypeName: PlayerControllerTcc, Player
-        m_MethodName: OnWallLeft
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnWallStuck:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: -1689060175449006688}
-        m_TargetAssemblyTypeName: PlayerControllerTcc, Player
-        m_MethodName: OnWallStuck
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &3111380247874356799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2224,6 +2177,54 @@ MonoBehaviour:
   OnChangeKey:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &121128162071316928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6799271142619480867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c0aec6c9b4e4867813f2916a9b8a2f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layersToReact:
+    serializedVersion: 2
+    m_Bits: 512
+  onLayerTouch:
+    m_PersistentCalls:
+      m_Calls: []
+  onLayerLeft:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -1689060175449006688}
+        m_TargetAssemblyTypeName: PlayerControllerTcc, Player
+        m_MethodName: OnWallLeft
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onLayerStuck:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -1689060175449006688}
+        m_TargetAssemblyTypeName: PlayerControllerTcc, Player
+        m_MethodName: OnWallStuck
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3936294129903394615
 MonoBehaviour:
   m_ObjectHideFlags: 0
