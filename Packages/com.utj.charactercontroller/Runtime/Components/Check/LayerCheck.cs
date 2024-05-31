@@ -26,32 +26,29 @@ namespace Unity.TinyCharacterController.Check
         public UnityEvent onLayerStuck;
         
         private int _order;
-        private IBrain _brain;
-        private ITransform _transform;
-        private CharacterSettings _settings;
 
         private bool _isFirstContact;
         private bool _cachedContact;
-        
-        private Vector3 _normal;
         
         /// <summary>
         /// If there is contact, it returns True.
         /// </summary>
         public bool IsContact { get; private set; }
+        
+        /// <summary>
+        /// If there is contact, it returns GameObject, otherwise it returns null.
+        /// </summary>
+        public GameObject ContactedGameObject { get; private set; }
 
         /// <summary>
         /// Returns normal vector of the contact surface. If there is no contact, it returns Vector3.Zero.
         /// </summary>
-        public Vector3 Normal => _normal;
+        public Vector3 Normal { get; private set; }
         
         private void Awake()
         {
-            TryGetComponent(out _brain);
-            TryGetComponent(out _transform);
-            TryGetComponent(out _settings);
             IsContact = false;
-            _normal = Vector3.zero;
+            Normal = Vector3.zero;
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -59,7 +56,8 @@ namespace Unity.TinyCharacterController.Check
             if (!IsCollisionWithLayerMask(collision, layersToReact)) return;
             IsContact = true;
             _isFirstContact = true;
-            _normal = collision.contacts[0].normal;
+            Normal = collision.contacts[0].normal;
+            ContactedGameObject = collision.contacts[0].otherCollider.gameObject;
         }
 
         private void OnCollisionStay(Collision collision)
@@ -67,7 +65,8 @@ namespace Unity.TinyCharacterController.Check
             if (!IsCollisionWithLayerMask(collision, layersToReact)) return;
             IsContact = true;
             _isFirstContact = false;
-            _normal = collision.contacts[0].normal;
+            Normal = collision.contacts[0].normal;
+            ContactedGameObject = collision.contacts[0].otherCollider.gameObject;
         }
         
         private void OnCollisionExit(Collision collision)
@@ -75,7 +74,8 @@ namespace Unity.TinyCharacterController.Check
             if (IsCollisionWithLayerMask(collision, layersToReact)) return;
             IsContact = false;
             _isFirstContact = false;
-            _normal = Vector3.zero;
+            Normal = Vector3.zero;
+            ContactedGameObject = null;
         }
 
         private bool IsCollisionWithLayerMask(Collision collision, LayerMask layerMask)
