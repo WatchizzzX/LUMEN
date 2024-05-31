@@ -1,7 +1,7 @@
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace Utils
+namespace Utils.EditorHelpers
 {
     public class RandomPosition : MonoBehaviour
     {

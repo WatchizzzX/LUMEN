@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Utils
+namespace Utils.EditorHelpers
 {
     public class GroupSpawner : MonoBehaviour
     {

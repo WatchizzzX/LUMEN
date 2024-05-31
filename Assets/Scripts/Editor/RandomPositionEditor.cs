@@ -1,7 +1,6 @@
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
-using Utils;
+using Utils.EditorHelpers;
 
 namespace Editor
 {
