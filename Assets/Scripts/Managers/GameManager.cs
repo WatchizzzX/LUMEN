@@ -73,6 +73,12 @@ namespace Managers
                     name: "bool",
                     helpText: "Enable logging"),
                 callback: value => Logger.logOnlyErrors = value));
+            
+            DevConsole.AddCommand(Command.Create(
+                name: "respawn",
+                aliases: "resp",
+                helpText: "Respawn player in spawnpoint without transition",
+                callback: () => RaiseEvent(new OnDevRespawn())));
         }
 
         private void RemoveDevCommands()

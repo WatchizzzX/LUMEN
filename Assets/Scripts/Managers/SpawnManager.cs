@@ -10,6 +10,7 @@ using PickupSystem;
 using Player;
 using ServiceLocatorSystem;
 using Unity.Cinemachine;
+using Unity.TinyCharacterController.Brain;
 using UnityEngine;
 using Utils;
 
@@ -108,7 +109,6 @@ namespace Managers
                 _spawnedPlayerGo = Instantiate(Settings.PlayerPrefab,
                     !_spawnPoint ? Vector3.zero : _spawnPoint.transform.position, Quaternion.identity);
                 _spawnedPlayerGo.name = "Player";
-                //PlayerAnimator = _spawnedPlayerGo.GetComponent<PlayerAnimator>();
                 PlayerController = _spawnedPlayerGo.GetComponent<PlayerController>();
                 InteractorController = _spawnedPlayerGo.GetComponent<InteractorController>();
                 PickupController = _spawnedPlayerGo.GetComponent<PickupController>();
@@ -132,7 +132,7 @@ namespace Managers
         private void RespawnPlayer()
         {
             if (_sceneManager.IsSceneLoading) return;
-            _spawnedPlayerGo.transform.position = _spawnPoint ? _spawnPoint.position : Vector3.zero;
+            _spawnedPlayerGo.GetComponent<RigidbodyBrain>().Warp(_spawnPoint ? _spawnPoint.position : Vector3.zero);
             PlayerCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
             PlayerCamera.ForceCameraPosition(Settings.SpawnCameraPosition,
                 Settings.SpawnCameraRotation);
@@ -196,5 +196,16 @@ namespace Managers
         }
 
         #endregion
+        
+        #if DEBUG || UNITY_EDITOR
+
+        [ListenTo(SignalEnum.OnDevRespawn)]
+        private void OnDevRespawn(EventModel eventModel)
+        {
+            _spawnedPlayerGo.GetComponent<RigidbodyBrain>().Warp(_spawnPoint ? _spawnPoint.position : Vector3.zero);
+            PlayerCamera.ForceCameraPosition(Settings.SpawnCameraPosition,
+                Settings.SpawnCameraRotation);
+        }
+        #endif
     }
 }
