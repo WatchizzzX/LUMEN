@@ -35,6 +35,7 @@ namespace Player
         private LayerCheck _wallCheck;
         private LayerCheck _sliderCheck;
         private HeadContactCheck _headContactCheck;
+        private ExtraForce _endSlidingForce;
 
         private bool _wallOnRightSide;
 
@@ -75,6 +76,7 @@ namespace Player
             _gravity = GetComponent<Gravity>();
             _groundCheck = GetComponent<GroundCheck>();
             _headContactCheck = GetComponent<HeadContactCheck>();
+            _endSlidingForce = GetComponent<ExtraForce>();
             
             var layerChecks = GetComponents<LayerCheck>();
             _wallCheck = layerChecks[0];
@@ -104,6 +106,11 @@ namespace Player
         {
             UpdateAnimatorGroundMovementState();
             UpdateAnimatorWallMovementState();
+
+            if (_groundCheck.IsOnGround)
+            {
+                RemoveEndSlidingForce();
+            }
         }
 
         /// <summary>
@@ -159,6 +166,11 @@ namespace Player
                     _animator.Play("JumpStart");
                     break;
             }
+        }
+
+        private void RemoveEndSlidingForce()
+        {
+            _endSlidingForce.ResetVelocity();
         }
 
         /// <summary>
@@ -361,8 +373,10 @@ namespace Player
         {
             _moveControl.MovePriority = 1;
             _moveControl.TurnPriority = 1;
-            
-            //_gravity.SetVelocity(Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) * 4f);
+
+            var targetVelocity = Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) * 10f;
+            targetVelocity.y = 10f;
+            _endSlidingForce.SetVelocity(targetVelocity);
         }
     }
 }
