@@ -37,7 +37,9 @@ namespace Player
         private HeadContactCheck _headContactCheck;
         private ExtraForce _endSlidingForce;
 
+        private bool _isOnWall;
         private bool _wallOnRightSide;
+        private GameObject _cashedLastWallGameObject;
 
         [Monitor] private bool IsContactWall => _wallCheck.IsContact;
 
@@ -109,6 +111,8 @@ namespace Player
 
             if (_groundCheck.IsOnGround)
             {
+                _cashedLastWallGameObject = null;
+                
                 RemoveEndSlidingForce();
             }
         }
@@ -135,7 +139,7 @@ namespace Player
         /// </summary>
         private void UpdateAnimatorWallMovementState()
         {
-            if (_wallCheck.IsContact && !_groundCheck.IsOnGround)
+            if (_isOnWall)
             {
                 _animator.CrossFade(_wallOnRightSide ? "WallHang_R" : "WallHang_L", 0.09f);
             }
@@ -152,7 +156,7 @@ namespace Player
         /// </remarks>
         private void UpdateAnimatorJumpState()
         {
-            if (_wallCheck.IsContact && !_groundCheck.IsOnGround)
+            if (_isOnWall)
             {
                 return;
             }
@@ -182,6 +186,8 @@ namespace Player
 
             jumpDirection.y = 4;
 
+            _jumpControl.JumpHeight = 3f;
+
             _jumpControl.JumpDirection = jumpDirection;
 
             _jumpControl.MovePriority = 5;
@@ -194,6 +200,8 @@ namespace Player
         {
             _jumpControl.JumpDirection = Vector3.up;
 
+            _jumpControl.JumpHeight = 2f;
+            
             _jumpControl.MovePriority = 0;
         }
 
@@ -215,6 +223,8 @@ namespace Player
 
             _gravity.GravityScale = 0;
             _gravity.SetVelocity(Vector3.zero);
+
+            _isOnWall = true;
         }
 
         /// <summary>
@@ -229,6 +239,8 @@ namespace Player
 
             _gravity.GravityScale = 2;
             _gravity.SetVelocity(Vector3.zero);
+
+            _isOnWall = false;
         }
 
         /// <summary>
@@ -321,14 +333,17 @@ namespace Player
         public void OnContactWall()
         {
             if (_groundCheck.IsOnGround) return;
+            if (_cashedLastWallGameObject == _wallCheck.ContactedGameObject) return;
 
+            _cashedLastWallGameObject = _wallCheck.ContactedGameObject;
+            
             var wallNormalXZ = _wallCheck.Normal.ToXZVector2();
             var perpendicularWallAxis = Vector2.Perpendicular(wallNormalXZ).ToXZVector3();
 
             var angle = Vector3.SignedAngle(transform.forward, perpendicularWallAxis, Vector3.up);
 
             _wallOnRightSide = angle > 90;
-
+            
             OnWallHang();
         }
 
