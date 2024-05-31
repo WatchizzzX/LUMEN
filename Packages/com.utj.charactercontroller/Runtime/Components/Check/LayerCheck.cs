@@ -13,7 +13,6 @@ namespace Unity.TinyCharacterController.Check
     /// while in contact with the layer, and when the character moves away from the layer.
     /// </summary>
     [AddComponentMenu(MenuList.MenuCheck + nameof(LayerCheck))]
-    [DisallowMultipleComponent]
     [RequireComponent(typeof(CharacterSettings))]
     [Unity.VisualScripting.RenamedFrom("TinyCharacterController.LayerCheck")]
     [Unity.VisualScripting.RenamedFrom("TinyCharacterController.Check.LayerCheck")]
@@ -32,6 +31,7 @@ namespace Unity.TinyCharacterController.Check
         private CharacterSettings _settings;
 
         private bool _isFirstContact;
+        private bool _cachedContact;
         
         private Vector3 _normal;
         
@@ -59,12 +59,7 @@ namespace Unity.TinyCharacterController.Check
             if (!IsCollisionWithLayerMask(collision, layersToReact)) return;
             IsContact = true;
             _isFirstContact = true;
-            foreach (var contact in collision.contacts)
-            {
-                _normal += contact.normal;
-            }
-            
-            _normal.Normalize();
+            _normal = collision.contacts[0].normal;
         }
 
         private void OnCollisionStay(Collision collision)
@@ -72,12 +67,7 @@ namespace Unity.TinyCharacterController.Check
             if (!IsCollisionWithLayerMask(collision, layersToReact)) return;
             IsContact = true;
             _isFirstContact = false;
-            foreach (var contact in collision.contacts)
-            {
-                _normal += contact.normal;
-            }
-
-            _normal.Normalize();
+            _normal = collision.contacts[0].normal;
         }
         
         private void OnCollisionExit(Collision collision)
@@ -98,6 +88,11 @@ namespace Unity.TinyCharacterController.Check
             if (enabled == false)
                 return;
             
+            if (_cachedContact != IsContact)
+            {
+                _cachedContact = true;
+            }
+            
             if (IsContact)
             {
                 onLayerStuck?.Invoke();
@@ -108,21 +103,10 @@ namespace Unity.TinyCharacterController.Check
                 onLayerTouch?.Invoke();
             }
             
-            if (!IsContact && !_isFirstContact)
-            {
-                onLayerLeft?.Invoke();
-            }
-        }
-        
-        //write a gizmo method
-        private void OnDrawGizmosSelected()
-        {
-            if (Application.isPlaying == false)
-                return;
+            if (IsContact || _isFirstContact || !_cachedContact) return;
             
-            if (!IsContact) return;
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(_transform.Position, _normal);
+            onLayerLeft?.Invoke();
+            _cachedContact = false;
         }
         
         int IEarlyUpdateComponent.Order => Order.Check;
