@@ -5,7 +5,7 @@
 //---------- -------------------------- -------
 
 //Runtime Monitoring
-//File generated: 2024-05-30 13:45:00Z
+//File generated: 2024-05-31 11:05:10Z
 //Please dont change the contents of this file. Otherwise IL2CPP runtime may not work with runtime monitoring!
 //Ensure that this file is located in Assembly-CSharp. Otherwise this file may not compile.
 //If this file contains any errors please contact me and/or create an issue in the linked repository.
@@ -13,7 +13,7 @@
 
 #if ENABLE_IL2CPP && !DISABLE_MONITORING
 
-internal class IL2CPP_AOT_XD21QDFT9HY26YCNBMLB
+internal class IL2CPP_AOT_E30EMTOGHIBY89MWUHUL
 {
     //Value Processor Method Definitions
 
@@ -61,10 +61,18 @@ internal class IL2CPP_AOT_XD21QDFT9HY26YCNBMLB
 
         // Baracuda.Monitoring.Modules.ConsoleMonitor::Console (System.Collections.Generic.Queue<System.String>)
         // Baracuda.Monitoring.Modules.ConsoleMonitor::LastLogStacktrace (System.String)
+        // Player.PlayerController::GetSideOfWallDebug (System.String)
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, System.Object>();
+
+        // Player.PlayerController::CurrentSpeed (System.Single)
+        Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, System.Single>();
 
         // Player.PlayerController::GravityState (Unity.TinyCharacterController.Effect.Gravity.State)
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, Unity.TinyCharacterController.Effect.Gravity.State>();
+
+        // Player.PlayerController::WallNormal (UnityEngine.Vector3)
+        // Player.PlayerController::ForwardDirection (UnityEngine.Vector3)
+        Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, UnityEngine.Vector3>();
 
         //  [Collection Definitions] 
 
@@ -81,24 +89,25 @@ internal class IL2CPP_AOT_XD21QDFT9HY26YCNBMLB
 
 //General
 
-//Monitored Member:               29
-//Monitored Member Instance:      29
+//Monitored Member:               33
+//Monitored Member Instance:      33
 
 //MemberInfo
 
 //Monitored Fields:               21
 //Monitored Fields Instance:      21
-//Monitored Properties:            8
-//Monitored Properties Instance:   8
+//Monitored Properties:           12
+//Monitored Properties Instance:  12
 
 //Monitored Types
 
 //Monitored bool:                  2
-//Monitored float:                 1
+//Monitored float:                 2
 //Monitored int:                   3
 //Monitored Queue<string>:         1
 //Monitored State:                 1
-//Monitored string:               21
+//Monitored string:               22
+//Monitored Vector3:               2
 
 //----------------------------------------------------------------------------------------------------------------------
 
