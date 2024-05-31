@@ -37,15 +37,15 @@ namespace Player
         private HeadContactCheck _headContactCheck;
         private ExtraForce _endSlidingForce;
 
+        private bool _isOnSlider;
         private bool _isOnWall;
         private bool _wallOnRightSide;
         private GameObject _cashedLastWallGameObject;
 
-        [Monitor] private bool IsContactWall => _wallCheck.IsContact;
+        [Monitor] private bool IsOnWall => _isOnWall;
 
-        [Monitor]
-        [MShowIf(nameof(IsContactWall))]
-        private Vector3 WallNormal => _wallCheck.Normal;
+        [Monitor] [MShowIf(nameof(IsOnWall))] private Vector3 WallNormal => _wallCheck.Normal;
+        [Monitor] private bool IsOnSlider => _isOnSlider;
 
         [Monitor] private bool IsGrounded => _groundCheck.IsOnGround;
         [Monitor] private Vector3 ForwardDirection => transform.forward;
@@ -54,7 +54,7 @@ namespace Player
         [Monitor] private int AerialJumpCount => _jumpControl.AerialJumpCount;
 
         [MonitorProperty]
-        [MShowIf(nameof(IsContactWall))]
+        [MShowIf(nameof(IsOnWall))]
         private string GetSideOfWallDebug
         {
             get
@@ -79,7 +79,7 @@ namespace Player
             _groundCheck = GetComponent<GroundCheck>();
             _headContactCheck = GetComponent<HeadContactCheck>();
             _endSlidingForce = GetComponent<ExtraForce>();
-            
+
             var layerChecks = GetComponents<LayerCheck>();
             _wallCheck = layerChecks[0];
             _sliderCheck = layerChecks[1];
@@ -112,7 +112,7 @@ namespace Player
             if (_groundCheck.IsOnGround)
             {
                 _cashedLastWallGameObject = null;
-                
+
                 RemoveEndSlidingForce();
             }
         }
@@ -201,7 +201,7 @@ namespace Player
             _jumpControl.JumpDirection = Vector3.up;
 
             _jumpControl.JumpHeight = 2f;
-            
+
             _jumpControl.MovePriority = 0;
         }
 
@@ -241,6 +241,20 @@ namespace Player
             _gravity.SetVelocity(Vector3.zero);
 
             _isOnWall = false;
+        }
+
+        private void OnEndSliding()
+        {
+            _moveControl.MovePriority = 1;
+            _moveControl.TurnPriority = 1;
+
+            var targetVelocity = Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) * 10f;
+            targetVelocity.y = 10f;
+            _endSlidingForce.SetVelocity(targetVelocity);
+            
+            _animator.CrossFade("JumpStart", 0.05f);
+
+            _isOnSlider = false;
         }
 
         /// <summary>
@@ -336,14 +350,14 @@ namespace Player
             if (_cashedLastWallGameObject == _wallCheck.ContactedGameObject) return;
 
             _cashedLastWallGameObject = _wallCheck.ContactedGameObject;
-            
+
             var wallNormalXZ = _wallCheck.Normal.ToXZVector2();
             var perpendicularWallAxis = Vector2.Perpendicular(wallNormalXZ).ToXZVector3();
 
             var angle = Vector3.SignedAngle(transform.forward, perpendicularWallAxis, Vector3.up);
 
             _wallOnRightSide = angle > 90;
-            
+
             OnWallHang();
         }
 
@@ -369,8 +383,12 @@ namespace Player
         /// </summary>
         public void OnContactSlider()
         {
+            if (_groundCheck.IsOnGround) return;
+
             _moveControl.MovePriority = 0;
             _moveControl.TurnPriority = 0;
+
+            _isOnSlider = true;
         }
 
         /// <summary>
@@ -378,7 +396,14 @@ namespace Player
         /// </summary>
         public void OnStayContactSlider()
         {
-            _gravity.SetVelocity(Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) * 2f);
+            if (!_groundCheck.IsOnGround)
+            {
+                _gravity.SetVelocity(Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) * 2f);
+            }
+            else
+            {
+                OnEndSliding();
+            }
         }
 
         /// <summary>
@@ -386,12 +411,7 @@ namespace Player
         /// </summary>
         public void OnLeftSlider()
         {
-            _moveControl.MovePriority = 1;
-            _moveControl.TurnPriority = 1;
-
-            var targetVelocity = Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) * 10f;
-            targetVelocity.y = 10f;
-            _endSlidingForce.SetVelocity(targetVelocity);
+            OnEndSliding();
         }
     }
 }
