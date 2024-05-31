@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Utils
+namespace Utils.Extra
 {
     public static class RaycastHelpers
     {

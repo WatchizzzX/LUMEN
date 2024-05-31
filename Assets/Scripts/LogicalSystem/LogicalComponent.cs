@@ -7,9 +7,9 @@ using TypeReferences;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-using Utils;
 using Utils.Extensions;
-using Logger = Utils.Logger;
+using Utils.Extra;
+using Logger = Utils.Extra.Logger;
 
 namespace LogicalSystem
 {

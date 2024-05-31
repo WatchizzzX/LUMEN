@@ -12,7 +12,8 @@ using ServiceLocatorSystem;
 using Unity.Cinemachine;
 using Unity.TinyCharacterController.Brain;
 using UnityEngine;
-using Utils;
+using Utils.Extra;
+using Utils.Gameplay;
 
 namespace Managers
 {

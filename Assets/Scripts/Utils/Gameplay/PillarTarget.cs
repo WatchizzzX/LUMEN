@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Utils
+namespace Utils.Gameplay
 {
     public class PillarTarget : MonoBehaviour
     {

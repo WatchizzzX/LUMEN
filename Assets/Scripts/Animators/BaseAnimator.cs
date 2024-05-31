@@ -4,8 +4,8 @@ using Animators.Interfaces;
 using Managers;
 using ServiceLocatorSystem;
 using UnityEngine;
-using Utils;
-using Logger = Utils.Logger;
+using Utils.Extra;
+using Logger = Utils.Extra.Logger;
 
 namespace Animators
 {

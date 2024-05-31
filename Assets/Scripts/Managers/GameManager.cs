@@ -8,7 +8,7 @@ using EventBusSystem.Signals.SceneSignals;
 using Managers.Settings;
 using ServiceLocatorSystem;
 using UnityEngine;
-using Logger = Utils.Logger;
+using Logger = Utils.Extra.Logger;
 
 namespace Managers
 {

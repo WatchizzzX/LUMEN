@@ -3,9 +3,8 @@ using Animators;
 using LogicalSystem;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-using Utils;
-using Logger = Utils.Logger;
+using Utils.Extra;
+using Logger = Utils.Extra.Logger;
 
 namespace Editor
 {

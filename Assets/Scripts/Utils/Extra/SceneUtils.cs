@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine.SceneManagement;
 
-namespace Utils
+namespace Utils.Extra
 {
     public static class SceneUtils
     {

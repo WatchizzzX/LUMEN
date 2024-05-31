@@ -1,8 +1,8 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Utils;
-using Logger = Utils.Logger;
+using Utils.Extra;
+using Logger = Utils.Extra.Logger;
 
 namespace Editor
 {

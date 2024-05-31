@@ -2,10 +2,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem; // Required for the new Input System
 
-namespace Utils
+namespace Utils.Extra
 {
-
-
     public class CheatCodes : MonoBehaviour
     {
         // Serializable class to hold cheat code data
