@@ -5,7 +5,7 @@
 //---------- -------------------------- -------
 
 //Runtime Monitoring
-//File generated: 2024-06-01 20:38:27Z
+//File generated: 2024-06-01 22:43:00Z
 //Please dont change the contents of this file. Otherwise IL2CPP runtime may not work with runtime monitoring!
 //Ensure that this file is located in Assembly-CSharp. Otherwise this file may not compile.
 //If this file contains any errors please contact me and/or create an issue in the linked repository.
@@ -13,7 +13,7 @@
 
 #if ENABLE_IL2CPP && !DISABLE_MONITORING
 
-internal class IL2CPP_AOT_V79FMHO671P43FRSKGMJ
+internal class IL2CPP_AOT_4M2IZW88C0LNEVSFU25O
 {
     //Value Processor Method Definitions
 
@@ -22,6 +22,12 @@ internal class IL2CPP_AOT_V79FMHO671P43FRSKGMJ
     private static void AOT()
     {
         //  [Field Definitions] 
+
+        // Managers.GameManager::_gameState (Enums.GameState)
+        Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefField<System.Object, Enums.GameState>();
+
+        // PickupSystem.PickupController::_isHoldingObject (System.Boolean)
+        Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefField<System.Object, System.Boolean>();
 
         // Baracuda.Monitoring.Modules.SystemMonitor::_operatingSystem (System.String)
         // Baracuda.Monitoring.Modules.SystemMonitor::_operatingSystemFamily (System.String)
@@ -43,6 +49,13 @@ internal class IL2CPP_AOT_V79FMHO671P43FRSKGMJ
         // Baracuda.Monitoring.Modules.SystemMonitor::_consoleLogPath (System.String)
         // Baracuda.Monitoring.Modules.SystemMonitor::_streamingAssetsPath (System.String)
         // Baracuda.Monitoring.Modules.SystemMonitor::_temporaryCachePath (System.String)
+        // InteractionSystem.InteractorController::_foundedInteractableColliders (UnityEngine.Collider[])
+        // InteractionSystem.InteractorController::_closestInteractableObject (UnityEngine.GameObject)
+        // PickupSystem.PickupController::_heldGameObject (UnityEngine.GameObject)
+        // PickupSystem.PickupController::_heldRigidbody (UnityEngine.Rigidbody)
+        // PickupSystem.PickupController::_heldCollider (UnityEngine.Collider)
+        // PickupSystem.PickupController::_foundedPickableColliders (UnityEngine.Collider[])
+        // PickupSystem.PickupController::_closestPickableObject (UnityEngine.GameObject)
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefField<System.Object, System.Object>();
 
         // Baracuda.Monitoring.Modules.FPSMonitor::_fps (System.Single)
@@ -50,6 +63,9 @@ internal class IL2CPP_AOT_V79FMHO671P43FRSKGMJ
 
         //  [Property Definitions] 
 
+        // Managers.GameManager::InDeveloperMode (System.Boolean)
+        // Managers.SceneManager::IsSceneLoading (System.Boolean)
+        // Managers.TransitionManager::IsTransitionStarted (System.Boolean)
         // Player.PlayerController::IsOnWall (System.Boolean)
         // Player.PlayerController::IsOnSlider (System.Boolean)
         // Player.PlayerController::IsGrounded (System.Boolean)
@@ -62,6 +78,7 @@ internal class IL2CPP_AOT_V79FMHO671P43FRSKGMJ
 
         // Baracuda.Monitoring.Modules.ConsoleMonitor::Console (System.Collections.Generic.Queue<System.String>)
         // Baracuda.Monitoring.Modules.ConsoleMonitor::LastLogStacktrace (System.String)
+        // Player.PlayerController::GroundGameObject (UnityEngine.GameObject)
         // Player.PlayerController::GetSideOfWallDebug (System.String)
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, System.Object>();
 
@@ -78,6 +95,9 @@ internal class IL2CPP_AOT_V79FMHO671P43FRSKGMJ
 
         //  [Collection Definitions] 
 
+        // UnityEngine.Collider[]
+        Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefArray<System.Object>();
+
         // System.Collections.Generic.Queue<System.String>
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefEnumerable<System.Object>();
     }
@@ -91,22 +111,27 @@ internal class IL2CPP_AOT_V79FMHO671P43FRSKGMJ
 
 //General
 
-//Monitored Member:               35
-//Monitored Member Instance:      35
+//Monitored Member:               48
+//Monitored Member Instance:      48
 
 //MemberInfo
 
-//Monitored Fields:               21
-//Monitored Fields Instance:      21
-//Monitored Properties:           14
-//Monitored Properties Instance:  14
+//Monitored Fields:               30
+//Monitored Fields Instance:      30
+//Monitored Properties:           18
+//Monitored Properties Instance:  18
 
 //Monitored Types
 
-//Monitored bool:                  3
+//Monitored bool:                  7
+//Monitored Collider:              1
+//Monitored Collider[]:            2
 //Monitored float:                 2
+//Monitored GameObject:            4
+//Monitored GameState:             1
 //Monitored int:                   3
 //Monitored Queue<string>:         1
+//Monitored Rigidbody:             1
 //Monitored State:                 1
 //Monitored string:               22
 //Monitored Vector3:               3
