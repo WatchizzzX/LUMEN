@@ -113,10 +113,7 @@ namespace Managers
 
             var payload = (OnSceneLoaded)eventModel.Payload;
 
-            if (!payload.IsGameLevel)
-            {
-                ChangeGameState(GameState.MainMenu);
-            }
+            ChangeGameState(!payload.IsGameLevel ? GameState.MainMenu : GameState.Level);
         }
 
         [ListenTo(SignalEnum.OnPauseKeyPressed)]
