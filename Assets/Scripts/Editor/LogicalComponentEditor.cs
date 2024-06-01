@@ -64,7 +64,7 @@ namespace Editor
             }
 
             var spawnedNode = (GameObject)PrefabUtility.InstantiatePrefab(prefab, _logicalComponent.transform);
-            var decalAnimator = spawnedNode.GetComponentInChildren<DecalAnimator>();
+            var decalAnimator = spawnedNode.GetComponentInChildren<MaterialAnimator>();
             UnityEditor.Events.UnityEventTools.AddPersistentListener(_logicalComponent.OnResultChanged,
                 decalAnimator.Animate);
 
