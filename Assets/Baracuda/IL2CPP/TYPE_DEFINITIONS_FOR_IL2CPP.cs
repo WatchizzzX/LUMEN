@@ -5,7 +5,7 @@
 //---------- -------------------------- -------
 
 //Runtime Monitoring
-//File generated: 2024-05-31 11:05:10Z
+//File generated: 2024-06-01 16:26:39Z
 //Please dont change the contents of this file. Otherwise IL2CPP runtime may not work with runtime monitoring!
 //Ensure that this file is located in Assembly-CSharp. Otherwise this file may not compile.
 //If this file contains any errors please contact me and/or create an issue in the linked repository.
@@ -13,7 +13,7 @@
 
 #if ENABLE_IL2CPP && !DISABLE_MONITORING
 
-internal class IL2CPP_AOT_E30EMTOGHIBY89MWUHUL
+internal class IL2CPP_AOT_291SOTD6IH99L2CYS9NK
 {
     //Value Processor Method Definitions
 
@@ -50,7 +50,8 @@ internal class IL2CPP_AOT_E30EMTOGHIBY89MWUHUL
 
         //  [Property Definitions] 
 
-        // Player.PlayerController::IsContactWall (System.Boolean)
+        // Player.PlayerController::IsOnWall (System.Boolean)
+        // Player.PlayerController::IsOnSlider (System.Boolean)
         // Player.PlayerController::IsGrounded (System.Boolean)
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, System.Boolean>();
 
@@ -89,19 +90,19 @@ internal class IL2CPP_AOT_E30EMTOGHIBY89MWUHUL
 
 //General
 
-//Monitored Member:               33
-//Monitored Member Instance:      33
+//Monitored Member:               34
+//Monitored Member Instance:      34
 
 //MemberInfo
 
 //Monitored Fields:               21
 //Monitored Fields Instance:      21
-//Monitored Properties:           12
-//Monitored Properties Instance:  12
+//Monitored Properties:           13
+//Monitored Properties Instance:  13
 
 //Monitored Types
 
-//Monitored bool:                  2
+//Monitored bool:                  3
 //Monitored float:                 2
 //Monitored int:                   3
 //Monitored Queue<string>:         1
