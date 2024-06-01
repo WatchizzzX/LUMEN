@@ -1,6 +1,7 @@
 using Baracuda.Monitoring;
 using DavidFDev.DevConsole;
 using EventBusSystem;
+using EventBusSystem.Signals.DeveloperSignals;
 using Unity.TinyCharacterController;
 using Unity.TinyCharacterController.Brain;
 using Unity.TinyCharacterController.Check;
@@ -48,8 +49,6 @@ namespace Player
 
         private bool _isOnSlider;
         private SlidingSurface _connectedSliderSurface;
-
-        private bool _inDebugMode;
         
         [Monitor] private bool IsOnWall => _isOnWall;
         
@@ -99,12 +98,9 @@ namespace Player
             var layerChecks = GetComponents<LayerCheck>();
             _wallCheck = layerChecks[0];
             _sliderCheck = layerChecks[1];
-
-            RegisterCommands();
             
 #if DEBUG || UNITY_EDITOR
             this.StartMonitoring();
-            _inDebugMode = true;
 #endif
         }
 
@@ -453,21 +449,15 @@ namespace Player
         {
             _gravity.SetVelocity(Vector3.zero);
         }
-
-        private void RegisterCommands()
+        
+        [ListenTo(SignalEnum.OnDevModeChanged)]
+        private void OnDevModeChanged(EventModel eventModel)
         {
-            DevConsole.AddCommand(Command.Create(
-                name: "playerdebug",
-                aliases:"plrdbg",
-                helpText:"Enable or disable player debug mode",
-                callback: () =>
-                {
-                    _inDebugMode = !_inDebugMode;
-                    if(_inDebugMode)
-                        this.StartMonitoring();
-                    else
-                        this.StopMonitoring();
-                }));
+            var payload = (OnDevModeChanged)eventModel.Payload;
+            if(payload.InDeveloperMode)
+                this.StartMonitoring();
+            else
+                this.StopMonitoring();
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Managers
         [NonSerialized]
         public TransitionManagerSettings Settings;
 
+        [Monitor]
         public bool IsTransitionStarted => _runningTransition;
 
         #endregion
