@@ -1,4 +1,5 @@
 using Baracuda.Monitoring;
+using DG.Tweening;
 using Unity.TinyCharacterController;
 using Unity.TinyCharacterController.Brain;
 using Unity.TinyCharacterController.Check;
@@ -60,8 +61,9 @@ namespace Player
 
                 var localVelocity = transform.up * _connectedWallJumpSurface.AdditiveUpVelocity
                                     + transform.forward * _connectedWallJumpSurface.AdditiveForwardVelocity
-                                    + (_wallOnRightSide ? -transform.right * _connectedWallJumpSurface.AdditiveSideVelocity:
-                                    transform.right * _connectedWallJumpSurface.AdditiveSideVelocity);
+                                    + (_wallOnRightSide
+                                        ? -transform.right * _connectedWallJumpSurface.AdditiveSideVelocity
+                                        : transform.right * _connectedWallJumpSurface.AdditiveSideVelocity);
 
                 return _wallCheck.Normal + localVelocity;
             }
@@ -198,7 +200,6 @@ namespace Player
         {
             _connectedSliderSurface = null;
             _isOnSlider = false;
-            _endSlidingForce.ResetVelocity();
         }
 
         /// <summary>
@@ -275,8 +276,9 @@ namespace Player
 
             var targetVelocity = Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) *
                                  _connectedSliderSurface.SpeedMultiplier;
-            targetVelocity.y += _connectedSliderSurface.JumpMultiplier;
-            _endSlidingForce.SetVelocity(targetVelocity);
+            if (_connectedSliderSurface.JumpMultiplier > 0)
+                targetVelocity.y = _connectedSliderSurface.JumpMultiplier;
+            _gravity.SetVelocity(targetVelocity);
 
             if (targetVelocity.y > 0)
             {
