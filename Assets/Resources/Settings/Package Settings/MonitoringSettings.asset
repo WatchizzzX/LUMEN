@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MonitoringSettings
   m_EditorClassIdentifier: 
   enableMonitoring: 2
-  updateRate: 2
+  updateRate: 0
   asyncProfiling: 1
   updatesWithLowTimeScale: 0
   openDisplayOnLoad: 1

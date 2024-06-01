@@ -1,4 +1,5 @@
 using System;
+using Baracuda.Monitoring;
 using DavidFDev.DevConsole;
 using Enums;
 using EventBusSystem;
@@ -12,11 +13,15 @@ using Logger = Utils.Extra.Logger;
 
 namespace Managers
 {
+    [MTag("Game Manager")]
+    [MGroupName("Game Manager")]
     public class GameManager : EventBehaviour, IService
     {
         [NonSerialized] public GameManagerSettings Settings;
 
-        private GameState _gameState;
+        [Monitor] private GameState _gameState;
+
+        [Monitor] public bool InDeveloperMode { get; private set; }
 
         private TransitionManager _transitionManager;
 
@@ -37,13 +42,14 @@ namespace Managers
 
             DevConsole.OnConsoleOpened += OnDevConsoleChangeState;
             DevConsole.OnConsoleClosed += OnDevConsoleChangeState;
-            
+
             AddDevCommands();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            this.StopMonitoring();
             RemoveDevCommands();
         }
 
@@ -62,21 +68,35 @@ namespace Managers
                 aliases: "log",
                 helpText: "Enable logging messages",
                 p1: Parameter.Create(
-                    name: "bool",
-                    helpText: "Enable logging"),
+                    name: "true/false",
+                    helpText: "Enable/disable logging"),
                 callback: value => Logger.logOnlyErrors = value));
-            
+
             DevConsole.AddCommand(Command.Create(
                 name: "respawn",
                 aliases: "resp",
                 helpText: "Respawn player in spawnpoint without transition",
                 callback: () => RaiseEvent(new OnDevRespawn())));
+            DevConsole.AddCommand(Command.Create<bool>(
+                name: "devmode",
+                aliases: "debugmode",
+                helpText: "Enable debugging info",
+                p1:
+                Parameter.Create(
+                    name: "true/false",
+                    helpText: "Enable/disable developer mode"),
+                callback: value =>
+                {
+                    InDeveloperMode = value;
+                    RaiseEvent(new OnDevModeChanged(InDeveloperMode));
+                }));
         }
 
         private void RemoveDevCommands()
         {
             DevConsole.RemoveCommand("set_settings");
             DevConsole.RemoveCommand("logging");
+            DevConsole.RemoveCommand("devmode");
         }
 
         [ListenTo(SignalEnum.OnExitCutscene)]
@@ -139,6 +159,16 @@ namespace Managers
         private void OnSetScene(EventModel eventModel)
         {
             ChangeGameState(GameState.Level);
+        }
+
+        [ListenTo(SignalEnum.OnDevModeChanged)]
+        private void OnDevModeChanged(EventModel eventModel)
+        {
+            var payload = (OnDevModeChanged)eventModel.Payload;
+            if(payload.InDeveloperMode)
+                this.StartMonitoring();
+            else
+                this.StopMonitoring();
         }
 
         private void OnDevConsoleChangeState()

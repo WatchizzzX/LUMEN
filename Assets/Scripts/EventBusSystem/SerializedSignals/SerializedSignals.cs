@@ -76,6 +76,12 @@ namespace EventBusSystem.SerializedSignals
   }
 
   [Serializable]
+  public class SerializedOnDevModeChanged : SerializedSignal
+  {
+      [SerializeField] public Boolean InDeveloperMode;
+  }
+
+  [Serializable]
   public class SerializedOnDevRespawn : SerializedSignal
   {
   }

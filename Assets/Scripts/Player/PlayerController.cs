@@ -13,6 +13,9 @@ using Utils.Gameplay;
 namespace Player
 {
     [SelectionBase]
+    [MTag("Player Controller")]
+    [MGroupName("Player Controller")]
+    [MOrder(-100)]
     public class PlayerController : EventBehaviour
     {
         [Header("Move Settings")] [SerializeField, Min(1f)]
@@ -47,9 +50,9 @@ namespace Player
         private SlidingSurface _connectedSliderSurface;
 
         private bool _inDebugMode;
-
+        
         [Monitor] private bool IsOnWall => _isOnWall;
-
+        
         [Monitor] [MShowIf(nameof(IsOnWall))] private Vector3 WallNormal => _wallCheck.Normal;
 
         [Monitor]
@@ -71,8 +74,8 @@ namespace Player
         }
 
         [Monitor] private bool IsOnSlider => _isOnSlider;
-
         [Monitor] private bool IsGrounded => _groundCheck.IsOnGround;
+        [Monitor, MShowIf(nameof(IsGrounded))] private GameObject GroundGameObject => _groundCheck.GroundObject;
         [Monitor] private Vector3 ForwardDirection => transform.forward;
         [Monitor] private float CurrentSpeed => _moveControl.CurrentSpeed;
         [Monitor] private Gravity.State GravityState => _gravity.CurrentState;
@@ -80,18 +83,7 @@ namespace Player
 
         [MonitorProperty]
         [MShowIf(nameof(IsOnWall))]
-        private string GetSideOfWallDebug
-        {
-            get
-            {
-                var wallNormalXZ = _wallCheck.Normal.ToXZVector2();
-                var perpendicular = Vector2.Perpendicular(wallNormalXZ).ToXZVector3();
-
-                var angle = Vector3.SignedAngle(transform.forward, perpendicular, Vector3.up);
-
-                return angle > 90 ? "Wall on right side" : "Wall on left side";
-            }
-        }
+        private string GetSideOfWallDebug => _wallOnRightSide ? "Wall on right side" : "Wall on left side";
 
         protected override void Awake()
         {
@@ -112,6 +104,7 @@ namespace Player
             
 #if DEBUG || UNITY_EDITOR
             this.StartMonitoring();
+            _inDebugMode = true;
 #endif
         }
 

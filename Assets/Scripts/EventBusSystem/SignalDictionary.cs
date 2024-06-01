@@ -21,6 +21,7 @@ namespace EventBusSystem
             {typeof(EventBusSystem.Signals.GameSignals.OnRespawnPlayer), SignalEnum.OnRespawnPlayer},
             {typeof(EventBusSystem.Signals.GameSignals.OnSpawnPlayer), SignalEnum.OnSpawnPlayer},
             {typeof(EventBusSystem.Signals.DeveloperSignals.OnDevConsoleOpened), SignalEnum.OnDevConsoleOpened},
+            {typeof(EventBusSystem.Signals.DeveloperSignals.OnDevModeChanged), SignalEnum.OnDevModeChanged},
             {typeof(EventBusSystem.Signals.DeveloperSignals.OnDevRespawn), SignalEnum.OnDevRespawn},
         };
 
@@ -36,6 +37,7 @@ namespace EventBusSystem
             {SignalEnum.OnRespawnPlayer, typeof(EventBusSystem.Signals.GameSignals.OnRespawnPlayer)},
             {SignalEnum.OnSpawnPlayer, typeof(EventBusSystem.Signals.GameSignals.OnSpawnPlayer)},
             {SignalEnum.OnDevConsoleOpened, typeof(EventBusSystem.Signals.DeveloperSignals.OnDevConsoleOpened)},
+            {SignalEnum.OnDevModeChanged, typeof(EventBusSystem.Signals.DeveloperSignals.OnDevModeChanged)},
             {SignalEnum.OnDevRespawn, typeof(EventBusSystem.Signals.DeveloperSignals.OnDevRespawn)},
         };
 
@@ -51,6 +53,7 @@ namespace EventBusSystem
             {typeof(EventBusSystem.Signals.GameSignals.OnRespawnPlayer), typeof(EventBusSystem.SerializedSignals.SerializedOnRespawnPlayer)},
             {typeof(EventBusSystem.Signals.GameSignals.OnSpawnPlayer), typeof(EventBusSystem.SerializedSignals.SerializedOnSpawnPlayer)},
             {typeof(EventBusSystem.Signals.DeveloperSignals.OnDevConsoleOpened), typeof(EventBusSystem.SerializedSignals.SerializedOnDevConsoleOpened)},
+            {typeof(EventBusSystem.Signals.DeveloperSignals.OnDevModeChanged), typeof(EventBusSystem.SerializedSignals.SerializedOnDevModeChanged)},
             {typeof(EventBusSystem.Signals.DeveloperSignals.OnDevRespawn), typeof(EventBusSystem.SerializedSignals.SerializedOnDevRespawn)},
         };
 
@@ -66,6 +69,7 @@ namespace EventBusSystem
             {typeof(EventBusSystem.SerializedSignals.SerializedOnRespawnPlayer), typeof(EventBusSystem.Signals.GameSignals.OnRespawnPlayer)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnSpawnPlayer), typeof(EventBusSystem.Signals.GameSignals.OnSpawnPlayer)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnDevConsoleOpened), typeof(EventBusSystem.Signals.DeveloperSignals.OnDevConsoleOpened)},
+            {typeof(EventBusSystem.SerializedSignals.SerializedOnDevModeChanged), typeof(EventBusSystem.Signals.DeveloperSignals.OnDevModeChanged)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnDevRespawn), typeof(EventBusSystem.Signals.DeveloperSignals.OnDevRespawn)},
         };
     }
