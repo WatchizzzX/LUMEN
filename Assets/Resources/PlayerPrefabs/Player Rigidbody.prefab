@@ -2061,7 +2061,7 @@ MonoBehaviour:
     y: 0
     z: 0
   _skinWidth: 0.126
-  _stepHeight: 0.15
+  _stepHeight: 0.2
 --- !u!54 &6834205016505665496
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2376,8 +2376,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a77bd4757a6fa4b8fb5a1c301a098c0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _friction: 0.4
-  _drag: 0.1
+  _friction: 0
+  _drag: 0.5
   _threshold: 0.5
   _bounce: 0
   OnHitOtherCollider:
