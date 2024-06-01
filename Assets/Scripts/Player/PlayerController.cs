@@ -6,6 +6,7 @@ using Unity.TinyCharacterController.Control;
 using Unity.TinyCharacterController.Effect;
 using UnityEngine;
 using Utils.Extensions;
+using Utils.Gameplay;
 
 namespace Player
 {
@@ -37,14 +38,35 @@ namespace Player
         private HeadContactCheck _headContactCheck;
         private ExtraForce _endSlidingForce;
 
-        private bool _isOnSlider;
         private bool _isOnWall;
         private bool _wallOnRightSide;
         private GameObject _cashedLastWallGameObject;
+        private WallJumpSurface _connectedWallJumpSurface;
+
+        private bool _isOnSlider;
+        private SlidingSurface _connectedSliderSurface;
 
         [Monitor] private bool IsOnWall => _isOnWall;
 
         [Monitor] [MShowIf(nameof(IsOnWall))] private Vector3 WallNormal => _wallCheck.Normal;
+
+        [Monitor]
+        [MShowIf(nameof(IsOnWall))]
+        private Vector3 WallJumpDirection
+        {
+            get
+            {
+                if (!_connectedWallJumpSurface) return Vector3.zero;
+
+                var localVelocity = transform.up * _connectedWallJumpSurface.AdditiveUpVelocity
+                                    + transform.forward * _connectedWallJumpSurface.AdditiveForwardVelocity
+                                    + (_wallOnRightSide ? -transform.right * _connectedWallJumpSurface.AdditiveSideVelocity:
+                                    transform.right * _connectedWallJumpSurface.AdditiveSideVelocity);
+
+                return _wallCheck.Normal + localVelocity;
+            }
+        }
+
         [Monitor] private bool IsOnSlider => _isOnSlider;
 
         [Monitor] private bool IsGrounded => _groundCheck.IsOnGround;
@@ -174,6 +196,8 @@ namespace Player
 
         private void RemoveEndSlidingForce()
         {
+            _connectedSliderSurface = null;
+            _isOnSlider = false;
             _endSlidingForce.ResetVelocity();
         }
 
@@ -182,13 +206,10 @@ namespace Player
         /// </summary>
         private void WallJumpHandler()
         {
-            var jumpDirection = _wallCheck.Normal * 4f;
+            if (_connectedWallJumpSurface.JumpHeight != 0)
+                _jumpControl.JumpHeight = _connectedWallJumpSurface.JumpHeight;
 
-            jumpDirection.y = 4;
-
-            _jumpControl.JumpHeight = 3f;
-
-            _jumpControl.JumpDirection = jumpDirection;
+            _jumpControl.JumpDirection = WallJumpDirection;
 
             _jumpControl.MovePriority = 5;
         }
@@ -214,6 +235,7 @@ namespace Player
 
             _moveControl.MovePriority = 0;
             _moveControl.TurnPriority = 0;
+            _jumpControl.TurnPriority = 0;
 
             var newRotation = Quaternion.LookRotation(_wallCheck.Normal, Vector3.up) * Quaternion.Euler(0f, 90f, 0f);
 
@@ -236,6 +258,7 @@ namespace Player
 
             _moveControl.MovePriority = 1;
             _moveControl.TurnPriority = 1;
+            _jumpControl.TurnPriority = 2;
 
             _gravity.GravityScale = 2;
             _gravity.SetVelocity(Vector3.zero);
@@ -248,13 +271,17 @@ namespace Player
             _moveControl.MovePriority = 1;
             _moveControl.TurnPriority = 1;
 
-            var targetVelocity = Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) * 10f;
-            targetVelocity.y = 10f;
-            _endSlidingForce.SetVelocity(targetVelocity);
-            
-            _animator.CrossFade("JumpStart", 0.05f);
+            if (!_connectedSliderSurface) return;
 
-            _isOnSlider = false;
+            var targetVelocity = Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) *
+                                 _connectedSliderSurface.SpeedMultiplier;
+            targetVelocity.y += _connectedSliderSurface.JumpMultiplier;
+            _endSlidingForce.SetVelocity(targetVelocity);
+
+            if (targetVelocity.y > 0)
+            {
+                _animator.CrossFade("JumpStart", 0.05f);
+            }
         }
 
         /// <summary>
@@ -350,6 +377,7 @@ namespace Player
             if (_cashedLastWallGameObject == _wallCheck.ContactedGameObject) return;
 
             _cashedLastWallGameObject = _wallCheck.ContactedGameObject;
+            _connectedWallJumpSurface = _cashedLastWallGameObject.GetComponent<WallJumpSurface>();
 
             var wallNormalXZ = _wallCheck.Normal.ToXZVector2();
             var perpendicularWallAxis = Vector2.Perpendicular(wallNormalXZ).ToXZVector3();
@@ -375,6 +403,7 @@ namespace Player
         /// </summary>
         public void OnLeftWall()
         {
+            if (!_isOnWall) return;
             OnEndWallHang();
         }
 
@@ -384,6 +413,8 @@ namespace Player
         public void OnContactSlider()
         {
             if (_groundCheck.IsOnGround) return;
+
+            _connectedSliderSurface = _sliderCheck.ContactedGameObject.GetComponent<SlidingSurface>();
 
             _moveControl.MovePriority = 0;
             _moveControl.TurnPriority = 0;
@@ -398,7 +429,13 @@ namespace Player
         {
             if (!_groundCheck.IsOnGround)
             {
-                _gravity.SetVelocity(Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) * 2f);
+                if (_connectedSliderSurface == null)
+                {
+                    _connectedSliderSurface = _sliderCheck.ContactedGameObject.GetComponent<SlidingSurface>();
+                }
+
+                _gravity.SetVelocity(Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) *
+                                     _connectedSliderSurface.SpeedMultiplier);
             }
             else
             {
@@ -411,6 +448,7 @@ namespace Player
         /// </summary>
         public void OnLeftSlider()
         {
+            if (!_isOnSlider) return;
             OnEndSliding();
         }
     }
