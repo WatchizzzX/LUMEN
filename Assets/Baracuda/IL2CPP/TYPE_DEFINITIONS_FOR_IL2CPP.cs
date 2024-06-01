@@ -5,7 +5,7 @@
 //---------- -------------------------- -------
 
 //Runtime Monitoring
-//File generated: 2024-06-01 16:26:39Z
+//File generated: 2024-06-01 20:38:27Z
 //Please dont change the contents of this file. Otherwise IL2CPP runtime may not work with runtime monitoring!
 //Ensure that this file is located in Assembly-CSharp. Otherwise this file may not compile.
 //If this file contains any errors please contact me and/or create an issue in the linked repository.
@@ -13,7 +13,7 @@
 
 #if ENABLE_IL2CPP && !DISABLE_MONITORING
 
-internal class IL2CPP_AOT_291SOTD6IH99L2CYS9NK
+internal class IL2CPP_AOT_V79FMHO671P43FRSKGMJ
 {
     //Value Processor Method Definitions
 
@@ -72,6 +72,7 @@ internal class IL2CPP_AOT_291SOTD6IH99L2CYS9NK
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, Unity.TinyCharacterController.Effect.Gravity.State>();
 
         // Player.PlayerController::WallNormal (UnityEngine.Vector3)
+        // Player.PlayerController::WallJumpDirection (UnityEngine.Vector3)
         // Player.PlayerController::ForwardDirection (UnityEngine.Vector3)
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, UnityEngine.Vector3>();
 
@@ -90,15 +91,15 @@ internal class IL2CPP_AOT_291SOTD6IH99L2CYS9NK
 
 //General
 
-//Monitored Member:               34
-//Monitored Member Instance:      34
+//Monitored Member:               35
+//Monitored Member Instance:      35
 
 //MemberInfo
 
 //Monitored Fields:               21
 //Monitored Fields Instance:      21
-//Monitored Properties:           13
-//Monitored Properties Instance:  13
+//Monitored Properties:           14
+//Monitored Properties Instance:  14
 
 //Monitored Types
 
@@ -108,7 +109,7 @@ internal class IL2CPP_AOT_291SOTD6IH99L2CYS9NK
 //Monitored Queue<string>:         1
 //Monitored State:                 1
 //Monitored string:               22
-//Monitored Vector3:               2
+//Monitored Vector3:               3
 
 //----------------------------------------------------------------------------------------------------------------------
 

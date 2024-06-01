@@ -1,5 +1,6 @@
 using Baracuda.Monitoring;
-using DG.Tweening;
+using DavidFDev.DevConsole;
+using EventBusSystem;
 using Unity.TinyCharacterController;
 using Unity.TinyCharacterController.Brain;
 using Unity.TinyCharacterController.Check;
@@ -12,7 +13,7 @@ using Utils.Gameplay;
 namespace Player
 {
     [SelectionBase]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : EventBehaviour
     {
         [Header("Move Settings")] [SerializeField, Min(1f)]
         private float walkSpeed;
@@ -29,7 +30,6 @@ namespace Player
         private static readonly int ContactWall = Animator.StringToHash("IsContactWall");
 
         private RigidbodyBrain _brain;
-        private CharacterSettings _settings;
         private MoveControl _moveControl;
         private JumpControl _jumpControl;
         private Gravity _gravity;
@@ -37,7 +37,6 @@ namespace Player
         private LayerCheck _wallCheck;
         private LayerCheck _sliderCheck;
         private HeadContactCheck _headContactCheck;
-        private ExtraForce _endSlidingForce;
 
         private bool _isOnWall;
         private bool _wallOnRightSide;
@@ -46,6 +45,8 @@ namespace Player
 
         private bool _isOnSlider;
         private SlidingSurface _connectedSliderSurface;
+
+        private bool _inDebugMode;
 
         [Monitor] private bool IsOnWall => _isOnWall;
 
@@ -92,22 +93,23 @@ namespace Player
             }
         }
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _brain = GetComponent<RigidbodyBrain>();
-            _settings = GetComponent<CharacterSettings>();
             _animator = GetComponent<Animator>();
             _moveControl = GetComponent<MoveControl>();
             _jumpControl = GetComponent<JumpControl>();
             _gravity = GetComponent<Gravity>();
             _groundCheck = GetComponent<GroundCheck>();
             _headContactCheck = GetComponent<HeadContactCheck>();
-            _endSlidingForce = GetComponent<ExtraForce>();
 
             var layerChecks = GetComponents<LayerCheck>();
             _wallCheck = layerChecks[0];
             _sliderCheck = layerChecks[1];
 
+            RegisterCommands();
+            
 #if DEBUG || UNITY_EDITOR
             this.StartMonitoring();
 #endif
@@ -121,11 +123,10 @@ namespace Player
         }
 #endif
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
-#if DEBUG || UNITY_EDITOR
+            base.OnDestroy();
             this.StopMonitoring();
-#endif
         }
 
         private void Update()
@@ -273,7 +274,7 @@ namespace Player
             _moveControl.TurnPriority = 1;
 
             if (!_connectedSliderSurface) return;
-
+            
             var targetVelocity = Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) *
                                  _connectedSliderSurface.SpeedMultiplier;
             if (_connectedSliderSurface.JumpMultiplier > 0)
@@ -452,6 +453,28 @@ namespace Player
         {
             if (!_isOnSlider) return;
             OnEndSliding();
+        }
+        
+        [ListenTo(SignalEnum.OnExitCutscene)]
+        private void OnExitCutscene(EventModel eventModel)
+        {
+            _gravity.SetVelocity(Vector3.zero);
+        }
+
+        private void RegisterCommands()
+        {
+            DevConsole.AddCommand(Command.Create(
+                name: "playerdebug",
+                aliases:"plrdbg",
+                helpText:"Enable or disable player debug mode",
+                callback: () =>
+                {
+                    _inDebugMode = !_inDebugMode;
+                    if(_inDebugMode)
+                        this.StartMonitoring();
+                    else
+                        this.StopMonitoring();
+                }));
         }
     }
 }

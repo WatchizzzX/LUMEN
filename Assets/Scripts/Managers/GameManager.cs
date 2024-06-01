@@ -29,7 +29,7 @@ namespace Managers
                 DevConsole.DisableConsole();
             }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEBUG
             DevConsole.EnableConsole();
 #endif
 
@@ -37,24 +37,16 @@ namespace Managers
 
             DevConsole.OnConsoleOpened += OnDevConsoleChangeState;
             DevConsole.OnConsoleClosed += OnDevConsoleChangeState;
-
-#if UNITY_EDITOR || DEBUG
-
+            
             AddDevCommands();
-#endif
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-
-#if UNITY_EDITOR || DEBUG
-
             RemoveDevCommands();
-#endif
         }
 
-#if UNITY_EDITOR || DEBUG
         private void AddDevCommands()
         {
             DevConsole.AddCommand(Command.Create<GraphicChanger.GraphicsSettings>(
@@ -86,7 +78,6 @@ namespace Managers
             DevConsole.RemoveCommand("set_settings");
             DevConsole.RemoveCommand("logging");
         }
-#endif
 
         [ListenTo(SignalEnum.OnExitCutscene)]
         private void OnExitCutscene(EventModel eventModel)
