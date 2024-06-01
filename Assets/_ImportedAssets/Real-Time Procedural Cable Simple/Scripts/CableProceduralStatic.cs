@@ -64,7 +64,6 @@ public class CableProceduralStatic : BaseCableRenderer
 
         while (i < pointsInLineRenderer)
         {
-            Debug.Log($"draw: {i}");
             // This is the fraction of where we are in the cable and it accounts for arrays starting at zero.
             float pointForCalcs = (float)i / (pointsInLineRenderer - 1);
             // This is what gives the cable a curve and makes the wind move the center the most.
