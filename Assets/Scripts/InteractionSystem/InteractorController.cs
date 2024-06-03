@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using Baracuda.Monitoring;
 using EventBusSystem;
 using EventBusSystem.Signals.DeveloperSignals;
 using UnityEngine;
+using UnityEngine.Events;
 using Utils.Extensions;
 using Utils.Extra;
 using Logger = Utils.Extra.Logger;
@@ -44,6 +46,9 @@ namespace InteractionSystem
         [Tooltip("Buffer size. Optimal size is 3")] [SerializeField]
         private int bufferSize = 3;
 
+        public UnityEvent<GameObject> onInteractableObjectFound;
+        public UnityEvent onInteractableObjectLoss;
+
         #endregion
 
         #region Private Variables
@@ -51,8 +56,7 @@ namespace InteractionSystem
         /// <summary>
         /// Internal buffer of interactables objects
         /// </summary>
-        [Monitor]
-        private Collider[] _foundedInteractableColliders;
+        [Monitor] private Collider[] _foundedInteractableColliders;
 
         /// <summary>
         /// Count of founded interactable objects. Max is bufferSize
@@ -62,13 +66,14 @@ namespace InteractionSystem
         /// <summary>
         /// The nearest object among those found
         /// </summary>
-        [Monitor]
-        private GameObject _closestInteractableObject;
+        [Monitor] private GameObject _closestInteractableObject;
 
         /// <summary>
         /// Cached interactable implementation
         /// </summary>
         private IInteractable _interactable;
+
+        private IInteractable _readyInteractable;
 
         #endregion
 
@@ -85,6 +90,11 @@ namespace InteractionSystem
             this.StopMonitoring();
         }
 
+        private void FixedUpdate()
+        {
+            ScanInteractableObject();
+        }
+
         #endregion
 
         #region Methods
@@ -99,18 +109,30 @@ namespace InteractionSystem
                 this.StopMonitoring();
         }
 
-        /// <summary>
-        /// A public method for processing interactive event
-        /// </summary>
-        public void Interact()
+        private void ScanInteractableObject()
         {
-            _interactableObjectsCount =
-                Physics.OverlapSphereNonAlloc(transform.position, interactiveRange, _foundedInteractableColliders, interactableLayer);
+            var foundedInteractable =
+                Physics.OverlapSphereNonAlloc(transform.position, interactiveRange, _foundedInteractableColliders,
+                    interactableLayer);
 
-            if (_interactableObjectsCount <= 0)
+            if (foundedInteractable == 0)
             {
-                return;
+                for (var i = 0; i < _foundedInteractableColliders.Length; i++)
+                {
+                    _foundedInteractableColliders[i] = null;
+                }
+
+                if (_interactableObjectsCount > 0)
+                {
+                    onInteractableObjectLoss.Invoke();
+                    _interactable = null;
+                    _closestInteractableObject = null;
+                }
             }
+            
+            _interactableObjectsCount = foundedInteractable;
+            
+            if(_interactableObjectsCount == 0) return;
 
             _closestInteractableObject = _foundedInteractableColliders.OrderBy(obj =>
                 obj ? Vector3.Distance(obj.transform.position, transform.position) : Mathf.Infinity
@@ -125,27 +147,44 @@ namespace InteractionSystem
             if (Vector3.Distance(_closestInteractableObject.transform.position, transform.position) <=
                 alwaysInteractiveRange)
             {
-                CallToInteract();
+                if (_readyInteractable != _interactable)
+                {
+                    _readyInteractable = _interactable;
+                    onInteractableObjectFound.Invoke(_closestInteractableObject);   
+                }
                 return;
             }
 
             var angle = Mathf.Abs(Vector2.Angle(transform.forward.ToXZVector2(), directionToInteractable));
 
-            if (angle < angleInteractiveRange) CallToInteract();
+            if (angle < angleInteractiveRange)
+            {
+                if (_readyInteractable != _interactable)
+                {
+                    _readyInteractable = _interactable;
+                    onInteractableObjectFound.Invoke(_closestInteractableObject);
+                }
+            }
+            else
+            {
+                _readyInteractable = null;
+                onInteractableObjectLoss.Invoke();
+            }
         }
 
         private void CallToInteract()
         {
-            if (_interactable == null)
-            {
-                Logger.Log(LoggerChannel.InteractableSystem, Priority.Warning,
-                    $"{_closestInteractableObject.name} on Interactable layer, but don't have a InteractableScript");
-                return;
-            }
+            if (_interactableObjectsCount == 0 || _readyInteractable == null) return;
 
-            if (_interactableObjectsCount == 0) return;
+            _readyInteractable.Interact(this);
+        }
 
-            _interactable.Interact(this);
+        /// <summary>
+        /// A public method for processing interactive event
+        /// </summary>
+        public void Interact()
+        {
+            CallToInteract();
         }
 
         #endregion

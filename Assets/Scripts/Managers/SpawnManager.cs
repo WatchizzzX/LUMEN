@@ -9,6 +9,7 @@ using Managers.Settings;
 using PickupSystem;
 using Player;
 using ServiceLocatorSystem;
+using UI;
 using Unity.Cinemachine;
 using Unity.TinyCharacterController.Brain;
 using Unity.TinyCharacterController.Effect;
@@ -144,6 +145,14 @@ namespace Managers
         private void SpawnInGameUI()
         {
             _spawnedInGameUIGo = Instantiate(Settings.InGameUIPrefab, Vector3.zero, Quaternion.identity);
+            
+            var uiInteractableHandler = _spawnedInGameUIGo.GetComponentInChildren<UIInteractableHandler>();
+            InteractorController.onInteractableObjectFound.AddListener(uiInteractableHandler.OnFoundInteractable);
+            InteractorController.onInteractableObjectLoss.AddListener(uiInteractableHandler.OnLossInteractable);
+            
+            var uiInteractableInfoHandler = _spawnedInGameUIGo.GetComponentInChildren<UIInteractableInfoHandler>();
+            InteractorController.onInteractableObjectFound.AddListener(uiInteractableInfoHandler.OnFoundInteractable);
+            InteractorController.onInteractableObjectLoss.AddListener(uiInteractableInfoHandler.OnLossInteractable);
         }
 
         #endregion

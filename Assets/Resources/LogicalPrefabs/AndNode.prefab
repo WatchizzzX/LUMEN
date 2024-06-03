@@ -61,7 +61,67 @@ PrefabInstance:
     - target: {fileID: 5810278560882989892, guid: 2019fb73e8b03cc458026cd0240c90d8,
         type: 3}
       propertyPath: m_Name
-      value: BaseNode
+      value: AndNode
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359296595125176809, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: drawingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359296595125176809, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: outlineParameters.color.b
+      value: 1.4980392
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359296595125176809, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: outlineParameters.color.g
+      value: 0.039215676
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359296595125176809, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: outlineParameters.color.r
+      value: 0.33451667
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359296595125176809, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: outlineParameters.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359296595125176809, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: outlineParameters.fillPass.shader
+      value: 
+      objectReference: {fileID: 4800000, guid: 213090e563021044c92d1c27258b93f0, type: 3}
+    - target: {fileID: 8359296595125176809, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: outlineParameters.fillPass.serializedProperties.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359296595125176809, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: outlineParameters.fillPass.serializedProperties.Array.data[0].PropertyName
+      value: _PublicColor
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359296595125176809, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: outlineParameters.fillPass.serializedProperties.Array.data[0].Property.ColorValue.a
+      value: 0.69411767
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359296595125176809, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: outlineParameters.fillPass.serializedProperties.Array.data[0].Property.ColorValue.b
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359296595125176809, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: outlineParameters.fillPass.serializedProperties.Array.data[0].Property.ColorValue.g
+      value: 0.044999957
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359296595125176809, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: outlineParameters.fillPass.serializedProperties.Array.data[0].Property.ColorValue.r
+      value: 0.3359997
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

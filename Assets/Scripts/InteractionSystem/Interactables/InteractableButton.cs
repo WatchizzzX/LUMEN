@@ -24,6 +24,12 @@ namespace InteractionSystem.Interactables
 
         protected bool IsInCooldown;
 
+        protected override void Awake()
+        {
+            base.Awake();
+            InteractableType = InteractableType.Button;
+        }
+
         #region Interface Realizations
 
         public override void Interact()

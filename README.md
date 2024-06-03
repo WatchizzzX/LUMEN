@@ -39,6 +39,11 @@ This is an game in which you play as a robot and solve logic puzzles based on lo
 > When building the project, please note that you will need to add animations for the character yourself.
 > Just open player animator in Assets/Art/AnimatorControllers/PlayerAnimator, and look at what animations are missing
 
+> [!WARNING]
+> I used payed asset Easy Perfomant Outline for selecting connected logical operators.
+> If you don't have, just remove some lines of code from UIInteractableInfoHandler.cs, and remove scripts from main camera,
+> logical operators and levers
+
 ## Process
 I am creating this game as part of my thesis project. The theme I have selected is learning, as I am studying to become a programmer. The game will contribute to this area in a positive way.
 Although the game is intended for people with no prior experience and who wish to expand their horizons in the area of programming and solving logical problems, it may be more suitable for those with less programming knowledge. Initially, the game was planned to be in first-person view, but the design has since shifted to isometric.

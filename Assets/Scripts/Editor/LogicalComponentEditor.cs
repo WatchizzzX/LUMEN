@@ -48,7 +48,7 @@ namespace Editor
 
             DrawDefaultInspector();
 
-            _type = _logicalComponent.LogicalType.Type;
+            _type = _logicalComponent.LogicalType;
 
             if (!CheckSpawnedNode()) return;
 

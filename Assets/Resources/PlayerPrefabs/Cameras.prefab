@@ -62,6 +62,7 @@ GameObject:
   - component: {fileID: 4264803343991382299}
   - component: {fileID: 2935911077083203998}
   - component: {fileID: 3473874572329393453}
+  - component: {fileID: 8991592584222486869}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -131,7 +132,7 @@ Camera:
   m_HDR: 1
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 0
+  m_ForceIntoRT: 1
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
@@ -219,6 +220,31 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 11400000, guid: 0195cf9b4e6f9084a8230b3753d3b20b, type: 2}
+--- !u!114 &8991592584222486869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2521452487216182737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bb42831ee5422f409e7f24f9e7488ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stage: 1
+  renderingStrategy: 0
+  renderingMode: 1
+  outlineLayerMask: -1
+  primaryBufferSizeMode: 0
+  primaryRendererScale: 0.75
+  primarySizeReference: 800
+  blurShift: 1
+  dilateShift: 1
+  dilateIterations: 1
+  dilateQuality: 0
+  blurIterations: 1
+  blurType: 2
 --- !u!1 &4632788645370407158
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,11 +391,11 @@ MonoBehaviour:
       Height: 2.25
     Bottom:
       Radius: 2.5
-      Height: 0.1
+      Height: -1.37
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: 0
+    Value: -117.80211
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -379,7 +405,7 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: 17.5
+    Value: -5.6125555
     Center: 17.5
     Range: {x: -10, y: 45}
     Wrap: 0
@@ -483,7 +509,7 @@ MonoBehaviour:
         LegacyInput: Mouse Y
         LegacyGain: -200
         CancelDeltaTime: 0
-      InputValue: 0
+      InputValue: -0
       Driver:
         AccelTime: 0.2
         DecelTime: 0.2
@@ -527,7 +553,7 @@ MonoBehaviour:
     Enabled: 1
     DistanceLimit: 0
     MinimumOcclusionTime: 0.02
-    CameraRadius: 0.2
+    CameraRadius: 0.1
     Strategy: 0
     MaximumEffort: 4
     SmoothingTime: 0.02
@@ -568,7 +594,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6592812021163393275}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.07959156, y: -0.000000038489496, z: 0.0000000030731881, w: 0.9968276}
+  m_LocalRotation: {x: 0.07959168, y: -0.000000053961298, z: 0.000000004308539, w: 0.99682754}
   m_LocalPosition: {x: 0.0000010689441, y: 1.5867809, z: -9.873303}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
