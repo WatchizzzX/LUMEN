@@ -1,3 +1,19 @@
+# [0.21.0](https://github.com/l0nnes/LUMEN/compare/v0.20.0...v0.21.0) (2024-06-03)
+
+
+### Bug Fixes
+
+* Now camera can look more up ([8b11b15](https://github.com/l0nnes/LUMEN/commit/8b11b1591bea005dda16b82a290936a62a01031f))
+
+
+### Features
+
+* Add event when interactable found ([005a727](https://github.com/l0nnes/LUMEN/commit/005a7273bdc5f7bd08415ca499b5106b15be0977))
+* Add info when player close to logical operator ([d56d877](https://github.com/l0nnes/LUMEN/commit/d56d8771fda66fedf6ecb550ee210028ad2a16a1))
+* Add new interactable type ([baecd78](https://github.com/l0nnes/LUMEN/commit/baecd78f3793de71ae388a64842dc6d24f0f04a6))
+* Add outline effect by EPO ([c3ce2e8](https://github.com/l0nnes/LUMEN/commit/c3ce2e803e558fb84d238086f68b9502f59baac7))
+* Added displaying key when interacting ([6f0b893](https://github.com/l0nnes/LUMEN/commit/6f0b89312c36f8e96b5d908aa975184faa20d9ad))
+
 # [0.20.0](https://github.com/l0nnes/LUMEN/compare/v0.19.0...v0.20.0) (2024-06-03)
 
 
