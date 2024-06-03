@@ -11,6 +11,7 @@ using Player;
 using ServiceLocatorSystem;
 using Unity.Cinemachine;
 using Unity.TinyCharacterController.Brain;
+using Unity.TinyCharacterController.Effect;
 using UnityEngine;
 using Utils.Extra;
 using Utils.Gameplay;
@@ -134,6 +135,7 @@ namespace Managers
         {
             if (_sceneManager.IsSceneLoading) return;
             _spawnedPlayerGo.GetComponent<RigidbodyBrain>().Warp(_spawnPoint ? _spawnPoint.position : Vector3.zero);
+            _spawnedPlayerGo.GetComponent<Gravity>().SetVelocity(Vector3.zero);
             PlayerCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
             PlayerCamera.ForceCameraPosition(Settings.SpawnCameraPosition,
                 Settings.SpawnCameraRotation);
@@ -204,6 +206,7 @@ namespace Managers
         private void OnDevRespawn(EventModel eventModel)
         {
             _spawnedPlayerGo.GetComponent<RigidbodyBrain>().Warp(_spawnPoint ? _spawnPoint.position : Vector3.zero);
+            _spawnedPlayerGo.GetComponent<Gravity>().SetVelocity(Vector3.zero);
             PlayerCamera.ForceCameraPosition(Settings.SpawnCameraPosition,
                 Settings.SpawnCameraRotation);
         }
