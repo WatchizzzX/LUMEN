@@ -77,5 +77,8 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 *.blob
-/ProjectSettings/Packages/com.unity.probuilder/Settings.json
 /Assets/Level/Scenes/Level 1
+/Assets/Level/Scenes/Level 2
+/Assets/Art/Animations
+Assets/DefaultVolumeProfile.asset
+Assets/DefaultVolumeProfile.asset.meta

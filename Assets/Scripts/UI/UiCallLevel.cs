@@ -1,10 +1,6 @@
 ﻿using EventBusSystem;
 using EventBusSystem.Signals.SceneSignals;
-using ServiceLocatorSystem;
-using UnityEngine;
 using UnityEngine.SceneManagement;
-using Utils;
-using Logger = Utils.Logger;
 
 namespace UI
 {

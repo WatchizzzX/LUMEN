@@ -1,6 +1,6 @@
 using UnityEngine;
-using Utils;
-using Logger = Utils.Logger;
+using Utils.Extra;
+using Logger = Utils.Extra.Logger;
 
 namespace InteractionSystem.Interactables
 {

@@ -75,4 +75,15 @@ namespace EventBusSystem.SerializedSignals
       [SerializeField] public Boolean IsOpened;
   }
 
+  [Serializable]
+  public class SerializedOnDevModeChanged : SerializedSignal
+  {
+      [SerializeField] public Boolean InDeveloperMode;
+  }
+
+  [Serializable]
+  public class SerializedOnDevRespawn : SerializedSignal
+  {
+  }
+
 }

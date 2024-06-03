@@ -1,15 +1,20 @@
 using System.Linq;
+using Baracuda.Monitoring;
+using EventBusSystem;
+using EventBusSystem.Signals.DeveloperSignals;
 using UnityEngine;
-using Utils;
 using Utils.Extensions;
-using Logger = Utils.Logger;
+using Utils.Extra;
+using Logger = Utils.Extra.Logger;
 
 namespace InteractionSystem
 {
     /// <summary>
     /// Interactor controller. Work with BasicInteractable implementations
     /// </summary>
-    public class InteractorController : MonoBehaviour
+    [MTag("Interactor Controller")]
+    [MGroupName("Interactor Controller")]
+    public class InteractorController : EventBehaviour
     {
         #region Serialized Fields
 
@@ -46,7 +51,8 @@ namespace InteractionSystem
         /// <summary>
         /// Internal buffer of interactables objects
         /// </summary>
-        private Collider[] _colliders;
+        [Monitor]
+        private Collider[] _foundedInteractableColliders;
 
         /// <summary>
         /// Count of founded interactable objects. Max is bufferSize
@@ -56,6 +62,7 @@ namespace InteractionSystem
         /// <summary>
         /// The nearest object among those found
         /// </summary>
+        [Monitor]
         private GameObject _closestInteractableObject;
 
         /// <summary>
@@ -69,12 +76,28 @@ namespace InteractionSystem
 
         private void Start()
         {
-            _colliders = new Collider[bufferSize];
+            _foundedInteractableColliders = new Collider[bufferSize];
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            this.StopMonitoring();
         }
 
         #endregion
 
         #region Methods
+
+        [ListenTo(SignalEnum.OnDevModeChanged)]
+        private void OnDevModeChanged(EventModel eventModel)
+        {
+            var payload = (OnDevModeChanged)eventModel.Payload;
+            if (payload.InDeveloperMode)
+                this.StartMonitoring();
+            else
+                this.StopMonitoring();
+        }
 
         /// <summary>
         /// A public method for processing interactive event
@@ -82,14 +105,14 @@ namespace InteractionSystem
         public void Interact()
         {
             _interactableObjectsCount =
-                Physics.OverlapSphereNonAlloc(transform.position, interactiveRange, _colliders, interactableLayer);
+                Physics.OverlapSphereNonAlloc(transform.position, interactiveRange, _foundedInteractableColliders, interactableLayer);
 
             if (_interactableObjectsCount <= 0)
             {
                 return;
             }
 
-            _closestInteractableObject = _colliders.OrderBy(obj =>
+            _closestInteractableObject = _foundedInteractableColliders.OrderBy(obj =>
                 obj ? Vector3.Distance(obj.transform.position, transform.position) : Mathf.Infinity
             ).First().gameObject;
 

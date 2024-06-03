@@ -3,9 +3,8 @@ using Animators;
 using LogicalSystem;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-using Utils;
-using Logger = Utils.Logger;
+using Utils.Extra;
+using Logger = Utils.Extra.Logger;
 
 namespace Editor
 {
@@ -65,7 +64,7 @@ namespace Editor
             }
 
             var spawnedNode = (GameObject)PrefabUtility.InstantiatePrefab(prefab, _logicalComponent.transform);
-            var decalAnimator = spawnedNode.GetComponentInChildren<DecalAnimator>();
+            var decalAnimator = spawnedNode.GetComponentInChildren<MaterialAnimator>();
             UnityEditor.Events.UnityEventTools.AddPersistentListener(_logicalComponent.OnResultChanged,
                 decalAnimator.Animate);
 

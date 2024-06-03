@@ -16,5 +16,7 @@ namespace EventBusSystem
       OnRespawnPlayer,
       OnSpawnPlayer,
       OnDevConsoleOpened,
+      OnDevModeChanged,
+      OnDevRespawn,
    }
 }

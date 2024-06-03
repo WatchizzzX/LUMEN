@@ -1,16 +1,22 @@
+using System;
 using System.Linq;
+using Baracuda.Monitoring;
 using DG.Tweening;
+using EventBusSystem;
+using EventBusSystem.Signals.DeveloperSignals;
 using UnityEngine;
 using UnityEngine.Events;
-using Utils;
-using Logger = Utils.Logger;
+using Utils.Extra;
+using Logger = Utils.Extra.Logger;
 
 namespace PickupSystem
 {
     /// <summary>
     /// Main controller in PickupSystem
     /// </summary>
-    public class PickupController : MonoBehaviour
+    [MTag("Pickup Controller")]
+    [MGroupName("Pickup Controller")]
+    public class PickupController : EventBehaviour
     {
         #region Serialized Fields
 
@@ -98,17 +104,17 @@ namespace PickupSystem
         /// <summary>
         /// Held GameObject
         /// </summary>
-        private GameObject _heldGameObject;
+        [Monitor] private GameObject _heldGameObject;
 
         /// <summary>
         /// Rigidbody of held GameObject
         /// </summary>
-        private Rigidbody _heldRigidbody;
+        [Monitor] private Rigidbody _heldRigidbody;
 
         /// <summary>
         /// Collider of held GameObject
         /// </summary>
-        private Collider _heldCollider;
+        [Monitor] private Collider _heldCollider;
 
         /// <summary>
         /// MeshRenderer of held GameObject
@@ -118,12 +124,12 @@ namespace PickupSystem
         /// <summary>
         /// Internal state if some object are held
         /// </summary>
-        private bool _isHoldingObject;
+        [Monitor] private bool _isHoldingObject;
 
         /// <summary>
         /// Founded pickable objects
         /// </summary>
-        private Collider[] _colliders;
+        [Monitor] private Collider[] _foundedPickableColliders;
 
         /// <summary>
         /// Count of founded pickable object. Max is bufferSize
@@ -133,6 +139,7 @@ namespace PickupSystem
         /// <summary>
         /// Closest GameObject to controller
         /// </summary>
+        [Monitor]
         private GameObject _closestPickableObject;
 
         /// <summary>
@@ -144,9 +151,10 @@ namespace PickupSystem
 
         #region MonoBehaviour
 
-        private void Awake()
+        protected override void Awake()
         {
-            _colliders = new Collider[bufferSize];
+            base.Awake();
+            _foundedPickableColliders = new Collider[bufferSize];
             var position = transform.position;
             position.y = frontHoldPoint.position.y;
             _distanceToHoldPoint = Vector3.Distance(position, frontHoldPoint.position);
@@ -158,9 +166,25 @@ namespace PickupSystem
                 MoveObject();
         }
 
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            this.StopMonitoring();
+        }
+
         #endregion
 
         #region Methods
+
+        [ListenTo(SignalEnum.OnDevModeChanged)]
+        private void OnDevModeChanged(EventModel eventModel)
+        {
+            var payload = (OnDevModeChanged)eventModel.Payload;
+            if (payload.InDeveloperMode)
+                this.StartMonitoring();
+            else
+                this.StopMonitoring();
+        }
 
         /// <summary>
         /// Event handler on pickup event
@@ -171,7 +195,7 @@ namespace PickupSystem
             {
                 var position = transform.position;
                 var frontHoldPointPosition = frontHoldPoint.position;
-                
+
                 var overlapCollider = new Collider[1];
                 Physics.OverlapBoxNonAlloc(frontHoldPointPosition, cubeSize / 2, overlapCollider,
                     _heldGameObject.transform.rotation);
@@ -192,14 +216,15 @@ namespace PickupSystem
             else
             {
                 _pickableObjectCount =
-                    Physics.OverlapSphereNonAlloc(transform.position, pickupRadius, _colliders, pickableLayer);
+                    Physics.OverlapSphereNonAlloc(transform.position, pickupRadius, _foundedPickableColliders,
+                        pickableLayer);
 
                 if (_pickableObjectCount <= 0)
                 {
                     return;
                 }
 
-                _closestPickableObject = _colliders.OrderBy(
+                _closestPickableObject = _foundedPickableColliders.OrderBy(
                     obj => obj ? Vector3.Distance(obj.transform.position, transform.position) : Mathf.Infinity
                 ).First().gameObject;
 

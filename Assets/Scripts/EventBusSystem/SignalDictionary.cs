@@ -21,6 +21,8 @@ namespace EventBusSystem
             {typeof(EventBusSystem.Signals.GameSignals.OnRespawnPlayer), SignalEnum.OnRespawnPlayer},
             {typeof(EventBusSystem.Signals.GameSignals.OnSpawnPlayer), SignalEnum.OnSpawnPlayer},
             {typeof(EventBusSystem.Signals.DeveloperSignals.OnDevConsoleOpened), SignalEnum.OnDevConsoleOpened},
+            {typeof(EventBusSystem.Signals.DeveloperSignals.OnDevModeChanged), SignalEnum.OnDevModeChanged},
+            {typeof(EventBusSystem.Signals.DeveloperSignals.OnDevRespawn), SignalEnum.OnDevRespawn},
         };
 
         public static readonly Dictionary<SignalEnum, Type> EnumToType = new()
@@ -35,6 +37,8 @@ namespace EventBusSystem
             {SignalEnum.OnRespawnPlayer, typeof(EventBusSystem.Signals.GameSignals.OnRespawnPlayer)},
             {SignalEnum.OnSpawnPlayer, typeof(EventBusSystem.Signals.GameSignals.OnSpawnPlayer)},
             {SignalEnum.OnDevConsoleOpened, typeof(EventBusSystem.Signals.DeveloperSignals.OnDevConsoleOpened)},
+            {SignalEnum.OnDevModeChanged, typeof(EventBusSystem.Signals.DeveloperSignals.OnDevModeChanged)},
+            {SignalEnum.OnDevRespawn, typeof(EventBusSystem.Signals.DeveloperSignals.OnDevRespawn)},
         };
 
         public static readonly Dictionary<Type, Type> TypeToSerializedType = new()
@@ -49,6 +53,8 @@ namespace EventBusSystem
             {typeof(EventBusSystem.Signals.GameSignals.OnRespawnPlayer), typeof(EventBusSystem.SerializedSignals.SerializedOnRespawnPlayer)},
             {typeof(EventBusSystem.Signals.GameSignals.OnSpawnPlayer), typeof(EventBusSystem.SerializedSignals.SerializedOnSpawnPlayer)},
             {typeof(EventBusSystem.Signals.DeveloperSignals.OnDevConsoleOpened), typeof(EventBusSystem.SerializedSignals.SerializedOnDevConsoleOpened)},
+            {typeof(EventBusSystem.Signals.DeveloperSignals.OnDevModeChanged), typeof(EventBusSystem.SerializedSignals.SerializedOnDevModeChanged)},
+            {typeof(EventBusSystem.Signals.DeveloperSignals.OnDevRespawn), typeof(EventBusSystem.SerializedSignals.SerializedOnDevRespawn)},
         };
 
         public static readonly Dictionary<Type, Type> SerializedTypeToType = new()
@@ -63,6 +69,8 @@ namespace EventBusSystem
             {typeof(EventBusSystem.SerializedSignals.SerializedOnRespawnPlayer), typeof(EventBusSystem.Signals.GameSignals.OnRespawnPlayer)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnSpawnPlayer), typeof(EventBusSystem.Signals.GameSignals.OnSpawnPlayer)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnDevConsoleOpened), typeof(EventBusSystem.Signals.DeveloperSignals.OnDevConsoleOpened)},
+            {typeof(EventBusSystem.SerializedSignals.SerializedOnDevModeChanged), typeof(EventBusSystem.Signals.DeveloperSignals.OnDevModeChanged)},
+            {typeof(EventBusSystem.SerializedSignals.SerializedOnDevRespawn), typeof(EventBusSystem.Signals.DeveloperSignals.OnDevRespawn)},
         };
     }
 }

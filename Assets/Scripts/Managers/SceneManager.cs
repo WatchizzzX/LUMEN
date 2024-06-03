@@ -1,21 +1,26 @@
 using System;
 using System.Linq;
+using Baracuda.Monitoring;
 using DavidFDev.DevConsole;
 using EasyTransition;
 using EventBusSystem;
+using EventBusSystem.Signals.DeveloperSignals;
 using EventBusSystem.Signals.SceneSignals;
 using Managers.Settings;
 using ServiceLocatorSystem;
 using UnityEngine.SceneManagement;
-using Utils;
-using Logger = Utils.Logger;
+using Utils.Extra;
+using Logger = Utils.Extra.Logger;
 
 namespace Managers
 {
+    [MTag("Scene Manager")]
+    [MGroupName("Scene Manager")]
     public class SceneManager : EventBehaviour, IService
     {
         [NonSerialized] public SceneManagerSettings Settings;
 
+        [Monitor]
         public bool IsSceneLoading => _isSceneLoading;
 
         private bool _isSceneLoading;
@@ -35,6 +40,8 @@ namespace Managers
 
             UnregisterCommands();
             
+            this.StopMonitoring();
+            
             base.OnDestroy();
         }
 
@@ -50,6 +57,16 @@ namespace Managers
         {
             var payload = (OnSetScene)eventModel.Payload;
             LoadScene(payload.NewSceneID, payload.Delay, payload.OverrideTransitionSettings);
+        }
+        
+        [ListenTo(SignalEnum.OnDevModeChanged)]
+        private void OnDevModeChanged(EventModel eventModel)
+        {
+            var payload = (OnDevModeChanged)eventModel.Payload;
+            if(payload.InDeveloperMode)
+                this.StartMonitoring();
+            else
+                this.StopMonitoring();
         }
 
         private void LoadScene(int sceneID, float delay, TransitionSettings overrideTransitionSettings = null)

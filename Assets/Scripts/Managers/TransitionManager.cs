@@ -1,19 +1,23 @@
 using System;
 using System.Collections;
+using Baracuda.Monitoring;
 using EasyTransition;
 using Enums;
 using EventBusSystem;
+using EventBusSystem.Signals.DeveloperSignals;
 using EventBusSystem.Signals.GameSignals;
 using EventBusSystem.Signals.TransitionSignals;
 using Managers.Settings;
 using ServiceLocatorSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Utils;
-using Logger = Utils.Logger;
+using Utils.Extra;
+using Logger = Utils.Extra.Logger;
 
 namespace Managers
 {
+    [MTag("Transition Manager")]
+    [MGroupName("Transition Manager")]
     public class TransitionManager : EventBehaviour, IService
     {
         #region Public Variables
@@ -21,6 +25,7 @@ namespace Managers
         [NonSerialized]
         public TransitionManagerSettings Settings;
 
+        [Monitor]
         public bool IsTransitionStarted => _runningTransition;
 
         #endregion
@@ -32,6 +37,22 @@ namespace Managers
         #endregion
 
         #region Methods
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            this.StopMonitoring();
+        }
+        
+        [ListenTo(SignalEnum.OnDevModeChanged)]
+        private void OnDevModeChanged(EventModel eventModel)
+        {
+            var payload = (OnDevModeChanged)eventModel.Payload;
+            if(payload.InDeveloperMode)
+                this.StartMonitoring();
+            else
+                this.StopMonitoring();
+        }
 
         [ListenTo(SignalEnum.OnRespawnPlayer)]
         private void OnRespawnPlayer(EventModel eventModel)

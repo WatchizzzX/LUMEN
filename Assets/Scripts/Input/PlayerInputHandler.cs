@@ -3,13 +3,11 @@ using Enums;
 using EventBusSystem;
 using EventBusSystem.Signals.DeveloperSignals;
 using EventBusSystem.Signals.GameSignals;
-using EventBusSystem.Signals.InputSignals;
-using ServiceLocatorSystem;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using Utils;
-using Logger = Utils.Logger;
+using Utils.Extra;
+using Logger = Utils.Extra.Logger;
 
 namespace Input
 {

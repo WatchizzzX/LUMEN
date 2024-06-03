@@ -1,12 +1,9 @@
-using EasyTransition;
 using EventBusSystem;
 using EventBusSystem.Signals.SceneSignals;
 using Managers;
-using Managers.Settings;
-using NaughtyAttributes;
 using ServiceLocatorSystem;
 using UnityEngine;
-using Utils;
+using Utils.Extra;
 using SceneManager = Managers.SceneManager;
 using TransitionManager = Managers.TransitionManager;
 

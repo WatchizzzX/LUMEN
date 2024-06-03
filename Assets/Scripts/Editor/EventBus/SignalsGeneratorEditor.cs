@@ -5,7 +5,8 @@ using System.Text;
 using EventBusSystem.Interfaces;
 using UnityEditor;
 using UnityEngine.SceneManagement;
-using Utils;
+using Utils.Extra;
+using Logger = Utils.Extra.Logger;
 
 namespace Editor.EventBus
 {

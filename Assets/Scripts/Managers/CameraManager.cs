@@ -6,9 +6,8 @@ using EventBusSystem.Signals.GameSignals;
 using EventBusSystem.Signals.TransitionSignals;
 using Managers.Settings;
 using ServiceLocatorSystem;
-using Unity.Cinemachine;
 using UnityEngine;
-using Utils;
+using Utils.Gameplay;
 
 namespace Managers
 {

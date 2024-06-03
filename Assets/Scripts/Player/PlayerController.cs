@@ -1,771 +1,463 @@
-using System;
+using Baracuda.Monitoring;
 using DavidFDev.DevConsole;
 using EventBusSystem;
-using TMPro;
-using UnityEditor;
+using EventBusSystem.Signals.DeveloperSignals;
+using Unity.TinyCharacterController;
+using Unity.TinyCharacterController.Brain;
+using Unity.TinyCharacterController.Check;
+using Unity.TinyCharacterController.Control;
+using Unity.TinyCharacterController.Effect;
 using UnityEngine;
-using Utils;
 using Utils.Extensions;
-using Logger = Utils.Logger;
+using Utils.Gameplay;
 
 namespace Player
 {
-    /// <summary>
-    /// Player movement controller
-    /// </summary>
-    [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
-    public class PlayerController : MonoBehaviour, IMovementController
+    [SelectionBase]
+    [MTag("Player Controller")]
+    [MGroupName("Player Controller")]
+    [MOrder(-100)]
+    public class PlayerController : EventBehaviour
     {
-        #region Serialized Fileds
+        [Header("Move Settings")] [SerializeField, Min(1f)]
+        private float walkSpeed;
 
-        /// <summary>
-        /// Walk speed
-        /// </summary>
-        [Header("Movement settings")] [Tooltip("Walk speed (m/s)")] [SerializeField, Range(0f, 100f)]
-        private float walkSpeed = 1.2f;
+        [SerializeField, Min(1f)] private float runSpeed;
 
-        /// <summary>
-        /// Run speed
-        /// </summary>
-        [Tooltip("Run speed (m/s)")] [SerializeField, Range(0f, 100f)]
-        private float runSpeed = 4.2f;
+        private Vector2 _inputMove;
+        private bool _inputSprint;
 
-        /// <summary>
-        /// Acceleration force when player on ground
-        /// </summary>
-        [Tooltip("Acceleration force on ground")] [SerializeField, Range(0f, 100f)]
-        private float maxAcceleration = 10f;
+        private Animator _animator;
+        private static readonly int Speed = Animator.StringToHash("Speed");
+        private static readonly int IsGround = Animator.StringToHash("IsGround");
+        private static readonly int IsMove = Animator.StringToHash("IsMove");
+        private static readonly int ContactWall = Animator.StringToHash("IsContactWall");
 
-        /// <summary>
-        /// Acceleration force when player in air
-        /// </summary>
-        [Tooltip("Acceleration force in air")] [SerializeField, Range(0f, 100f)]
-        private float maxAirAcceleration = 1f;
+        private RigidbodyBrain _brain;
+        private MoveControl _moveControl;
+        private JumpControl _jumpControl;
+        private Gravity _gravity;
+        private GroundCheck _groundCheck;
+        private LayerCheck _wallCheck;
+        private LayerCheck _sliderCheck;
+        private HeadContactCheck _headContactCheck;
 
-        /// <summary>
-        /// Acceleration force which will be applied when player on slope
-        /// </summary>
-        [Tooltip("Acceleration force to slope")] [SerializeField, Range(0f, 1f)]
-        private float accelerationForceToSlope;
+        private bool _isOnWall;
+        private bool _wallOnRightSide;
+        private GameObject _cashedLastWallGameObject;
+        private WallJumpSurface _connectedWallJumpSurface;
 
-        /// <summary>
-        /// The time for which the player turns in desired direction
-        /// </summary>
-        [Space(2f), Header("Rotation settings")]
-        [Tooltip("The time for which the player turns")]
-        [SerializeField, Range(0f, 1)]
-        private float smoothRotationTime = 0.5f;
+        private bool _isOnSlider;
+        private SlidingSurface _connectedSliderSurface;
+        
+        [Monitor] private bool IsOnWall => _isOnWall;
+        
+        [Monitor] [MShowIf(nameof(IsOnWall))] private Vector3 WallNormal => _wallCheck.Normal;
 
-        /// <summary>
-        /// Jump height
-        /// </summary>
-        [Space(2f), Header("Jumping settings")] [Tooltip("Jump height in metres")] [SerializeField, Range(0f, 10f)]
-        private float jumpHeight = 2f;
-
-        /// <summary>
-        /// Max count of air jumps
-        /// </summary>
-        [Tooltip("Max jumps count in air")] [SerializeField, Range(0, 5)]
-        private int maxAirJumps = 0;
-
-        /// <summary>
-        /// Time for coyote jump
-        /// </summary>
-        [Tooltip("Time for coyote jump")] [SerializeField, Range(0f, 0.5f)]
-        private float coyoteTime;
-
-        /// <summary>
-        /// Cooldown for next jump
-        /// </summary>
-        [Tooltip("Cooldown for next jump")] [SerializeField, Range(0f, 1f)]
-        private float jumpCooldown;
-
-        [SerializeField] private bool enableJumpingFromWalls;
-
-        /// <summary>
-        /// The maximum angle at which the ground remains the ground"
-        /// </summary>
-        [Space(2f), Header("Ground detection settings")]
-        [Tooltip("The maximum angle at which the ground remains the ground")]
-        [SerializeField, Range(0, 90)]
-        private float maxGroundAngle = 25f;
-
-        /// <summary>
-        /// The maximum angle at which the stairs remains the stairs
-        /// </summary>
-        [Tooltip("The maximum angle at which the stairs remains the stairs")] [SerializeField, Range(0, 90)]
-        private float maxStairsAngle = 50f;
-
-        /// <summary>
-        /// Layer for ground
-        /// </summary>
-        [Tooltip("Layer for ground")] [SerializeField]
-        private LayerMask probeMask = -1;
-
-        /// <summary>
-        /// Layer for stairs
-        /// </summary>
-        [Tooltip("Layer for stairs")] [SerializeField]
-        private LayerMask stairsMask = -1;
-
-        /// <summary>
-        /// The maximum speed at which the player will be pressed to the ground
-        /// </summary>
-        [Space(2f), Header("Snap settings")]
-        [Tooltip("The maximum speed at which the player will be pressed to the ground")]
-        [SerializeField, Range(0f, 100f)]
-        private float maxSnapSpeed = 100f;
-
-        /// <summary>
-        /// The maximum distance to the ground at which the player will still be attracted to the ground
-        /// </summary>
-        [Tooltip("The maximum distance to the ground at which the player will still be attracted to the ground")]
-        [SerializeField, Min(0f)]
-        private float probeDistance = 1f;
-
-        [Tooltip("Debug text")] [SerializeField]
-        private TextMeshProUGUI debugText;
-
-        #endregion
-
-        #region Private Variables
-
-        /// <summary>
-        /// Cached Rigidbody
-        /// </summary>
-        private Rigidbody _body;
-
-        /// <summary>
-        /// Cached connected rigidbody
-        /// </summary>
-        private Rigidbody _connectedRigidbody;
-
-        /// <summary>
-        /// Cached previous connected rigidbody
-        /// </summary>
-        private Rigidbody _previousConnectedRigidbody;
-
-        /// <summary>
-        /// Calculated velocity
-        /// </summary>
-        private Vector3 _velocity;
-
-        /// <summary>
-        /// Relative velocity in local space
-        /// </summary>
-        private Vector3 _relativeVelocity;
-
-        /// <summary>
-        /// Cached velocity of connected Rigidbody
-        /// </summary>
-        private Vector3 _connectedVelocity;
-
-        /// <summary>
-        /// World position of connected Rigidbody
-        /// </summary>
-        private Vector3 _connectedWorldPosition;
-
-        /// <summary>
-        /// Local position of connected Rigidbody
-        /// </summary>
-        private Vector3 _connectedLocalPosition;
-
-        /// <summary>
-        /// Desired velocity according to input
-        /// </summary>
-        private Vector3 _desiredVelocity;
-
-        /// <summary>
-        /// Cached jump state
-        /// </summary>
-        private bool _desiredJump;
-
-        /// <summary>
-        /// Calculated angle for rotation
-        /// </summary>
-        private float _calculatedAngle;
-
-        /// <summary>
-        /// Velocity of change calculatedAngle
-        /// </summary>
-        private float _currentAngleVelocity;
-
-        /// <summary>
-        /// Normal of contact point
-        /// </summary>
-        private Vector3 _contactNormal;
-
-        /// <summary>
-        /// Normal of contact, when player on steep
-        /// </summary>
-        private Vector3 _steepNormal;
-
-        /// <summary>
-        /// Count of contacts with ground
-        /// </summary>
-        private int _groundContactCount;
-
-        /// <summary>
-        /// Count of contacts with steep
-        /// </summary>
-        private int _steepContactCount;
-
-        /// <summary>
-        /// Cached input move
-        /// </summary>
-        private Vector2 _cachedDirection;
-
-        /// <summary>
-        /// Cached internal state of sprinting
-        /// </summary>
-        private bool _cachedSprinting;
-
-        /// <summary>
-        /// Cached internal state of sprinting in air
-        /// </summary>
-        private bool _cachedInAirSprinting;
-
-        /// <summary>
-        /// Internal state of jump
-        /// </summary>
-        private int _jumpPhase;
-
-        /// <summary>
-        /// Counter steps from last ground
-        /// </summary>
-        private int _stepsSinceLastGrounded;
-
-        /// <summary>
-        /// Counter steps from last jump
-        /// </summary>
-        private int _stepsSinceLastJump;
-
-        /// <summary>
-        /// Cached camera Transform
-        /// </summary>
-        private Transform _cameraPosition;
-
-        /// <summary>
-        /// Calculated internal value to check ground
-        /// </summary>
-        private float _minGroundDotProduct;
-
-        /// <summary>
-        /// Calculated internal value to check stairs
-        /// </summary>
-        private float _minStairsDotProduct;
-
-        /// <summary>
-        /// Internal timer for coyote jump
-        /// </summary>
-        private float _internalCoyoteTimer;
-
-        /// <summary>
-        /// Internal timer for jump
-        /// </summary>
-        private float _internalJumpCooldownTimer;
-
-        /// <summary>
-        /// Direction in which player slide on slope
-        /// </summary>
-        private Vector3 _slidingDirection;
-
-        /// <summary>
-        /// Cached gravity force
-        /// </summary>
-        private Vector3 _gravityForce;
-
-        private Vector3 _lastGroundPoint;
-
-        #endregion
-
-        #region Public Fields
-
-        public bool OnGround => _groundContactCount > 0;
-        public bool OnSteep => _steepContactCount > 0;
-        public float DesiredSpeed => _cachedSprinting ? runSpeed : walkSpeed;
-        public Vector3 HorizontalVelocity => new(_relativeVelocity.x, 0f, _relativeVelocity.z);
-
-        #endregion
-
-        #region MonoBehaviour
-
-        private void Awake()
+        [Monitor]
+        [MShowIf(nameof(IsOnWall))]
+        private Vector3 WallJumpDirection
         {
-            RegisterCommands();
-            _body = GetComponent<Rigidbody>();
-            _cameraPosition = Camera.main?.transform;
+            get
+            {
+                if (!_connectedWallJumpSurface) return Vector3.zero;
 
-            if (_cameraPosition == null)
-                Logger.Log(LoggerChannel.Player, Priority.Warning,
-                    "Controller can't find MainCamera. Rotating input will be not work");
-            OnValidate();
+                var localVelocity = transform.up * _connectedWallJumpSurface.AdditiveUpVelocity
+                                    + transform.forward * _connectedWallJumpSurface.AdditiveForwardVelocity
+                                    + (_wallOnRightSide
+                                        ? -transform.right * _connectedWallJumpSurface.AdditiveSideVelocity
+                                        : transform.right * _connectedWallJumpSurface.AdditiveSideVelocity);
+
+                return _wallCheck.Normal + localVelocity;
+            }
         }
 
-        private void OnDestroy()
+        [Monitor] private bool IsOnSlider => _isOnSlider;
+        [Monitor] private bool IsGrounded => _groundCheck.IsOnGround;
+        [Monitor, MShowIf(nameof(IsGrounded))] private GameObject GroundGameObject => _groundCheck.GroundObject;
+        [Monitor] private Vector3 ForwardDirection => transform.forward;
+        [Monitor] private float CurrentSpeed => _moveControl.CurrentSpeed;
+        [Monitor] private Gravity.State GravityState => _gravity.CurrentState;
+        [Monitor] private int AerialJumpCount => _jumpControl.AerialJumpCount;
+
+        [MonitorProperty]
+        [MShowIf(nameof(IsOnWall))]
+        private string GetSideOfWallDebug => _wallOnRightSide ? "Wall on right side" : "Wall on left side";
+
+        protected override void Awake()
         {
-            UnregisterCommands();
+            base.Awake();
+            _brain = GetComponent<RigidbodyBrain>();
+            _animator = GetComponent<Animator>();
+            _moveControl = GetComponent<MoveControl>();
+            _jumpControl = GetComponent<JumpControl>();
+            _gravity = GetComponent<Gravity>();
+            _groundCheck = GetComponent<GroundCheck>();
+            _headContactCheck = GetComponent<HeadContactCheck>();
+
+            var layerChecks = GetComponents<LayerCheck>();
+            _wallCheck = layerChecks[0];
+            _sliderCheck = layerChecks[1];
+            
+#if DEBUG || UNITY_EDITOR
+            this.StartMonitoring();
+#endif
         }
 
-        private void OnValidate()
+#if DEBUG || UNITY_EDITOR
+        void OnScriptHotReload()
         {
-            _minGroundDotProduct = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);
-            _minStairsDotProduct = Mathf.Cos(maxStairsAngle * Mathf.Deg2Rad);
-            _gravityForce = Physics.gravity;
+            this.StopMonitoring();
+            this.StartMonitoring();
+        }
+#endif
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            this.StopMonitoring();
         }
 
         private void Update()
         {
-            CalculateMovementVector();
-            RotateVelocityAccordingToCamera();
-            RotateToVelocity();
-            UpdateTimers();
-            if (debugText)
-                DebugText();
-        }
+            UpdateAnimatorGroundMovementState();
+            UpdateAnimatorWallMovementState();
 
-        private void FixedUpdate()
-        {
-            UpdateState();
-
-            if (OnSteep && !OnGround)
-                DecreaseVelocityOnSteep();
-
-            AdjustVelocity();
-
-            if (_desiredJump)
+            if (_groundCheck.IsOnGround)
             {
-                _desiredJump = false;
-                Jump();
-            }
+                _cashedLastWallGameObject = null;
 
-            CompensateStairsSliding();
-            _body.velocity = _velocity;
-            ClearState();
-        }
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            EvaluateCollision(collision);
-        }
-
-        private void OnCollisionStay(Collision collision)
-        {
-            EvaluateCollision(collision);
-        }
-
-        #endregion
-
-        #region Methods
-
-        public MovementState GetMovementState()
-        {
-            /*var velocity = _body.velocity;
-            var isFalling = (OnSteep && !OnGround) || (!OnGround && velocity.y < 0);
-            var relativeSpeed = HorizontalVelocity.magnitude / DesiredSpeed;
-            var isJumping = (_desiredJump && _internalJumpCooldownTimer <= 0f) ||
-                            (!OnGround && _jumpPhase > 0 && velocity.y >= 0);
-            isFalling = !isJumping && isFalling;*/
-
-            var velocity = _body.velocity;
-            var isFalling = (OnSteep && !OnGround && Vector3.Dot(transform.up, _steepNormal) > 0f) ||
-                            (!OnGround && velocity.y < 0);
-            var relativeSpeed = HorizontalVelocity.magnitude / DesiredSpeed;
-            var isJumping = _jumpPhase > 0 && velocity.y > 0.1f;
-            return new MovementState(isFalling, relativeSpeed, isJumping, _cachedSprinting);
-        }
-
-        /// <summary>
-        /// Draw debug info
-        /// </summary>
-        private void DebugText()
-        {
-            debugText.text = $"cont normal: {_contactNormal.normalized}";
-        }
-
-        /// <summary>
-        /// Update internal timers. Call on every Update
-        /// </summary>
-        private void UpdateTimers()
-        {
-            if (_internalCoyoteTimer > 0f)
-                _internalCoyoteTimer -= Time.deltaTime;
-            if (_internalJumpCooldownTimer > 0f)
-                _internalJumpCooldownTimer -= Time.deltaTime;
-        }
-
-        /// <summary>
-        /// Rotate controller in velocity direction
-        /// </summary>
-        private void RotateToVelocity()
-        {
-            var horizontalVelocity = HorizontalVelocity;
-            if (!(horizontalVelocity.magnitude > 0.1f)) return;
-
-            var targetAngle = Mathf.Atan2(horizontalVelocity.x, horizontalVelocity.z) * Mathf.Rad2Deg;
-
-            _calculatedAngle = Mathf.SmoothDampAngle(_calculatedAngle, targetAngle, ref _currentAngleVelocity,
-                smoothRotationTime);
-            transform.rotation = Quaternion.Euler(0, _calculatedAngle, 0);
-        }
-
-        /// <summary>
-        /// Clear internal state in end of FixedUpdate
-        /// </summary>
-        private void ClearState()
-        {
-            _groundContactCount = _steepContactCount = 0;
-            _contactNormal = _steepNormal = _connectedVelocity = Vector3.zero;
-            _previousConnectedRigidbody = _connectedRigidbody;
-            _connectedRigidbody = null;
-        }
-
-        /// <summary>
-        /// Update internal state in start of FixedUpdate
-        /// </summary>
-        private void UpdateState()
-        {
-            _stepsSinceLastGrounded += 1;
-            _stepsSinceLastJump += 1;
-            _velocity = _body.velocity;
-            if (OnGround || SnapToGround() || CheckSteepContacts())
-            {
-                if (_stepsSinceLastGrounded > 1)
-                    _internalJumpCooldownTimer = jumpCooldown;
-
-                if (_cachedInAirSprinting)
-                {
-                    _cachedSprinting = true;
-                    _cachedInAirSprinting = false;
-                }
-
-                _stepsSinceLastGrounded = 0;
-                if (_stepsSinceLastJump > 1)
-                {
-                    _jumpPhase = 0;
-                }
-
-                if (_groundContactCount > 1)
-                {
-                    _contactNormal.Normalize();
-                }
-            }
-            else
-            {
-                if (_stepsSinceLastGrounded == 1)
-                {
-                    if (_stepsSinceLastJump > 2)
-                        _internalCoyoteTimer = coyoteTime;
-                }
-
-                if (_stepsSinceLastJump < _stepsSinceLastGrounded)
-                    _internalCoyoteTimer = 0f;
-
-                _contactNormal = Vector3.up;
-            }
-
-            if (_connectedRigidbody)
-            {
-                if (_connectedRigidbody.isKinematic || _connectedRigidbody.mass >= _body.mass)
-                {
-                    UpdateConnectionState();
-                }
+                RemoveEndSlidingForce();
             }
         }
 
         /// <summary>
-        /// Try to snap controller to ground
+        /// Updates the animator's ground movement state based on the current player's movement and ground check.
         /// </summary>
-        /// <returns>Snapping is successful</returns>
-        private bool SnapToGround()
+        /// <remarks>
+        /// This method sets the animator's Speed parameter to the current speed of the player's movement control.
+        /// It also sets the IsGround parameter to true if the player is on the ground and not falling, and false otherwise.
+        /// Finally, it sets the IsMove parameter to true if the player is moving and false otherwise.
+        /// </remarks>
+        private void UpdateAnimatorGroundMovementState()
         {
-            if (_stepsSinceLastGrounded > 1 || _stepsSinceLastJump <= 2)
-            {
-                return false;
-            }
+            _animator.SetFloat(Speed, _moveControl.CurrentSpeed);
 
-            var speed = _velocity.magnitude;
-            if (speed > maxSnapSpeed)
-            {
-                return false;
-            }
+            _animator.SetBool(IsGround, _groundCheck.IsOnGround && _gravity.FallSpeed <= 0);
 
-            if (!Physics.Raycast(_body.position, Vector3.down, out var hit, probeDistance, probeMask))
-            {
-                return false;
-            }
-
-            if (hit.normal.y < GetMinDot(hit.collider.gameObject.layer))
-            {
-                return false;
-            }
-
-            _groundContactCount = 1;
-            _contactNormal = hit.normal;
-            var dot = Vector3.Dot(_velocity, hit.normal);
-            if (dot > 0f)
-            {
-                _velocity = (_velocity - hit.normal * dot).normalized * speed;
-            }
-
-            if (hit.rigidbody != null)
-                _connectedRigidbody = hit.rigidbody;
-            return true;
+            _animator.SetBool(IsMove, _moveControl.IsMove);
         }
 
         /// <summary>
-        /// Check steep contact
+        /// Updates the animator's wall movement state based on the current player's movement and ground check.
         /// </summary>
-        /// <returns></returns>
-        private bool CheckSteepContacts()
+        private void UpdateAnimatorWallMovementState()
         {
-            if (_steepContactCount <= 1) return false;
-
-            _steepNormal.Normalize();
-            if (!(_steepNormal.y >= _minGroundDotProduct)) return false;
-
-            _steepContactCount = 0;
-            _groundContactCount = 1;
-            _contactNormal = _steepNormal;
-            return true;
+            if (_isOnWall)
+            {
+                _animator.CrossFade(_wallOnRightSide ? "WallHang_R" : "WallHang_L", 0.09f);
+            }
         }
 
         /// <summary>
-        /// Adjust velocity with according to input
+        /// Updates the animator's jump state based on the current player's contact with the ground and jump count.
         /// </summary>
-        private void AdjustVelocity()
+        /// <remarks>
+        /// This method checks if the player is in contact with a surface and not on the ground. If so, it returns early and does not update the animator.
+        /// If the player is on the ground or in contact with a surface, it checks the jump count.
+        /// If the jump count is 1, it plays the "DoubleJump" animation.
+        /// Otherwise, it plays the "JumpStart" animation.
+        /// </remarks>
+        private void UpdateAnimatorJumpState()
         {
-            var xAxis = ProjectOnContactPlane(Vector3.right).normalized;
-            var zAxis = ProjectOnContactPlane(Vector3.forward).normalized;
-
-            _relativeVelocity = _velocity - _connectedVelocity;
-
-            var currentX = Vector3.Dot(_relativeVelocity, xAxis);
-            var currentZ = Vector3.Dot(_relativeVelocity, zAxis);
-
-            var acceleration = OnGround ? maxAcceleration : maxAirAcceleration;
-            var maxSpeedChange = acceleration * Time.deltaTime;
-
-            var newX = Mathf.MoveTowards(currentX, _desiredVelocity.x, maxSpeedChange);
-            var newZ = Mathf.MoveTowards(currentZ, _desiredVelocity.z, maxSpeedChange);
-
-            _velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
-        }
-
-        /// <summary>
-        /// Jump handler
-        /// </summary>
-        private void Jump()
-        {
-            if (_internalJumpCooldownTimer > 0f) return;
-
-            Vector3 jumpDirection;
-            var isCoyoteJump = false;
-            if (OnGround)
-            {
-                jumpDirection = _contactNormal;
-            }
-            else if (OnSteep)
-            {
-                if (!enableJumpingFromWalls) return;
-                jumpDirection = _steepNormal;
-                _jumpPhase = 0;
-            }
-            else if (maxAirJumps > 0 && _jumpPhase <= maxAirJumps)
-            {
-                if (_jumpPhase == 0)
-                {
-                    _jumpPhase = 1;
-                }
-
-                jumpDirection = _contactNormal;
-            }
-            else if (_internalCoyoteTimer > 0)
-            {
-                jumpDirection = Vector3.up;
-                isCoyoteJump = true;
-            }
-            else
+            if (_isOnWall)
             {
                 return;
             }
 
-            _stepsSinceLastJump = 0;
-            _jumpPhase += 1;
-
-            var heightDifference = _lastGroundPoint.y - transform.position.y;
-            var jumpSpeed = Mathf.Sqrt(-2f * _gravityForce.y *
-                                       (isCoyoteJump ? jumpHeight + heightDifference * 3.5f : jumpHeight));
-            jumpDirection = (jumpDirection + Vector3.up).normalized;
-            var alignedSpeed = Vector3.Dot(_velocity, jumpDirection);
-            if (alignedSpeed > 0f)
+            switch (_jumpControl.AerialJumpCount)
             {
-                jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
+                case 1:
+                    _animator.Play("DoubleJump");
+                    break;
+                default:
+                    _animator.Play("JumpStart");
+                    break;
             }
+        }
 
-            _velocity += jumpDirection * jumpSpeed;
+        private void RemoveEndSlidingForce()
+        {
+            _connectedSliderSurface = null;
+            _isOnSlider = false;
         }
 
         /// <summary>
-        /// Evaluate internal state, according on every contact point
+        /// Handles the wall jump behavior of the player.
         /// </summary>
-        /// <param name="collision">Detected collision</param>
-        private void EvaluateCollision(Collision collision)
+        private void WallJumpHandler()
         {
-            var minDot = GetMinDot(collision.gameObject.layer);
-            for (var i = 0; i < collision.contactCount; i++)
+            if (_connectedWallJumpSurface.JumpHeight != 0)
+                _jumpControl.JumpHeight = _connectedWallJumpSurface.JumpHeight;
+
+            _jumpControl.JumpDirection = WallJumpDirection;
+
+            _jumpControl.MovePriority = 5;
+        }
+
+        /// <summary>
+        /// Handles the basic jump behavior of the player.
+        /// </summary>
+        private void StandardJumpHandler()
+        {
+            _jumpControl.JumpDirection = Vector3.up;
+
+            _jumpControl.JumpHeight = 2f;
+
+            _jumpControl.MovePriority = 0;
+        }
+
+        /// <summary>
+        /// Handles the behavior of the player when they are hanging on a wall.
+        /// </summary>
+        private void OnWallHang()
+        {
+            _animator.SetBool(ContactWall, true);
+
+            _moveControl.MovePriority = 0;
+            _moveControl.TurnPriority = 0;
+            _jumpControl.TurnPriority = 0;
+
+            var newRotation = Quaternion.LookRotation(_wallCheck.Normal, Vector3.up) * Quaternion.Euler(0f, 90f, 0f);
+
+            _brain.Warp(_wallOnRightSide
+                ? newRotation
+                : newRotation * Quaternion.Euler(0f, 180f, 0f));
+
+            _gravity.GravityScale = 0;
+            _gravity.SetVelocity(Vector3.zero);
+
+            _isOnWall = true;
+        }
+
+        /// <summary>
+        /// Resets the player's state after ending the wall hang behavior.
+        /// </summary>
+        private void OnEndWallHang()
+        {
+            _animator.SetBool(ContactWall, false);
+
+            _moveControl.MovePriority = 1;
+            _moveControl.TurnPriority = 1;
+            _jumpControl.TurnPriority = 2;
+
+            _gravity.GravityScale = 2;
+            _gravity.SetVelocity(Vector3.zero);
+
+            _isOnWall = false;
+        }
+
+        private void OnEndSliding()
+        {
+            _moveControl.MovePriority = 1;
+            _moveControl.TurnPriority = 1;
+
+            if (!_connectedSliderSurface) return;
+            
+            var targetVelocity = Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) *
+                                 _connectedSliderSurface.SpeedMultiplier;
+            if (_connectedSliderSurface.JumpMultiplier > 0)
+                targetVelocity.y = _connectedSliderSurface.JumpMultiplier;
+            _gravity.SetVelocity(targetVelocity);
+
+            if (targetVelocity.y > 0)
             {
-                var normal = collision.GetContact(i).normal;
-                if (normal.y >= minDot)
-                {
-                    _groundContactCount += 1;
-                    _contactNormal += normal;
-                    _lastGroundPoint = collision.GetContact(i).point;
-                }
-                else if (normal.y > -0.01f)
-                {
-                    _steepContactCount += 1;
-                    _steepNormal += normal;
-                }
+                _animator.CrossFade("JumpStart", 0.05f);
             }
-
-            if (collision.rigidbody == null) return;
-            _connectedRigidbody = collision.rigidbody;
         }
 
         /// <summary>
-        /// Update connection state
+        /// Private method which called on change move direction
         /// </summary>
-        private void UpdateConnectionState()
+        private void OnChangeMove()
         {
-            if (_connectedRigidbody == _previousConnectedRigidbody)
+            _moveControl.Move(_inputMove);
+        }
+
+        /// <summary>
+        /// Private method which called on change sprint
+        /// </summary>
+        private void OnChangeSprint()
+        {
+            _moveControl.MoveSpeed = _inputSprint ? runSpeed : walkSpeed;
+        }
+
+        /// <summary>
+        /// Change move direction
+        /// </summary>
+        /// <param name="moveVector">New move direction</param>
+        public void Move(Vector2 moveVector)
+        {
+            _inputMove = moveVector;
+            OnChangeMove();
+        }
+
+        /// <summary>
+        /// Change sprint state
+        /// </summary>
+        /// <param name="isSprint">New sprint state</param>
+        public void Sprint(bool isSprint)
+        {
+            _inputSprint = isSprint;
+            OnChangeSprint();
+        }
+
+        /// <summary>
+        /// Performs a jump action for the player.
+        /// </summary>
+        /// <remarks>
+        /// This method is called when the player wants to jump. It first checks if the player is currently hanging on a wall.
+        /// If so, it resets the jump and performs a wall jump. If the player is not hanging on a wall, it simply performs a regular jump.
+        /// </remarks>
+        public void Jump()
+        {
+            if (_wallCheck.IsContact && !_groundCheck.IsOnGround)
             {
-                var connectionMovement = _connectedRigidbody.transform.TransformPoint(_connectedLocalPosition) -
-                                         _connectedWorldPosition;
-                _connectedVelocity = connectionMovement / Time.deltaTime;
+                OnEndWallHang();
+                _jumpControl.ResetJump();
+                _jumpControl.Jump(false);
             }
-
-            _connectedWorldPosition = _body.position;
-            _connectedLocalPosition = _connectedRigidbody.transform.InverseTransformPoint(_connectedWorldPosition);
-        }
-
-        /// <summary>
-        /// Project vector on ground contact point
-        /// </summary>
-        /// <param name="vector">Input vector</param>
-        /// <returns>Projected vector</returns>
-        private Vector3 ProjectOnContactPlane(Vector3 vector)
-        {
-            return vector - _contactNormal.normalized * Vector3.Dot(vector, _contactNormal.normalized);
-        }
-
-        /// <summary>
-        /// Get minimal dot product according to physic layer
-        /// </summary>
-        /// <param name="layer"></param>
-        /// <returns></returns>
-        private float GetMinDot(int layer)
-        {
-            return (stairsMask & (1 << layer)) == 0 ? _minGroundDotProduct : _minStairsDotProduct;
-        }
-
-        /// <summary>
-        /// Calculate desired movement vector
-        /// </summary>
-        private void CalculateMovementVector()
-        {
-            var convertedDirection = _cachedDirection.ToXZVector3();
-            convertedDirection = ProjectOnContactPlane(convertedDirection);
-            convertedDirection *= DesiredSpeed;
-
-            _desiredVelocity = new Vector3(convertedDirection.x, 0, convertedDirection.z);
-        }
-
-        private void DecreaseVelocityOnSteep()
-        {
-            var dotProduct = Vector3.Dot(transform.up, _steepNormal);
-
-            if (!Physics.Raycast(_body.position, Vector3.down, out _, probeDistance, probeMask)) return;
-            if (!(dotProduct > 0f)) return;
-            _slidingDirection = _gravityForce - _steepNormal * Vector3.Dot(_gravityForce, _steepNormal);
-            _velocity += _slidingDirection.normalized * accelerationForceToSlope;
-        }
-
-        /// <summary>
-        /// Compensate sliding on steep
-        /// </summary>
-        private void CompensateStairsSliding()
-        {
-            _velocity -= ProjectOnContactPlane(Physics.gravity) * Time.fixedDeltaTime;
-        }
-
-        /// <summary>
-        /// Rotate input, according to camera
-        /// </summary>
-        private void RotateVelocityAccordingToCamera()
-        {
-            var cameraRotation = Quaternion.AngleAxis(_cameraPosition.eulerAngles.y, Vector3.up);
-            _desiredVelocity = cameraRotation * _desiredVelocity;
-        }
-
-        private void ResetVelocity()
-        {
-            _desiredVelocity = Vector3.zero;
-            _velocity = Vector3.zero;
-        }
-
-        #endregion
-
-        #region Callbacks
-
-        public void SetMoveDirection(Vector2 input)
-        {
-            _cachedDirection = input;
-        }
-
-        public void SetSprint(bool sprint)
-        {
-            if (OnGround || _cachedSprinting)
-                _cachedSprinting = sprint;
             else
             {
-                _cachedInAirSprinting = true;
+                _jumpControl.Jump();
             }
         }
 
-        public void CallToJump()
+        /// <summary>
+        /// Called when the player starts a jump.
+        /// </summary>
+        /// <remarks>
+        /// This method checks if the player is overhead and returns early if true.
+        /// If the player is in contact with a surface and not on the ground, it calls the WallJumpHandler method.
+        /// Otherwise, it calls the StandardJumpHandler method.
+        /// Finally, it updates the animator's jump state.
+        /// </remarks>
+        public void OnStartedJump()
         {
-            _desiredJump = true;
+            if (_headContactCheck.IsObjectOverhead) return;
+
+            if (_wallCheck.IsContact && !_groundCheck.IsOnGround)
+                WallJumpHandler();
+            else
+                StandardJumpHandler();
+
+            UpdateAnimatorJumpState();
         }
 
+        /// <summary>
+        /// Called when the player contacts a wall.
+        /// </summary>
+        /// <remarks>
+        /// This method checks if the player is on the ground and returns early if true.
+        /// It calculates the angle between the player's forward direction and the perpendicular wall axis.
+        /// The angle is used to determine if the wall is on the right side of the player.
+        /// Finally, it calls the OnWallHang method to handle the wall hang behavior.
+        /// </remarks>
+        public void OnContactWall()
+        {
+            if (_groundCheck.IsOnGround) return;
+            if (_cashedLastWallGameObject == _wallCheck.ContactedGameObject) return;
+
+            _cashedLastWallGameObject = _wallCheck.ContactedGameObject;
+            _connectedWallJumpSurface = _cashedLastWallGameObject.GetComponent<WallJumpSurface>();
+
+            var wallNormalXZ = _wallCheck.Normal.ToXZVector2();
+            var perpendicularWallAxis = Vector2.Perpendicular(wallNormalXZ).ToXZVector3();
+
+            var angle = Vector3.SignedAngle(transform.forward, perpendicularWallAxis, Vector3.up);
+
+            _wallOnRightSide = angle > 90;
+
+            OnWallHang();
+        }
+
+        /// <summary>
+        /// Called when the player stay contact a wall.
+        /// </summary>
+        public void OnStayContactWall()
+        {
+            if (!_groundCheck.IsOnGround) return;
+            OnEndWallHang();
+        }
+
+        /// <summary>
+        /// Resets the player's state after ending the wall hang behavior.
+        /// </summary>
+        public void OnLeftWall()
+        {
+            if (!_isOnWall) return;
+            OnEndWallHang();
+        }
+
+        /// <summary>
+        /// Called when the player contacts a sliding surface.
+        /// </summary>
+        public void OnContactSlider()
+        {
+            if (_groundCheck.IsOnGround) return;
+
+            _connectedSliderSurface = _sliderCheck.ContactedGameObject.GetComponent<SlidingSurface>();
+
+            _moveControl.MovePriority = 0;
+            _moveControl.TurnPriority = 0;
+
+            _isOnSlider = true;
+        }
+
+        /// <summary>
+        /// Called when the player stay contact a sliding surface.
+        /// </summary>
+        public void OnStayContactSlider()
+        {
+            if (!_groundCheck.IsOnGround)
+            {
+                if (_connectedSliderSurface == null)
+                {
+                    _connectedSliderSurface = _sliderCheck.ContactedGameObject.GetComponent<SlidingSurface>();
+                }
+
+                _gravity.SetVelocity(Vector3.ProjectOnPlane(Physics.gravity, _sliderCheck.Normal) *
+                                     _connectedSliderSurface.SpeedMultiplier);
+            }
+            else
+            {
+                OnEndSliding();
+            }
+        }
+
+        /// <summary>
+        /// Resets the player's state after ending the sliding behavior.
+        /// </summary>
+        public void OnLeftSlider()
+        {
+            if (!_isOnSlider) return;
+            OnEndSliding();
+        }
+        
         [ListenTo(SignalEnum.OnExitCutscene)]
         private void OnExitCutscene(EventModel eventModel)
         {
-            ResetVelocity();
+            _gravity.SetVelocity(Vector3.zero);
         }
-
-        #endregion
-
-        #region Dev-commands
-
-        private void RegisterCommands()
+        
+        [ListenTo(SignalEnum.OnDevModeChanged)]
+        private void OnDevModeChanged(EventModel eventModel)
         {
-            DevConsole.AddCommand(Command.Create(
-                name: "walljump",
-                aliases: "",
-                helpText: "Switch wall jump ability",
-                callback: () =>
-                {
-                    enableJumpingFromWalls = !enableJumpingFromWalls;
-                    DevConsole.Log($"Walljump is {enableJumpingFromWalls}");
-                }));
+            var payload = (OnDevModeChanged)eventModel.Payload;
+            if(payload.InDeveloperMode)
+                this.StartMonitoring();
+            else
+                this.StopMonitoring();
         }
-
-        private void UnregisterCommands()
-        {
-            DevConsole.RemoveCommand("walljump");
-        }
-
-        #endregion
     }
 }

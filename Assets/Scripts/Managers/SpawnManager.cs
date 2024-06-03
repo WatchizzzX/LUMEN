@@ -1,7 +1,6 @@
 using System;
 using Enums;
 using EventBusSystem;
-using EventBusSystem.Signals.GameSignals;
 using EventBusSystem.Signals.SceneSignals;
 using EventBusSystem.Signals.TransitionSignals;
 using Input;
@@ -11,9 +10,11 @@ using PickupSystem;
 using Player;
 using ServiceLocatorSystem;
 using Unity.Cinemachine;
+using Unity.TinyCharacterController.Brain;
+using Unity.TinyCharacterController.Effect;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Utils;
+using Utils.Extra;
+using Utils.Gameplay;
 
 namespace Managers
 {
@@ -24,7 +25,6 @@ namespace Managers
         [NonSerialized] public SpawnManagerSettings Settings;
 
         public PlayerController PlayerController { get; private set; }
-        public PlayerAnimator PlayerAnimator { get; private set; }
         public PickupController PickupController { get; private set; }
         public InteractorController InteractorController { get; private set; }
         public CinemachineCamera PlayerCamera { get; private set; }
@@ -111,18 +111,17 @@ namespace Managers
                 _spawnedPlayerGo = Instantiate(Settings.PlayerPrefab,
                     !_spawnPoint ? Vector3.zero : _spawnPoint.transform.position, Quaternion.identity);
                 _spawnedPlayerGo.name = "Player";
-                PlayerAnimator = _spawnedPlayerGo.GetComponent<PlayerAnimator>();
                 PlayerController = _spawnedPlayerGo.GetComponent<PlayerController>();
                 InteractorController = _spawnedPlayerGo.GetComponent<InteractorController>();
                 PickupController = _spawnedPlayerGo.GetComponent<PickupController>();
 
                 PlayerCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
 
-                PlayerInputHandler.onMoveEvent.AddListener(PlayerController.SetMoveDirection);
+                PlayerInputHandler.onMoveEvent.AddListener(PlayerController.Move);
                 PlayerInputHandler.onInteractEvent.AddListener(InteractorController.Interact);
                 PlayerInputHandler.onPickupEvent.AddListener(PickupController.OnPickupEvent);
-                PlayerInputHandler.onJumpEvent.AddListener(PlayerController.CallToJump);
-                PlayerInputHandler.onSprintEvent.AddListener(PlayerController.SetSprint);
+                PlayerInputHandler.onJumpEvent.AddListener(PlayerController.Jump);
+                PlayerInputHandler.onSprintEvent.AddListener(PlayerController.Sprint);
 
                 RaiseEvent(SignalEnum.OnSpawnPlayer);
             }
@@ -135,7 +134,8 @@ namespace Managers
         private void RespawnPlayer()
         {
             if (_sceneManager.IsSceneLoading) return;
-            _spawnedPlayerGo.transform.position = _spawnPoint ? _spawnPoint.position : Vector3.zero;
+            _spawnedPlayerGo.GetComponent<RigidbodyBrain>().Warp(_spawnPoint ? _spawnPoint.position : Vector3.zero);
+            _spawnedPlayerGo.GetComponent<Gravity>().SetVelocity(Vector3.zero);
             PlayerCamera.Follow = _spawnedPlayerGo.transform.Find("CameraTarget");
             PlayerCamera.ForceCameraPosition(Settings.SpawnCameraPosition,
                 Settings.SpawnCameraRotation);
@@ -183,7 +183,6 @@ namespace Managers
                     PlayerInputHandler.onInteractEvent.RemoveAllListeners();
                     PlayerInputHandler.onJumpEvent.RemoveAllListeners();
                     PlayerInputHandler.onSprintEvent.RemoveAllListeners();
-                    PlayerAnimator = null;
                     PlayerController = null;
                     PickupController = null;
                     PlayerCamera.Follow = null;
@@ -200,5 +199,17 @@ namespace Managers
         }
 
         #endregion
+        
+        #if DEBUG || UNITY_EDITOR
+
+        [ListenTo(SignalEnum.OnDevRespawn)]
+        private void OnDevRespawn(EventModel eventModel)
+        {
+            _spawnedPlayerGo.GetComponent<RigidbodyBrain>().Warp(_spawnPoint ? _spawnPoint.position : Vector3.zero);
+            _spawnedPlayerGo.GetComponent<Gravity>().SetVelocity(Vector3.zero);
+            PlayerCamera.ForceCameraPosition(Settings.SpawnCameraPosition,
+                Settings.SpawnCameraRotation);
+        }
+        #endif
     }
 }
