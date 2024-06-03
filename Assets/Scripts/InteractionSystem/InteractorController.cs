@@ -46,7 +46,8 @@ namespace InteractionSystem
         [Tooltip("Buffer size. Optimal size is 3")] [SerializeField]
         private int bufferSize = 3;
 
-        public UnityEvent<IInteractable> onInteractableObjectFound;
+        public UnityEvent<GameObject> onInteractableObjectFound;
+        public UnityEvent onInteractableObjectLoss;
 
         #endregion
 
@@ -71,6 +72,8 @@ namespace InteractionSystem
         /// Cached interactable implementation
         /// </summary>
         private IInteractable _interactable;
+
+        private IInteractable _readyInteractable;
 
         #endregion
 
@@ -108,47 +111,35 @@ namespace InteractionSystem
 
         private void ScanInteractableObject()
         {
-            _interactableObjectsCount =
+            var foundedInteractable =
                 Physics.OverlapSphereNonAlloc(transform.position, interactiveRange, _foundedInteractableColliders,
                     interactableLayer);
 
-            if (_interactableObjectsCount <= 0)
+            if (foundedInteractable == 0)
             {
                 for (var i = 0; i < _foundedInteractableColliders.Length; i++)
                 {
                     _foundedInteractableColliders[i] = null;
                 }
 
-                return;
+                if (_interactableObjectsCount > 0)
+                {
+                    onInteractableObjectLoss.Invoke();
+                    _interactable = null;
+                    _closestInteractableObject = null;
+                }
             }
+            
+            _interactableObjectsCount = foundedInteractable;
+            
+            if(_interactableObjectsCount == 0) return;
 
             _closestInteractableObject = _foundedInteractableColliders.OrderBy(obj =>
                 obj ? Vector3.Distance(obj.transform.position, transform.position) : Mathf.Infinity
             ).First().gameObject;
 
             _interactable = _closestInteractableObject.GetComponent<IInteractable>();
-            onInteractableObjectFound.Invoke(_interactable);
-        }
 
-        private void CallToInteract()
-        {
-            if (_interactable == null)
-            {
-                Logger.Log(LoggerChannel.InteractableSystem, Priority.Warning,
-                    $"{_closestInteractableObject.name} on Interactable layer, but don't have a InteractableScript");
-                return;
-            }
-
-            if (_interactableObjectsCount == 0) return;
-
-            _interactable.Interact(this);
-        }
-
-        /// <summary>
-        /// A public method for processing interactive event
-        /// </summary>
-        public void Interact()
-        {
             var directionToInteractable =
                 (_closestInteractableObject.transform.position.ToXZVector2() - transform.position.ToXZVector2())
                 .normalized;
@@ -156,13 +147,44 @@ namespace InteractionSystem
             if (Vector3.Distance(_closestInteractableObject.transform.position, transform.position) <=
                 alwaysInteractiveRange)
             {
-                CallToInteract();
+                if (_readyInteractable != _interactable)
+                {
+                    _readyInteractable = _interactable;
+                    onInteractableObjectFound.Invoke(_closestInteractableObject);   
+                }
                 return;
             }
 
             var angle = Mathf.Abs(Vector2.Angle(transform.forward.ToXZVector2(), directionToInteractable));
 
-            if (angle < angleInteractiveRange) CallToInteract();
+            if (angle < angleInteractiveRange)
+            {
+                if (_readyInteractable != _interactable)
+                {
+                    _readyInteractable = _interactable;
+                    onInteractableObjectFound.Invoke(_closestInteractableObject);
+                }
+            }
+            else
+            {
+                _readyInteractable = null;
+                onInteractableObjectLoss.Invoke();
+            }
+        }
+
+        private void CallToInteract()
+        {
+            if (_interactableObjectsCount == 0 || _readyInteractable == null) return;
+
+            _readyInteractable.Interact(this);
+        }
+
+        /// <summary>
+        /// A public method for processing interactive event
+        /// </summary>
+        public void Interact()
+        {
+            CallToInteract();
         }
 
         #endregion
