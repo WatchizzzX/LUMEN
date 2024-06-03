@@ -1,3 +1,39 @@
+# [0.20.0](https://github.com/l0nnes/LUMEN/compare/v0.19.0...v0.20.0) (2024-06-03)
+
+
+### Bug Fixes
+
+* Add permanent enabled dev-console in editor and dev build ([9403981](https://github.com/l0nnes/LUMEN/commit/9403981acf2167bb0cc60f42b29446702bd8cdab))
+* Fix bug when player respawn with non-zero velocity ([48fcce0](https://github.com/l0nnes/LUMEN/commit/48fcce09ec52b5da9eda4ee06341e94f7fb7b514))
+* Fix reset velocity on jump ([bd8cf0a](https://github.com/l0nnes/LUMEN/commit/bd8cf0adb7dd72fec7301f6032c24181543025fd))
+* Fix RuntimeMonitoring draw ([1629b2d](https://github.com/l0nnes/LUMEN/commit/1629b2d01a5ff0faece029bf46f58f04ad471c1b))
+* Fix sliding in PlayerController ([41366f2](https://github.com/l0nnes/LUMEN/commit/41366f2a176ed0aa515fca42bde6706bb45ec45c))
+* Fix when input doesn't block when console open in devmode ([b96608f](https://github.com/l0nnes/LUMEN/commit/b96608f7217bbff9d2e045a183d54c3df81f7fd4))
+* Increase player speed ([ffd282c](https://github.com/l0nnes/LUMEN/commit/ffd282c779c252a4d18ed15578825f4e68ff833b))
+* Rework VectorExtensions ([c649964](https://github.com/l0nnes/LUMEN/commit/c6499646ab27966ff2a59510013a8e54b0ce77e9))
+* Rework wall jumping ([be989f4](https://github.com/l0nnes/LUMEN/commit/be989f4b89bb33ac44c9101d353b8f99003b3744))
+* Separate functionality in RaycastHelpers ([723eab6](https://github.com/l0nnes/LUMEN/commit/723eab673b5d8ef1d74c39e6d57d5e9288f74b0c))
+* Some fixes in runtime monitoring ([5edf1da](https://github.com/l0nnes/LUMEN/commit/5edf1dac3dd1b3a49ddf27e8969599557475e00c))
+
+
+### Features
+
+* Add a little jump in end of sliding surface ([35b208d](https://github.com/l0nnes/LUMEN/commit/35b208d058e63ab06b1bf1a5c9a6b49b8c86d0d5))
+* Add Build Version package ([45d7201](https://github.com/l0nnes/LUMEN/commit/45d7201f6a599cf9179208b97e3958e88ac7bc50))
+* Add dev command Respawn ([5ab7fea](https://github.com/l0nnes/LUMEN/commit/5ab7fead2e1e12b35883c28cda3175f37265877d))
+* Add devmode for debugging ([142e45f](https://github.com/l0nnes/LUMEN/commit/142e45fc5c9eb0078c4836933491f5989c537f85))
+* Add jump animation on end of sliding ([22198f0](https://github.com/l0nnes/LUMEN/commit/22198f02af9ed4f9ef3b01a8ad941ecb358ef57e))
+* Add new LineRenderer animator ([0df9ca7](https://github.com/l0nnes/LUMEN/commit/0df9ca790548fc5b260a42282e28adb3688daa57))
+* Add propety of connected GO in LayerCheck ([e1b0224](https://github.com/l0nnes/LUMEN/commit/e1b0224dddd3189ef0225a5a440f1584330825b3))
+* Add RaycastHelpers ([05fa4cd](https://github.com/l0nnes/LUMEN/commit/05fa4cd5abae25d164d8a99b78982ec38fc7102c))
+* Add sliding setup feature ([8c3a522](https://github.com/l0nnes/LUMEN/commit/8c3a52261d86dfe2b0254f84f37e08babbb481fb))
+* Add SlidingSurface for setup sliding ([1b5a8ec](https://github.com/l0nnes/LUMEN/commit/1b5a8ec96a30203bde136d92eb95838b0c578729))
+* Add walljump setup feature ([c20be9b](https://github.com/l0nnes/LUMEN/commit/c20be9be1f05e52f5918adac2027cfdb6e720fcb))
+* Add WallJumpSurface for setup WallJump ([efb90c9](https://github.com/l0nnes/LUMEN/commit/efb90c9dc9a6b0280f52e4fb3be1dfff52edcb8e))
+* Now player can't wall jump up on only one wall ([0d91b19](https://github.com/l0nnes/LUMEN/commit/0d91b19fb66b7d3b0b58043efb0eac96d866f88a))
+* Rework Player Controller. Added jump, double jump, wall hang, sliding ([3ebf9b8](https://github.com/l0nnes/LUMEN/commit/3ebf9b8283ab4913582c81fa1ad90f97cdee7630))
+* Rework PlayerController for TCC ([26967f1](https://github.com/l0nnes/LUMEN/commit/26967f1b4453c1deb8011553a92fe05a648827ef))
+
 # [0.19.0](https://github.com/l0nnes/LUMEN/compare/v0.18.0...v0.19.0) (2024-05-16)
 
 
