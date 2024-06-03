@@ -234,7 +234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stage: 1
   renderingStrategy: 0
-  renderingMode: 0
+  renderingMode: 1
   outlineLayerMask: -1
   primaryBufferSizeMode: 0
   primaryRendererScale: 0.75
@@ -244,7 +244,7 @@ MonoBehaviour:
   dilateIterations: 1
   dilateQuality: 0
   blurIterations: 1
-  blurType: 1
+  blurType: 2
 --- !u!1 &4632788645370407158
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,11 +391,11 @@ MonoBehaviour:
       Height: 2.25
     Bottom:
       Radius: 2.5
-      Height: 0.1
+      Height: -1.37
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
-    Value: 0
+    Value: -117.80211
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 1
@@ -405,7 +405,7 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   VerticalAxis:
-    Value: 17.5
+    Value: -5.6125555
     Center: 17.5
     Range: {x: -10, y: 45}
     Wrap: 0
@@ -509,7 +509,7 @@ MonoBehaviour:
         LegacyInput: Mouse Y
         LegacyGain: -200
         CancelDeltaTime: 0
-      InputValue: 0
+      InputValue: -0
       Driver:
         AccelTime: 0.2
         DecelTime: 0.2
@@ -594,7 +594,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6592812021163393275}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.07959168, y: -0.00000003848952, z: 0.000000003073195, w: 0.99682754}
+  m_LocalRotation: {x: 0.07959168, y: -0.000000053961298, z: 0.000000004308539, w: 0.99682754}
   m_LocalPosition: {x: 0.0000010689441, y: 1.5867809, z: -9.873303}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
