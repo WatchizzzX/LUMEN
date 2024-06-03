@@ -61,7 +61,12 @@ PrefabInstance:
     - target: {fileID: 5810278560882989892, guid: 2019fb73e8b03cc458026cd0240c90d8,
         type: 3}
       propertyPath: m_Name
-      value: BaseNode
+      value: AndNode
+      objectReference: {fileID: 0}
+    - target: {fileID: 8359296595125176809, guid: 2019fb73e8b03cc458026cd0240c90d8,
+        type: 3}
+      propertyPath: drawingMode
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
