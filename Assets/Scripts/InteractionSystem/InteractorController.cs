@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using Baracuda.Monitoring;
 using EventBusSystem;
 using EventBusSystem.Signals.DeveloperSignals;
 using UnityEngine;
+using UnityEngine.Events;
 using Utils.Extensions;
 using Utils.Extra;
 using Logger = Utils.Extra.Logger;
@@ -44,6 +46,8 @@ namespace InteractionSystem
         [Tooltip("Buffer size. Optimal size is 3")] [SerializeField]
         private int bufferSize = 3;
 
+        public UnityEvent<IInteractable> onInteractableObjectFound;
+
         #endregion
 
         #region Private Variables
@@ -51,8 +55,7 @@ namespace InteractionSystem
         /// <summary>
         /// Internal buffer of interactables objects
         /// </summary>
-        [Monitor]
-        private Collider[] _foundedInteractableColliders;
+        [Monitor] private Collider[] _foundedInteractableColliders;
 
         /// <summary>
         /// Count of founded interactable objects. Max is bufferSize
@@ -62,8 +65,7 @@ namespace InteractionSystem
         /// <summary>
         /// The nearest object among those found
         /// </summary>
-        [Monitor]
-        private GameObject _closestInteractableObject;
+        [Monitor] private GameObject _closestInteractableObject;
 
         /// <summary>
         /// Cached interactable implementation
@@ -85,6 +87,11 @@ namespace InteractionSystem
             this.StopMonitoring();
         }
 
+        private void FixedUpdate()
+        {
+            ScanInteractableObject();
+        }
+
         #endregion
 
         #region Methods
@@ -99,16 +106,19 @@ namespace InteractionSystem
                 this.StopMonitoring();
         }
 
-        /// <summary>
-        /// A public method for processing interactive event
-        /// </summary>
-        public void Interact()
+        private void ScanInteractableObject()
         {
             _interactableObjectsCount =
-                Physics.OverlapSphereNonAlloc(transform.position, interactiveRange, _foundedInteractableColliders, interactableLayer);
+                Physics.OverlapSphereNonAlloc(transform.position, interactiveRange, _foundedInteractableColliders,
+                    interactableLayer);
 
             if (_interactableObjectsCount <= 0)
             {
+                for (var i = 0; i < _foundedInteractableColliders.Length; i++)
+                {
+                    _foundedInteractableColliders[i] = null;
+                }
+
                 return;
             }
 
@@ -117,21 +127,7 @@ namespace InteractionSystem
             ).First().gameObject;
 
             _interactable = _closestInteractableObject.GetComponent<IInteractable>();
-
-            var directionToInteractable =
-                (_closestInteractableObject.transform.position.ToXZVector2() - transform.position.ToXZVector2())
-                .normalized;
-
-            if (Vector3.Distance(_closestInteractableObject.transform.position, transform.position) <=
-                alwaysInteractiveRange)
-            {
-                CallToInteract();
-                return;
-            }
-
-            var angle = Mathf.Abs(Vector2.Angle(transform.forward.ToXZVector2(), directionToInteractable));
-
-            if (angle < angleInteractiveRange) CallToInteract();
+            onInteractableObjectFound.Invoke(_interactable);
         }
 
         private void CallToInteract()
@@ -146,6 +142,27 @@ namespace InteractionSystem
             if (_interactableObjectsCount == 0) return;
 
             _interactable.Interact(this);
+        }
+
+        /// <summary>
+        /// A public method for processing interactive event
+        /// </summary>
+        public void Interact()
+        {
+            var directionToInteractable =
+                (_closestInteractableObject.transform.position.ToXZVector2() - transform.position.ToXZVector2())
+                .normalized;
+
+            if (Vector3.Distance(_closestInteractableObject.transform.position, transform.position) <=
+                alwaysInteractiveRange)
+            {
+                CallToInteract();
+                return;
+            }
+
+            var angle = Mathf.Abs(Vector2.Angle(transform.forward.ToXZVector2(), directionToInteractable));
+
+            if (angle < angleInteractiveRange) CallToInteract();
         }
 
         #endregion

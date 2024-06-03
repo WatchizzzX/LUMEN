@@ -11,11 +11,6 @@ namespace InteractionSystem.Interactables
     {
         #region Serialized Fields
 
-        [Header("Basic Interactable Settings")]
-        [SerializeField]
-        [Tooltip("Interactable type defines behaviour of object")]
-        private InteractableType interactableType;
-
         [Tooltip("The message that will be displayed if this object is selected as active (WIP)")]
         [SerializeField] private string message;
 
@@ -26,7 +21,7 @@ namespace InteractionSystem.Interactables
         /// <summary>
         /// Cached InteractableType
         /// </summary>
-        private InteractableType _interactableType;
+        protected InteractableType InteractableType;
         
         /// <summary>
         /// Cached message
@@ -39,7 +34,6 @@ namespace InteractionSystem.Interactables
 
         protected virtual void Awake()
         {
-            _interactableType = interactableType;
             _message = message.Trim() == "" ? "NULL" : message;
 
             if (gameObject.layer != LayerMask.NameToLayer("Interactable"))
@@ -58,7 +52,7 @@ namespace InteractionSystem.Interactables
 
         #region Interface Realizations
 
-        public InteractableType GetInteractableType() => _interactableType;
+        public InteractableType GetInteractableType() => InteractableType;
 
         public string GetMessage() => _message;
 

@@ -28,6 +28,12 @@ namespace InteractionSystem.Interactables
         #endregion
 
         #region Override Methods
+        
+        protected override void Awake()
+        {
+            base.Awake();
+            InteractableType = InteractableType.Switch;
+        }
 
         public override void Interact(InteractorController interactor)
         {

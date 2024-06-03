@@ -29,9 +29,8 @@ namespace InteractionSystem
     /// </summary>
     public enum InteractableType
     {
-        /// <summary>
-        /// Default type
-        /// </summary>
-        Object
+        Button,
+        Switch,
+        Pad
     }
 }
