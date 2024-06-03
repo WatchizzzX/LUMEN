@@ -31,6 +31,7 @@ namespace InteractionSystem
     {
         Button,
         Switch,
-        Pad
+        Pad,
+        LogicComponent
     }
 }
