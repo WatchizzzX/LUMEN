@@ -63,7 +63,9 @@ namespace LogicalSystem
 
         #region Public Fields
 
-        public TypeReference LogicalType => logicalType;
+        public Type LogicalType => logicalType.Type;
+
+        public List<ConnectableComponent> Inputs => _inputsArray.ToList();
 
         public UnityEvent<bool> OnResultChanged;
 

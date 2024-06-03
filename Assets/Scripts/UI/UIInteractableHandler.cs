@@ -38,7 +38,11 @@ namespace UI
 
         public void OnFoundInteractable(GameObject foundedInteractable)
         {
-            _foundedInteractable = foundedInteractable.GetComponent<IInteractable>();
+            var founded = foundedInteractable.GetComponent<IInteractable>();
+
+            if (founded.GetInteractableType() == InteractableType.LogicComponent) return;
+            
+            _foundedInteractable = founded;
             _foundedInteractableGameObject = foundedInteractable;
         }
 
