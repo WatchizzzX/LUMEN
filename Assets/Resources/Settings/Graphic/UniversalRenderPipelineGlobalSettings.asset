@@ -12,43 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec995e51a6e251468d2a3fd8a686257, type: 3}
   m_Name: UniversalRenderPipelineGlobalSettings
   m_EditorClassIdentifier: 
-  m_Settings:
-    m_SettingsList: []
-    m_RuntimeSettings: []
-  m_AssetVersion: 5
-  m_DefaultVolumeProfile: {fileID: 11400000, guid: 79829e772adb9c24e8f5fa41deefec22,
-    type: 2}
-  m_RenderingLayerNames:
-  - Default
-  - Ignore Decals
-  m_ValidRenderingLayers: 3
-  lightLayerName0: Light Layer default
-  lightLayerName1: Light Layer 1
-  lightLayerName2: Light Layer 2
-  lightLayerName3: Light Layer 3
-  lightLayerName4: Light Layer 4
-  lightLayerName5: Light Layer 5
-  lightLayerName6: Light Layer 6
-  lightLayerName7: Light Layer 7
-  apvScenesData:
-    m_ObsoleteSerializedBakingSets: []
-    sceneToBakingSet:
-      m_Keys:
-      - 79668fe1c2731384693e42d63c9fe94c
-      m_Values:
-      - {fileID: 11400000, guid: 1d88721c4024f9a42923c60f23a50b16, type: 2}
-    bakingSets:
-    - {fileID: 11400000, guid: 1d88721c4024f9a42923c60f23a50b16, type: 2}
-    sceneBounds:
-      m_Keys:
-      - 79668fe1c2731384693e42d63c9fe94c
-      m_Values:
-      - m_Center: {x: 0, y: -202.5, z: 0}
-        m_Extent: {x: 81, y: 283.5, z: 81}
-    hasProbeVolumes:
-      m_Keys:
-      - 79668fe1c2731384693e42d63c9fe94c
-      m_Values: 01
   m_ShaderStrippingSetting:
     m_Version: 0
     m_ExportShaderVariants: 1
@@ -66,6 +29,40 @@ MonoBehaviour:
   m_StripUnusedVariants: 1
   m_StripScreenCoordOverrideVariants: 1
   supportRuntimeDebugDisplay: 0
+  m_Settings:
+    m_SettingsList: []
+    m_RuntimeSettings: []
+  m_AssetVersion: 5
+  m_DefaultVolumeProfile: {fileID: 11400000, guid: aaa1f1429e7e6f7a3b4b8dd393d1aaea,
+    type: 2}
+  m_RenderingLayerNames:
+  - Default
+  - Ignore Decals
+  m_ValidRenderingLayers: 3
+  lightLayerName0: Light Layer default
+  lightLayerName1: Light Layer 1
+  lightLayerName2: Light Layer 2
+  lightLayerName3: Light Layer 3
+  lightLayerName4: Light Layer 4
+  lightLayerName5: Light Layer 5
+  lightLayerName6: Light Layer 6
+  lightLayerName7: Light Layer 7
+  apvScenesData:
+    m_ObsoleteSerializedBakingSets: []
+    sceneToBakingSet:
+      m_Keys: []
+      m_Values: []
+    bakingSets: []
+    sceneBounds:
+      m_Keys:
+      - 79668fe1c2731384693e42d63c9fe94c
+      m_Values:
+      - m_Center: {x: 0, y: -202.5, z: 0}
+        m_Extent: {x: 81, y: 283.5, z: 81}
+    hasProbeVolumes:
+      m_Keys:
+      - 79668fe1c2731384693e42d63c9fe94c
+      m_Values: 01
   references:
     version: 2
     RefIds: []
