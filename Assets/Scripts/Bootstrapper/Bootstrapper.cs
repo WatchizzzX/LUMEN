@@ -1,6 +1,7 @@
 using EventBusSystem;
 using EventBusSystem.Signals.SceneSignals;
 using Managers;
+using SaveLoadSystem;
 using ServiceLocatorSystem;
 using UnityEngine;
 using Utils.Extra;
@@ -33,6 +34,10 @@ namespace Bootstrapper
             eventBusGo.transform.SetParent(managersGo.transform);
             _eventBus = eventBusGo.GetComponent<EventBus>();
             ServiceLocator.Register(_eventBus);
+            
+            var saveManagerGo = new GameObject("Save Load Manager",  typeof(SaveLoadManager));
+            saveManagerGo.transform.SetParent(managersGo.transform);
+            ServiceLocator.Register(saveManagerGo.GetComponent<SaveLoadManager>());
 
             var gameManagerGo = new GameObject("Game Manager",  typeof(Stopwatch), typeof(GameManager));
             gameManagerGo.transform.SetParent(managersGo.transform);

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Baracuda.Monitoring;
 using DavidFDev.DevConsole;
 using DG.Tweening;
@@ -8,6 +9,7 @@ using EventBusSystem.Signals.DeveloperSignals;
 using EventBusSystem.Signals.GameSignals;
 using EventBusSystem.Signals.SceneSignals;
 using Managers.Settings;
+using SaveLoadSystem;
 using ServiceLocatorSystem;
 using UnityEngine;
 using Utils.Extra;
@@ -110,14 +112,36 @@ namespace Managers
         [ListenTo(SignalEnum.OnExitCutscene)]
         private void OnExitCutscene(EventModel eventModel)
         {
+            var sceneManager = ServiceLocator.Get<SceneManager>();
+            var currentSceneID = sceneManager.GetCurrentSceneID();
+            var nextSceneID = sceneManager.GetNextSceneID();
+            
+            var levelSettings = Settings.LevelsRecords.FirstOrDefault(x => x.SceneID == currentSceneID);
+            
+            _stopwatch.Pause();
+
+            var currentTime = _stopwatch.ElapsedTime;
+
+            var starsCount = CalculateStars(levelSettings, currentTime);
+            
+            ServiceLocator.Get<SaveLoadManager>().SaveLevelProgress(currentSceneID, starsCount);
+            
             var sequence = DOTween.Sequence();
             sequence.AppendInterval(((OnExitCutscene)eventModel.Payload).CutsceneDuration)
                 .AppendCallback(() =>
                 {
-                    _stopwatch.Pause();
-                    RaiseEvent(new OnFinish(_stopwatch.GetFormattedTime(), Random.Range(0,3)));
+                    RaiseEvent(new OnFinish(_stopwatch.GetFormattedTime(), starsCount, nextSceneID));
                     _stopwatch.Stop();
                 });
+        }
+
+        private int CalculateStars(LevelSettings levelSettings, float totalTime)
+        {
+            if (totalTime <= levelSettings.ThirdStarRecord)
+                return 3;
+            if (totalTime <= levelSettings.SecondStarRecord)
+                return 2;
+            return totalTime <= levelSettings.FirstStarRecord ? 1 : 0;
         }
 
         [ListenTo(SignalEnum.OnSceneLoaded)]
