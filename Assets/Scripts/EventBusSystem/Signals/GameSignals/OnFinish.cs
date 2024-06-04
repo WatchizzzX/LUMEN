@@ -6,11 +6,13 @@ namespace EventBusSystem.Signals.GameSignals
     {
         public readonly string ElapsedTime;
         public readonly int StarsCount;
+        public readonly int NextSceneID;
 
-        public OnFinish(string elapsedTime, int starsCount)
+        public OnFinish(string elapsedTime, int starsCount, int nextSceneID)
         {
             ElapsedTime = elapsedTime;
             StarsCount = starsCount;
+            NextSceneID = nextSceneID;
         }
     }
 }

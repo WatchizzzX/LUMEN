@@ -56,6 +56,7 @@ namespace EventBusSystem.SerializedSignals
   {
       [SerializeField] public String ElapsedTime;
       [SerializeField] public Int32 StarsCount;
+      [SerializeField] public Int32 NextSceneID;
   }
 
   [Serializable]
