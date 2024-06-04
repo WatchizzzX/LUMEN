@@ -1,6 +1,7 @@
 using System;
 using Baracuda.Monitoring;
 using DavidFDev.DevConsole;
+using DG.Tweening;
 using Enums;
 using EventBusSystem;
 using EventBusSystem.Signals.DeveloperSignals;
@@ -9,7 +10,10 @@ using EventBusSystem.Signals.SceneSignals;
 using Managers.Settings;
 using ServiceLocatorSystem;
 using UnityEngine;
+using Utils.Extra;
+using Debug = UnityEngine.Debug;
 using Logger = Utils.Extra.Logger;
+using Random = UnityEngine.Random;
 
 namespace Managers
 {
@@ -25,9 +29,13 @@ namespace Managers
 
         private TransitionManager _transitionManager;
 
+        private Stopwatch _stopwatch;
+
         protected override void Awake()
         {
             base.Awake();
+
+            _stopwatch = GetComponent<Stopwatch>();
 
             if (!PlayerPrefs.HasKey("DevConsole"))
             {
@@ -102,8 +110,14 @@ namespace Managers
         [ListenTo(SignalEnum.OnExitCutscene)]
         private void OnExitCutscene(EventModel eventModel)
         {
-            var payload = (OnExitCutscene)eventModel.Payload;
-            RaiseEvent(new OnSetScene(payload.NextSceneID, payload.CutsceneDuration));
+            var sequence = DOTween.Sequence();
+            sequence.AppendInterval(((OnExitCutscene)eventModel.Payload).CutsceneDuration)
+                .AppendCallback(() =>
+                {
+                    _stopwatch.Pause();
+                    RaiseEvent(new OnFinish(_stopwatch.GetFormattedTime(), Random.Range(0,3)));
+                    _stopwatch.Stop();
+                });
         }
 
         [ListenTo(SignalEnum.OnSceneLoaded)]
@@ -127,9 +141,11 @@ namespace Managers
             switch (_gameState)
             {
                 case GameState.Level:
+                    _stopwatch.Pause();
                     ChangeGameState(GameState.Paused);
                     break;
                 case GameState.Paused:
+                    _stopwatch.Resume();
                     ChangeGameState(GameState.Level);
                     break;
             }
@@ -144,6 +160,11 @@ namespace Managers
                 GameState.Paused => 0f,
                 _ => throw new ArgumentOutOfRangeException()
             };
+
+            if (((OnGameStateChanged)eventModel.Payload).GameState != GameState.Level) return;
+            
+            if (!_stopwatch.IsRunning)
+                _stopwatch.Start();
         }
 
         [ListenTo(SignalEnum.OnRespawnPlayer)]
@@ -152,17 +173,11 @@ namespace Managers
             ChangeGameState(GameState.Level);
         }
 
-        [ListenTo(SignalEnum.OnSetScene)]
-        private void OnSetScene(EventModel eventModel)
-        {
-            ChangeGameState(GameState.Level);
-        }
-
         [ListenTo(SignalEnum.OnDevModeChanged)]
         private void OnDevModeChanged(EventModel eventModel)
         {
             var payload = (OnDevModeChanged)eventModel.Payload;
-            if(payload.InDeveloperMode)
+            if (payload.InDeveloperMode)
                 this.StartMonitoring();
             else
                 this.StopMonitoring();

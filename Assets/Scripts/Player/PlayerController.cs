@@ -321,7 +321,7 @@ namespace Player
         /// </remarks>
         public void Jump()
         {
-            if (_wallCheck.IsContact && !_groundCheck.IsOnGround)
+            if (IsOnWall && _wallCheck.IsContact && !_groundCheck.IsOnGround)
             {
                 OnEndWallHang();
                 _jumpControl.ResetJump();
