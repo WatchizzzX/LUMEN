@@ -1,6 +1,7 @@
 using System;
 using Baracuda.Monitoring;
 using DavidFDev.DevConsole;
+using DG.Tweening;
 using Enums;
 using EventBusSystem;
 using EventBusSystem.Signals.DeveloperSignals;
@@ -12,6 +13,7 @@ using UnityEngine;
 using Utils.Extra;
 using Debug = UnityEngine.Debug;
 using Logger = Utils.Extra.Logger;
+using Random = UnityEngine.Random;
 
 namespace Managers
 {
@@ -108,11 +110,14 @@ namespace Managers
         [ListenTo(SignalEnum.OnExitCutscene)]
         private void OnExitCutscene(EventModel eventModel)
         {
-            _stopwatch.Pause();
-            Debug.Log(_stopwatch.GetFormattedTime());
-            _stopwatch.Stop();
-            var payload = (OnExitCutscene)eventModel.Payload;
-            RaiseEvent(new OnSetScene(payload.NextSceneID, payload.CutsceneDuration));
+            var sequence = DOTween.Sequence();
+            sequence.AppendInterval(((OnExitCutscene)eventModel.Payload).CutsceneDuration)
+                .AppendCallback(() =>
+                {
+                    _stopwatch.Pause();
+                    RaiseEvent(new OnFinish(_stopwatch.GetFormattedTime(), Random.Range(0,3)));
+                    _stopwatch.Stop();
+                });
         }
 
         [ListenTo(SignalEnum.OnSceneLoaded)]
