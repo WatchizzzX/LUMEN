@@ -45,6 +45,21 @@ namespace Managers
             base.OnDestroy();
         }
 
+        public int GetCurrentSceneID()
+        {
+            return UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+        }
+
+        public int GetNextSceneID()
+        {
+            var currentID = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+            if (UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings > currentID + 1)
+            {
+                return currentID + 1;
+            }
+            return -1;
+        }
+
         private void OnSceneLoaded(Scene loadedScene, LoadSceneMode loadSceneMode)
         {
             _isSceneLoading = false;
