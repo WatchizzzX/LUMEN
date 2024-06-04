@@ -47,6 +47,13 @@ namespace EventBusSystem.SerializedSignals
   }
 
   [Serializable]
+  public class SerializedOnFinish : SerializedSignal
+  {
+      [SerializeField] public String ElapsedTime;
+      [SerializeField] public Int32 StarsCount;
+  }
+
+  [Serializable]
   public class SerializedOnGameStateChanged : SerializedSignal
   {
       [SerializeField] public GameState GameState;
