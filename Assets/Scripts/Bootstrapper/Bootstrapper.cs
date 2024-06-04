@@ -34,7 +34,7 @@ namespace Bootstrapper
             _eventBus = eventBusGo.GetComponent<EventBus>();
             ServiceLocator.Register(_eventBus);
 
-            var gameManagerGo = new GameObject("Game Manager", typeof(GameManager));
+            var gameManagerGo = new GameObject("Game Manager",  typeof(Stopwatch), typeof(GameManager));
             gameManagerGo.transform.SetParent(managersGo.transform);
             var gameManager = gameManagerGo.GetComponent<GameManager>();
             gameManager.Settings = Settings.GameManagerSettings;

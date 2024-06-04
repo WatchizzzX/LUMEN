@@ -9,6 +9,8 @@ using EventBusSystem.Signals.SceneSignals;
 using Managers.Settings;
 using ServiceLocatorSystem;
 using UnityEngine;
+using Utils.Extra;
+using Debug = UnityEngine.Debug;
 using Logger = Utils.Extra.Logger;
 
 namespace Managers
@@ -25,9 +27,13 @@ namespace Managers
 
         private TransitionManager _transitionManager;
 
+        private Stopwatch _stopwatch;
+
         protected override void Awake()
         {
             base.Awake();
+
+            _stopwatch = GetComponent<Stopwatch>();
 
             if (!PlayerPrefs.HasKey("DevConsole"))
             {
@@ -102,6 +108,9 @@ namespace Managers
         [ListenTo(SignalEnum.OnExitCutscene)]
         private void OnExitCutscene(EventModel eventModel)
         {
+            _stopwatch.Pause();
+            Debug.Log(_stopwatch.GetFormattedTime());
+            _stopwatch.Stop();
             var payload = (OnExitCutscene)eventModel.Payload;
             RaiseEvent(new OnSetScene(payload.NextSceneID, payload.CutsceneDuration));
         }
@@ -127,9 +136,11 @@ namespace Managers
             switch (_gameState)
             {
                 case GameState.Level:
+                    _stopwatch.Pause();
                     ChangeGameState(GameState.Paused);
                     break;
                 case GameState.Paused:
+                    _stopwatch.Resume();
                     ChangeGameState(GameState.Level);
                     break;
             }
@@ -144,6 +155,11 @@ namespace Managers
                 GameState.Paused => 0f,
                 _ => throw new ArgumentOutOfRangeException()
             };
+
+            if (((OnGameStateChanged)eventModel.Payload).GameState != GameState.Level) return;
+            
+            if (!_stopwatch.IsRunning)
+                _stopwatch.Start();
         }
 
         [ListenTo(SignalEnum.OnRespawnPlayer)]
@@ -152,17 +168,11 @@ namespace Managers
             ChangeGameState(GameState.Level);
         }
 
-        [ListenTo(SignalEnum.OnSetScene)]
-        private void OnSetScene(EventModel eventModel)
-        {
-            ChangeGameState(GameState.Level);
-        }
-
         [ListenTo(SignalEnum.OnDevModeChanged)]
         private void OnDevModeChanged(EventModel eventModel)
         {
             var payload = (OnDevModeChanged)eventModel.Payload;
-            if(payload.InDeveloperMode)
+            if (payload.InDeveloperMode)
                 this.StartMonitoring();
             else
                 this.StopMonitoring();
