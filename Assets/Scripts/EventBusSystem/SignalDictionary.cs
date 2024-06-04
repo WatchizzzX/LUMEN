@@ -12,6 +12,7 @@ namespace EventBusSystem
         public static readonly Dictionary<Type, SignalEnum> TypeToEnum = new()
         {
             {typeof(EventBusSystem.Signals.TransitionSignals.OnChangeTransitionState), SignalEnum.OnChangeTransitionState},
+            {typeof(EventBusSystem.Signals.SceneSignals.OnReloadScene), SignalEnum.OnReloadScene},
             {typeof(EventBusSystem.Signals.SceneSignals.OnSceneLoaded), SignalEnum.OnSceneLoaded},
             {typeof(EventBusSystem.Signals.SceneSignals.OnSetScene), SignalEnum.OnSetScene},
             {typeof(EventBusSystem.Signals.InputSignals.OnPauseKeyPressed), SignalEnum.OnPauseKeyPressed},
@@ -29,6 +30,7 @@ namespace EventBusSystem
         public static readonly Dictionary<SignalEnum, Type> EnumToType = new()
         {
             {SignalEnum.OnChangeTransitionState, typeof(EventBusSystem.Signals.TransitionSignals.OnChangeTransitionState)},
+            {SignalEnum.OnReloadScene, typeof(EventBusSystem.Signals.SceneSignals.OnReloadScene)},
             {SignalEnum.OnSceneLoaded, typeof(EventBusSystem.Signals.SceneSignals.OnSceneLoaded)},
             {SignalEnum.OnSetScene, typeof(EventBusSystem.Signals.SceneSignals.OnSetScene)},
             {SignalEnum.OnPauseKeyPressed, typeof(EventBusSystem.Signals.InputSignals.OnPauseKeyPressed)},
@@ -46,6 +48,7 @@ namespace EventBusSystem
         public static readonly Dictionary<Type, Type> TypeToSerializedType = new()
         {
             {typeof(EventBusSystem.Signals.TransitionSignals.OnChangeTransitionState), typeof(EventBusSystem.SerializedSignals.SerializedOnChangeTransitionState)},
+            {typeof(EventBusSystem.Signals.SceneSignals.OnReloadScene), typeof(EventBusSystem.SerializedSignals.SerializedOnReloadScene)},
             {typeof(EventBusSystem.Signals.SceneSignals.OnSceneLoaded), typeof(EventBusSystem.SerializedSignals.SerializedOnSceneLoaded)},
             {typeof(EventBusSystem.Signals.SceneSignals.OnSetScene), typeof(EventBusSystem.SerializedSignals.SerializedOnSetScene)},
             {typeof(EventBusSystem.Signals.InputSignals.OnPauseKeyPressed), typeof(EventBusSystem.SerializedSignals.SerializedOnPauseKeyPressed)},
@@ -63,6 +66,7 @@ namespace EventBusSystem
         public static readonly Dictionary<Type, Type> SerializedTypeToType = new()
         {
             {typeof(EventBusSystem.SerializedSignals.SerializedOnChangeTransitionState), typeof(EventBusSystem.Signals.TransitionSignals.OnChangeTransitionState)},
+            {typeof(EventBusSystem.SerializedSignals.SerializedOnReloadScene), typeof(EventBusSystem.Signals.SceneSignals.OnReloadScene)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnSceneLoaded), typeof(EventBusSystem.Signals.SceneSignals.OnSceneLoaded)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnSetScene), typeof(EventBusSystem.Signals.SceneSignals.OnSetScene)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnPauseKeyPressed), typeof(EventBusSystem.Signals.InputSignals.OnPauseKeyPressed)},

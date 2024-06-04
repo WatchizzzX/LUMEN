@@ -59,6 +59,12 @@ namespace Managers
             LoadScene(payload.NewSceneID, payload.Delay, payload.OverrideTransitionSettings);
         }
         
+        [ListenTo(SignalEnum.OnReloadScene)]
+        private void OnReloadScene(EventModel eventModel)
+        {
+            LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex, 0f);
+        }
+        
         [ListenTo(SignalEnum.OnDevModeChanged)]
         private void OnDevModeChanged(EventModel eventModel)
         {

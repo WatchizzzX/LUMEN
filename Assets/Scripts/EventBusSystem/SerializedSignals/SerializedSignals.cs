@@ -19,6 +19,11 @@ namespace EventBusSystem.SerializedSignals
   }
 
   [Serializable]
+  public class SerializedOnReloadScene : SerializedSignal
+  {
+  }
+
+  [Serializable]
   public class SerializedOnSceneLoaded : SerializedSignal
   {
       [SerializeField][Scene] public int LoadedScene;

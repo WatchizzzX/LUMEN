@@ -7,6 +7,7 @@ namespace EventBusSystem
    public enum SignalEnum
    {
       OnChangeTransitionState,
+      OnReloadScene,
       OnSceneLoaded,
       OnSetScene,
       OnPauseKeyPressed,

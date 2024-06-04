@@ -172,6 +172,12 @@ namespace Managers
         {
             ChangeGameState(GameState.Level);
         }
+        
+        [ListenTo(SignalEnum.OnReloadScene, 10)]
+        private void OnReloadScene(EventModel eventModel)
+        {
+            ChangeGameState(GameState.Level);
+        }
 
         [ListenTo(SignalEnum.OnDevModeChanged)]
         private void OnDevModeChanged(EventModel eventModel)
