@@ -19,6 +19,11 @@ namespace EventBusSystem.SerializedSignals
   }
 
   [Serializable]
+  public class SerializedOnReloadScene : SerializedSignal
+  {
+  }
+
+  [Serializable]
   public class SerializedOnSceneLoaded : SerializedSignal
   {
       [SerializeField][Scene] public int LoadedScene;
@@ -44,6 +49,14 @@ namespace EventBusSystem.SerializedSignals
       [SerializeField] public Int32 NextSceneID;
       [SerializeField] public Single CutsceneDuration;
       [SerializeField] public ExitCamera ExitCamera;
+  }
+
+  [Serializable]
+  public class SerializedOnFinish : SerializedSignal
+  {
+      [SerializeField] public String ElapsedTime;
+      [SerializeField] public Int32 StarsCount;
+      [SerializeField] public Int32 NextSceneID;
   }
 
   [Serializable]

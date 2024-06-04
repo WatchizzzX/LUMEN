@@ -44,6 +44,10 @@ This is an game in which you play as a robot and solve logic puzzles based on lo
 > If you don't have, just remove some lines of code from UIInteractableInfoHandler.cs, and remove scripts from main camera,
 > logical operators and levers
 
+> [!WARNING]
+> SaveLoadSystem uses a password for protecting game data. File with password doesn't include in repo
+> So, you need to add a SaveLoadConfig.cs file. And add a public const string with a password
+
 ## Process
 I am creating this game as part of my thesis project. The theme I have selected is learning, as I am studying to become a programmer. The game will contribute to this area in a positive way.
 Although the game is intended for people with no prior experience and who wish to expand their horizons in the area of programming and solving logical problems, it may be more suitable for those with less programming knowledge. Initially, the game was planned to be in first-person view, but the design has since shifted to isometric.

@@ -12,10 +12,12 @@ namespace EventBusSystem
         public static readonly Dictionary<Type, SignalEnum> TypeToEnum = new()
         {
             {typeof(EventBusSystem.Signals.TransitionSignals.OnChangeTransitionState), SignalEnum.OnChangeTransitionState},
+            {typeof(EventBusSystem.Signals.SceneSignals.OnReloadScene), SignalEnum.OnReloadScene},
             {typeof(EventBusSystem.Signals.SceneSignals.OnSceneLoaded), SignalEnum.OnSceneLoaded},
             {typeof(EventBusSystem.Signals.SceneSignals.OnSetScene), SignalEnum.OnSetScene},
             {typeof(EventBusSystem.Signals.InputSignals.OnPauseKeyPressed), SignalEnum.OnPauseKeyPressed},
             {typeof(EventBusSystem.Signals.GameSignals.OnExitCutscene), SignalEnum.OnExitCutscene},
+            {typeof(EventBusSystem.Signals.GameSignals.OnFinish), SignalEnum.OnFinish},
             {typeof(EventBusSystem.Signals.GameSignals.OnGameStateChanged), SignalEnum.OnGameStateChanged},
             {typeof(EventBusSystem.Signals.GameSignals.OnLevelCameraChange), SignalEnum.OnLevelCameraChange},
             {typeof(EventBusSystem.Signals.GameSignals.OnRespawnPlayer), SignalEnum.OnRespawnPlayer},
@@ -28,10 +30,12 @@ namespace EventBusSystem
         public static readonly Dictionary<SignalEnum, Type> EnumToType = new()
         {
             {SignalEnum.OnChangeTransitionState, typeof(EventBusSystem.Signals.TransitionSignals.OnChangeTransitionState)},
+            {SignalEnum.OnReloadScene, typeof(EventBusSystem.Signals.SceneSignals.OnReloadScene)},
             {SignalEnum.OnSceneLoaded, typeof(EventBusSystem.Signals.SceneSignals.OnSceneLoaded)},
             {SignalEnum.OnSetScene, typeof(EventBusSystem.Signals.SceneSignals.OnSetScene)},
             {SignalEnum.OnPauseKeyPressed, typeof(EventBusSystem.Signals.InputSignals.OnPauseKeyPressed)},
             {SignalEnum.OnExitCutscene, typeof(EventBusSystem.Signals.GameSignals.OnExitCutscene)},
+            {SignalEnum.OnFinish, typeof(EventBusSystem.Signals.GameSignals.OnFinish)},
             {SignalEnum.OnGameStateChanged, typeof(EventBusSystem.Signals.GameSignals.OnGameStateChanged)},
             {SignalEnum.OnLevelCameraChange, typeof(EventBusSystem.Signals.GameSignals.OnLevelCameraChange)},
             {SignalEnum.OnRespawnPlayer, typeof(EventBusSystem.Signals.GameSignals.OnRespawnPlayer)},
@@ -44,10 +48,12 @@ namespace EventBusSystem
         public static readonly Dictionary<Type, Type> TypeToSerializedType = new()
         {
             {typeof(EventBusSystem.Signals.TransitionSignals.OnChangeTransitionState), typeof(EventBusSystem.SerializedSignals.SerializedOnChangeTransitionState)},
+            {typeof(EventBusSystem.Signals.SceneSignals.OnReloadScene), typeof(EventBusSystem.SerializedSignals.SerializedOnReloadScene)},
             {typeof(EventBusSystem.Signals.SceneSignals.OnSceneLoaded), typeof(EventBusSystem.SerializedSignals.SerializedOnSceneLoaded)},
             {typeof(EventBusSystem.Signals.SceneSignals.OnSetScene), typeof(EventBusSystem.SerializedSignals.SerializedOnSetScene)},
             {typeof(EventBusSystem.Signals.InputSignals.OnPauseKeyPressed), typeof(EventBusSystem.SerializedSignals.SerializedOnPauseKeyPressed)},
             {typeof(EventBusSystem.Signals.GameSignals.OnExitCutscene), typeof(EventBusSystem.SerializedSignals.SerializedOnExitCutscene)},
+            {typeof(EventBusSystem.Signals.GameSignals.OnFinish), typeof(EventBusSystem.SerializedSignals.SerializedOnFinish)},
             {typeof(EventBusSystem.Signals.GameSignals.OnGameStateChanged), typeof(EventBusSystem.SerializedSignals.SerializedOnGameStateChanged)},
             {typeof(EventBusSystem.Signals.GameSignals.OnLevelCameraChange), typeof(EventBusSystem.SerializedSignals.SerializedOnLevelCameraChange)},
             {typeof(EventBusSystem.Signals.GameSignals.OnRespawnPlayer), typeof(EventBusSystem.SerializedSignals.SerializedOnRespawnPlayer)},
@@ -60,10 +66,12 @@ namespace EventBusSystem
         public static readonly Dictionary<Type, Type> SerializedTypeToType = new()
         {
             {typeof(EventBusSystem.SerializedSignals.SerializedOnChangeTransitionState), typeof(EventBusSystem.Signals.TransitionSignals.OnChangeTransitionState)},
+            {typeof(EventBusSystem.SerializedSignals.SerializedOnReloadScene), typeof(EventBusSystem.Signals.SceneSignals.OnReloadScene)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnSceneLoaded), typeof(EventBusSystem.Signals.SceneSignals.OnSceneLoaded)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnSetScene), typeof(EventBusSystem.Signals.SceneSignals.OnSetScene)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnPauseKeyPressed), typeof(EventBusSystem.Signals.InputSignals.OnPauseKeyPressed)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnExitCutscene), typeof(EventBusSystem.Signals.GameSignals.OnExitCutscene)},
+            {typeof(EventBusSystem.SerializedSignals.SerializedOnFinish), typeof(EventBusSystem.Signals.GameSignals.OnFinish)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnGameStateChanged), typeof(EventBusSystem.Signals.GameSignals.OnGameStateChanged)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnLevelCameraChange), typeof(EventBusSystem.Signals.GameSignals.OnLevelCameraChange)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnRespawnPlayer), typeof(EventBusSystem.Signals.GameSignals.OnRespawnPlayer)},

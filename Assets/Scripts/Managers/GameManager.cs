@@ -1,15 +1,21 @@
 using System;
+using System.Linq;
 using Baracuda.Monitoring;
 using DavidFDev.DevConsole;
+using DG.Tweening;
 using Enums;
 using EventBusSystem;
 using EventBusSystem.Signals.DeveloperSignals;
 using EventBusSystem.Signals.GameSignals;
 using EventBusSystem.Signals.SceneSignals;
 using Managers.Settings;
+using SaveLoadSystem;
 using ServiceLocatorSystem;
 using UnityEngine;
+using Utils.Extra;
+using Debug = UnityEngine.Debug;
 using Logger = Utils.Extra.Logger;
+using Random = UnityEngine.Random;
 
 namespace Managers
 {
@@ -25,9 +31,13 @@ namespace Managers
 
         private TransitionManager _transitionManager;
 
+        private Stopwatch _stopwatch;
+
         protected override void Awake()
         {
             base.Awake();
+
+            _stopwatch = GetComponent<Stopwatch>();
 
             if (!PlayerPrefs.HasKey("DevConsole"))
             {
@@ -102,8 +112,36 @@ namespace Managers
         [ListenTo(SignalEnum.OnExitCutscene)]
         private void OnExitCutscene(EventModel eventModel)
         {
-            var payload = (OnExitCutscene)eventModel.Payload;
-            RaiseEvent(new OnSetScene(payload.NextSceneID, payload.CutsceneDuration));
+            var sceneManager = ServiceLocator.Get<SceneManager>();
+            var currentSceneID = sceneManager.GetCurrentSceneID();
+            var nextSceneID = sceneManager.GetNextSceneID();
+            
+            var levelSettings = Settings.LevelsRecords.FirstOrDefault(x => x.SceneID == currentSceneID);
+            
+            _stopwatch.Pause();
+
+            var currentTime = _stopwatch.ElapsedTime;
+
+            var starsCount = CalculateStars(levelSettings, currentTime);
+            
+            ServiceLocator.Get<SaveLoadManager>().SaveLevelProgress(currentSceneID, starsCount);
+            
+            var sequence = DOTween.Sequence();
+            sequence.AppendInterval(((OnExitCutscene)eventModel.Payload).CutsceneDuration)
+                .AppendCallback(() =>
+                {
+                    RaiseEvent(new OnFinish(_stopwatch.GetFormattedTime(), starsCount, nextSceneID));
+                    _stopwatch.Stop();
+                });
+        }
+
+        private int CalculateStars(LevelSettings levelSettings, float totalTime)
+        {
+            if (totalTime <= levelSettings.ThirdStarRecord)
+                return 3;
+            if (totalTime <= levelSettings.SecondStarRecord)
+                return 2;
+            return totalTime <= levelSettings.FirstStarRecord ? 1 : 0;
         }
 
         [ListenTo(SignalEnum.OnSceneLoaded)]
@@ -127,9 +165,11 @@ namespace Managers
             switch (_gameState)
             {
                 case GameState.Level:
+                    _stopwatch.Pause();
                     ChangeGameState(GameState.Paused);
                     break;
                 case GameState.Paused:
+                    _stopwatch.Resume();
                     ChangeGameState(GameState.Level);
                     break;
             }
@@ -144,6 +184,11 @@ namespace Managers
                 GameState.Paused => 0f,
                 _ => throw new ArgumentOutOfRangeException()
             };
+
+            if (((OnGameStateChanged)eventModel.Payload).GameState != GameState.Level) return;
+            
+            if (!_stopwatch.IsRunning)
+                _stopwatch.Start();
         }
 
         [ListenTo(SignalEnum.OnRespawnPlayer)]
@@ -151,9 +196,9 @@ namespace Managers
         {
             ChangeGameState(GameState.Level);
         }
-
-        [ListenTo(SignalEnum.OnSetScene)]
-        private void OnSetScene(EventModel eventModel)
+        
+        [ListenTo(SignalEnum.OnReloadScene, 10)]
+        private void OnReloadScene(EventModel eventModel)
         {
             ChangeGameState(GameState.Level);
         }
@@ -162,7 +207,7 @@ namespace Managers
         private void OnDevModeChanged(EventModel eventModel)
         {
             var payload = (OnDevModeChanged)eventModel.Payload;
-            if(payload.InDeveloperMode)
+            if (payload.InDeveloperMode)
                 this.StartMonitoring();
             else
                 this.StopMonitoring();

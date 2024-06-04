@@ -5,7 +5,7 @@
 //---------- -------------------------- -------
 
 //Runtime Monitoring
-//File generated: 2024-06-03 11:53:05Z
+//File generated: 2024-06-04 22:05:20Z
 //Please dont change the contents of this file. Otherwise IL2CPP runtime may not work with runtime monitoring!
 //Ensure that this file is located in Assembly-CSharp. Otherwise this file may not compile.
 //If this file contains any errors please contact me and/or create an issue in the linked repository.
@@ -13,7 +13,7 @@
 
 #if ENABLE_IL2CPP && !DISABLE_MONITORING
 
-internal class IL2CPP_AOT_6IU26TCKUM0QWH035ZI3
+internal class IL2CPP_AOT_O6YYND22W1VHTGATCP5Y
 {
     //Value Processor Method Definitions
 
@@ -69,6 +69,8 @@ internal class IL2CPP_AOT_6IU26TCKUM0QWH035ZI3
         // Player.PlayerController::IsOnWall (System.Boolean)
         // Player.PlayerController::IsOnSlider (System.Boolean)
         // Player.PlayerController::IsGrounded (System.Boolean)
+        // UI.UIInteractableHandler::IsVisible (System.Boolean)
+        // UI.UIInteractableInfoHandler::IsVisible (System.Boolean)
         Baracuda.Monitoring.IL2CPP.IL2CPPTypeDefinitions.TypeDefProperty<System.Object, System.Boolean>();
 
         // Baracuda.Monitoring.Modules.FPSMonitor::TargetFrameRate (System.Int32)
@@ -111,19 +113,19 @@ internal class IL2CPP_AOT_6IU26TCKUM0QWH035ZI3
 
 //General
 
-//Monitored Member:               48
-//Monitored Member Instance:      48
+//Monitored Member:               50
+//Monitored Member Instance:      50
 
 //MemberInfo
 
 //Monitored Fields:               30
 //Monitored Fields Instance:      30
-//Monitored Properties:           18
-//Monitored Properties Instance:  18
+//Monitored Properties:           20
+//Monitored Properties Instance:  20
 
 //Monitored Types
 
-//Monitored bool:                  7
+//Monitored bool:                  9
 //Monitored Collider:              1
 //Monitored Collider[]:            2
 //Monitored float:                 2

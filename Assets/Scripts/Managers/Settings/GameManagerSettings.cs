@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Managers.Settings
@@ -7,7 +8,12 @@ namespace Managers.Settings
     {
         [Header("Durations of events")]
         [SerializeField] private float exitCutsceneDuration;
+        
+        [Header("Records of Levels")]
+        [SerializeField] private LevelSettings[] levelsRecords;
 
         public float ExitCutsceneDuration => exitCutsceneDuration;
+
+        public IReadOnlyCollection<LevelSettings> LevelsRecords => levelsRecords;
     }
 }
