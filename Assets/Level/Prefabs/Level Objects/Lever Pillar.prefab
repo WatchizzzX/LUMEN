@@ -742,6 +742,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lever
       objectReference: {fileID: 0}
+    - target: {fileID: 5873525148710237272, guid: 4380a02ca5ccbec44b56db32772a4dea,
+        type: 3}
+      propertyPath: message
+      value: Switch power
+      objectReference: {fileID: 0}
     - target: {fileID: 8080742603656936684, guid: 4380a02ca5ccbec44b56db32772a4dea,
         type: 3}
       propertyPath: m_LocalPosition.x

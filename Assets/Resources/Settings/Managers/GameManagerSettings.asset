@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: GameManagerSettings
   m_EditorClassIdentifier: 
   exitCutsceneDuration: 7
+  levelsRecords:
+  - {fileID: 11400000, guid: f0eda4a537b9e064dbc660e6e4f16cb2, type: 2}
+  - {fileID: 11400000, guid: fe1a112e7f200984fac42d780e01a3c8, type: 2}
