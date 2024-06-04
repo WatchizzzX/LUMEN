@@ -1,3 +1,23 @@
+# [0.22.0](https://github.com/l0nnes/LUMEN/compare/v0.21.0...v0.22.0) (2024-06-04)
+
+
+### Bug Fixes
+
+* Fix extra jump from the same wall ([9312beb](https://github.com/l0nnes/LUMEN/commit/9312beb45914a7d86dfda0407303774e88fbd322))
+
+
+### Features
+
+* Add GameManager support for OnFinish signal ([4248e17](https://github.com/l0nnes/LUMEN/commit/4248e175e5f44aeb558f454eba76049db809fa59))
+* Add GetCurrentSceneID and GetNextSceneID for SceneManager ([712a88b](https://github.com/l0nnes/LUMEN/commit/712a88b77134e36adac4793e6494ee740ae495b7))
+* Add LevelSettings for storing records ([64cc020](https://github.com/l0nnes/LUMEN/commit/64cc020868cef607a767a06863482d06acad2914))
+* Add new signal OnFinish ([d9ea118](https://github.com/l0nnes/LUMEN/commit/d9ea1185af903ae12d6f74f28050218ee6652f28))
+* Add Reload option in pause menu ([42dbe94](https://github.com/l0nnes/LUMEN/commit/42dbe9408b0793b93829365e6b4c09ba69e47580))
+* Add SaveLoadSystem ([7d3d4d7](https://github.com/l0nnes/LUMEN/commit/7d3d4d71cd8f5aa77f8b084d3990f40688aeec98))
+* Add stopwatch ([dfabf41](https://github.com/l0nnes/LUMEN/commit/dfabf4137c6e012b801d2990393ca38b2402e762))
+* Add support for saving progress ([b9eb606](https://github.com/l0nnes/LUMEN/commit/b9eb6068a2f1fea9341ea15b4fe240cce6b48539))
+* Now OnFinish signal contains data ([fd93721](https://github.com/l0nnes/LUMEN/commit/fd93721409689bae4f32ff19b4a0f1231b216180))
+
 # [0.21.0](https://github.com/l0nnes/LUMEN/compare/v0.20.0...v0.21.0) (2024-06-03)
 
 
