@@ -1,3 +1,10 @@
+## [0.23.1](https://github.com/l0nnes/LUMEN/compare/v0.23.0...v0.23.1) (2024-06-05)
+
+
+### Bug Fixes
+
+* Fix stopwatch when exiting to main menu ([f92ed4d](https://github.com/l0nnes/LUMEN/commit/f92ed4d17a32a0111628c9c003415f7b75e3bfdf))
+
 # [0.23.0](https://github.com/l0nnes/LUMEN/compare/v0.22.0...v0.23.0) (2024-06-05)
 
 
