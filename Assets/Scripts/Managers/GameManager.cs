@@ -112,6 +112,8 @@ namespace Managers
         [ListenTo(SignalEnum.OnExitCutscene)]
         private void OnExitCutscene(EventModel eventModel)
         {
+            ChangeGameState(GameState.OnFinish);
+            
             var sceneManager = ServiceLocator.Get<SceneManager>();
             var currentSceneID = sceneManager.GetCurrentSceneID();
             var nextSceneID = sceneManager.GetNextSceneID();
@@ -180,7 +182,7 @@ namespace Managers
         {
             Time.timeScale = ((OnGameStateChanged)eventModel.Payload).GameState switch
             {
-                GameState.MainMenu or GameState.Level => 1f,
+                GameState.MainMenu or GameState.Level or GameState.OnFinish => 1f,
                 GameState.Paused => 0f,
                 _ => throw new ArgumentOutOfRangeException()
             };
