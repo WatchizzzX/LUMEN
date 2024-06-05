@@ -149,6 +149,7 @@ namespace Managers
         [ListenTo(SignalEnum.OnSceneLoaded)]
         private void OnSceneLoaded(EventModel eventModel)
         {
+            _stopwatch.Stop();
             DevConsole.CloseConsole();
 
             var payload = (OnSceneLoaded)eventModel.Payload;
