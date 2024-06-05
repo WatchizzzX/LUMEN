@@ -4,6 +4,7 @@
     {
         MainMenu,
         Level,
-        Paused
+        Paused,
+        OnFinish
     }
 }

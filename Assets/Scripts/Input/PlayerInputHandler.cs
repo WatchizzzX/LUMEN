@@ -188,7 +188,7 @@ namespace Input
         [ListenTo(SignalEnum.OnDevConsoleOpened)]
         private void OnDevConsoleChangeState(EventModel eventModel)
         {
-            if (_lastGameState is GameState.MainMenu or GameState.Paused) return;
+            if (_lastGameState is GameState.MainMenu or GameState.Paused or GameState.OnFinish) return;
             ChangeInputState(!((OnDevConsoleOpened)eventModel.Payload).IsOpened);
         }
 
@@ -220,6 +220,9 @@ namespace Input
                 case GameState.MainMenu:
                     ChangeInputState(false);
                     break;
+                case GameState.OnFinish:
+                    ChangeInputState(false);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -231,6 +234,7 @@ namespace Input
 
         private void OnPause(InputAction.CallbackContext obj)
         {
+            if(_lastGameState == GameState.OnFinish) return;
             if (obj.ReadValueAsButton())
                 RaiseEvent(SignalEnum.OnPauseKeyPressed);
         }

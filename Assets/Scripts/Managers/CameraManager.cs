@@ -24,7 +24,7 @@ namespace Managers
 
         private IEnumerator StartExitAnimation()
         {
-            _spawnManager.FinishCamera.Follow = _spawnManager.PlayerCamera.Follow;
+            /*_spawnManager.FinishCamera.Follow = _spawnManager.PlayerCamera.Follow;
 
             _spawnManager.FinishCameraTargetGroup.AddMember(FindFirstObjectByType<PillarTarget>().transform, 2f, 40f);
             _spawnManager.FinishCameraTargetGroup.AddMember(_spawnManager.PlayerCamera.Follow, 1f, 1.5f);
@@ -32,7 +32,8 @@ namespace Managers
             yield return new WaitForSecondsRealtime(0.1f);
             
             _spawnManager.PlayerCamera.Priority.Value = 0;
-            _spawnManager.FinishCamera.Priority.Value = 1;
+            _spawnManager.FinishCamera.Priority.Value = 1;*/
+            yield return null;
         }
 
         [ListenTo(SignalEnum.OnExitCutscene)]
