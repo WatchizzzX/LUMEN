@@ -174,6 +174,9 @@ namespace Managers
                     _stopwatch.Resume();
                     ChangeGameState(GameState.Level);
                     break;
+                case GameState.MainMenu:
+                    _stopwatch.Stop();
+                    break;
             }
         }
 
