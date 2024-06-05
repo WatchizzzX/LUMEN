@@ -1,3 +1,10 @@
+## [0.23.2](https://github.com/l0nnes/LUMEN/compare/v0.23.1...v0.23.2) (2024-06-05)
+
+
+### Bug Fixes
+
+* Fix bug when stopwatch doesn't stop on restart ([f81cc83](https://github.com/l0nnes/LUMEN/commit/f81cc8365b854d5f07e9c749b06a8cdb590efd94))
+
 ## [0.23.1](https://github.com/l0nnes/LUMEN/compare/v0.23.0...v0.23.1) (2024-06-05)
 
 
