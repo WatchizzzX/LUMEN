@@ -1,3 +1,19 @@
+# [0.23.0](https://github.com/l0nnes/LUMEN/compare/v0.22.0...v0.23.0) (2024-06-05)
+
+
+### Bug Fixes
+
+* Disable camera animation on finish ([4dbd1d3](https://github.com/l0nnes/LUMEN/commit/4dbd1d3e8e450c28bf84480a80c7a4b2ecc43d22))
+* Fix end event duration ([ff39822](https://github.com/l0nnes/LUMEN/commit/ff39822a59f126f951f1890335a2f97868c54b11))
+* Fix post processing ([62dea13](https://github.com/l0nnes/LUMEN/commit/62dea1382d26a49f2caf897096699847f61d49b9))
+
+
+### Features
+
+* Add GameManager support for new GameState ([7e7b3c1](https://github.com/l0nnes/LUMEN/commit/7e7b3c170bd933e18a662903e4aec988a2a40ed5))
+* Add new GameState for OnFinish ([3a8bad6](https://github.com/l0nnes/LUMEN/commit/3a8bad6743b689887fdae23e821cd0c54034e65a))
+* Add PlayerInputHandler support for new GameState ([f4b5d17](https://github.com/l0nnes/LUMEN/commit/f4b5d17259b3b34f52705ae56ac07cd04965191b))
+
 # [0.22.0](https://github.com/l0nnes/LUMEN/compare/v0.21.0...v0.22.0) (2024-06-04)
 
 
