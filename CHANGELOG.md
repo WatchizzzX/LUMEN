@@ -1,3 +1,11 @@
+# [0.24.0](https://github.com/l0nnes/LUMEN/compare/v0.23.2...v0.24.0) (2024-06-12)
+
+
+### Features
+
+* Add question marks with help info ([8745df9](https://github.com/l0nnes/LUMEN/commit/8745df9fed021c01925ca668f5591fd952ae6df9))
+* Add saving record time ([e8c0e63](https://github.com/l0nnes/LUMEN/commit/e8c0e63a1b2b10313891e00e3429d1e3f75e3cda))
+
 ## [0.23.2](https://github.com/l0nnes/LUMEN/compare/v0.23.1...v0.23.2) (2024-06-05)
 
 
