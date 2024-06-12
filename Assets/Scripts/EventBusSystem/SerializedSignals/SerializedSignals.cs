@@ -95,6 +95,12 @@ namespace EventBusSystem.SerializedSignals
   }
 
   [Serializable]
+  public class SerializedSetSettingsLevel : SerializedSignal
+  {
+      [SerializeField] public Int32 SettingsLevel;
+  }
+
+  [Serializable]
   public class SerializedOnDevConsoleOpened : SerializedSignal
   {
       [SerializeField] public Boolean IsOpened;

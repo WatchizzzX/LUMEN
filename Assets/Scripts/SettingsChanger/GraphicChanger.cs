@@ -15,4 +15,9 @@ public static class GraphicChanger
     {
         QualitySettings.SetQualityLevel((int)graphicsSettings);
     }
+    
+    public static void SetQuality(int graphicsSettings)
+    {
+        QualitySettings.SetQualityLevel(graphicsSettings);
+    }
 }

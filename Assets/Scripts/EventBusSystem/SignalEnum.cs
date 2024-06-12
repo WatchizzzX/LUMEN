@@ -19,6 +19,7 @@ namespace EventBusSystem
       OnLevelCameraChange,
       OnRespawnPlayer,
       OnSpawnPlayer,
+      SetSettingsLevel,
       OnDevConsoleOpened,
       OnDevModeChanged,
       OnDevRespawn,
