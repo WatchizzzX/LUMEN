@@ -126,7 +126,7 @@ namespace Managers
 
             var starsCount = CalculateStars(levelSettings, currentTime);
             
-            ServiceLocator.Get<SaveLoadManager>().SaveLevelProgress(currentSceneID, starsCount);
+            ServiceLocator.Get<SaveLoadManager>().SaveLevelProgress(currentSceneID, starsCount, _stopwatch.GetFormattedTime());
             
             var sequence = DOTween.Sequence();
             sequence.AppendInterval(((OnExitCutscene)eventModel.Payload).CutsceneDuration)

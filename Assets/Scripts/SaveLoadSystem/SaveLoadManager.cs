@@ -17,7 +17,7 @@ namespace SaveLoadSystem
                 callback: ResetProgress));
         }
         
-        public void SaveLevelProgress(int sceneID, int starsCount)
+        public void SaveLevelProgress(int sceneID, int starsCount, string time)
         {
             var writer = QuickSaveWriter.Create("LevelProgress", new QuickSaveSettings()
             {
@@ -26,13 +26,19 @@ namespace SaveLoadSystem
                 CompressionMode = CompressionMode.Gzip
             });
             
-            writer.Write($"{sceneID}", starsCount);
+            writer.Write($"{sceneID}_stars", starsCount);
+            writer.Write($"{sceneID}_time", time);
             writer.Commit();
         }
 
-        public int LoadLevelProgress(int sceneID)
+        public void LoadLevelProgress(int sceneID, out int starsCount, out string time)
         {
-            if (!QuickSaveBase.RootExists("LevelProgress")) return -1;
+            if (!QuickSaveBase.RootExists("LevelProgress"))
+            {
+                starsCount = -1;
+                time = "";
+                return;
+            }
             var reader = QuickSaveReader.Create("LevelProgress", new QuickSaveSettings
             {
                 SecurityMode = SecurityMode.Aes,
@@ -40,11 +46,13 @@ namespace SaveLoadSystem
                 CompressionMode = CompressionMode.Gzip
             });
 
-            if (!reader.TryRead<int>($"{sceneID}", out var starsCount))
+            if(!reader.TryRead($"{sceneID}_stars", out starsCount))
             {
-                return -1;
+                starsCount = -1;
+                time = "";
+                return;
             }
-            return starsCount;
+            time = reader.Read<string>($"{sceneID}_time");
         }
 
         private void ResetProgress()
