@@ -1,3 +1,10 @@
+# [0.25.0](https://github.com/l0nnes/LUMEN/compare/v0.24.0...v0.25.0) (2024-06-12)
+
+
+### Features
+
+* Add settings menu ([6950788](https://github.com/l0nnes/LUMEN/commit/6950788cf3804cbff80d79aaf8a9916d56a9636f))
+
 # [0.24.0](https://github.com/l0nnes/LUMEN/compare/v0.23.2...v0.24.0) (2024-06-12)
 
 
