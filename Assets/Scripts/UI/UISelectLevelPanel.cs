@@ -1,6 +1,7 @@
 ﻿using NaughtyAttributes;
 using SaveLoadSystem;
 using ServiceLocatorSystem;
+using TMPro;
 using UnityEngine;
 
 namespace UI
@@ -11,13 +12,22 @@ namespace UI
         [SerializeField] private GameObject firstStar;
         [SerializeField] private GameObject secondStar;
         [SerializeField] private GameObject thirdStar;
+        [SerializeField] private TextMeshProUGUI timeText;
         
         private void Awake()
         {
             var saveManager = ServiceLocator.Get<SaveLoadManager>();
 
-            var loadedStarsCount = saveManager.LoadLevelProgress(sceneID);
+            saveManager.LoadLevelProgress(sceneID, out var loadedStarsCount, out var loadedTime);
 
+            if (loadedStarsCount == -1)
+            {
+                timeText.text = "--:--:---";
+                return;
+            }
+            
+            timeText.text = loadedTime;
+            
             switch (loadedStarsCount)
             {
                 case 1:

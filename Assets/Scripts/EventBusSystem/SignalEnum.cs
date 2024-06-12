@@ -6,6 +6,8 @@ namespace EventBusSystem
 {
    public enum SignalEnum
    {
+      HideUIHelp,
+      ShowUIHelp,
       OnChangeTransitionState,
       OnReloadScene,
       OnSceneLoaded,

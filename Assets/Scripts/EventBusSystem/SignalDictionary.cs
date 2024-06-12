@@ -11,6 +11,8 @@ namespace EventBusSystem
     {
         public static readonly Dictionary<Type, SignalEnum> TypeToEnum = new()
         {
+            {typeof(EventBusSystem.Signals.UISignals.HideUIHelp), SignalEnum.HideUIHelp},
+            {typeof(EventBusSystem.Signals.UISignals.ShowUIHelp), SignalEnum.ShowUIHelp},
             {typeof(EventBusSystem.Signals.TransitionSignals.OnChangeTransitionState), SignalEnum.OnChangeTransitionState},
             {typeof(EventBusSystem.Signals.SceneSignals.OnReloadScene), SignalEnum.OnReloadScene},
             {typeof(EventBusSystem.Signals.SceneSignals.OnSceneLoaded), SignalEnum.OnSceneLoaded},
@@ -29,6 +31,8 @@ namespace EventBusSystem
 
         public static readonly Dictionary<SignalEnum, Type> EnumToType = new()
         {
+            {SignalEnum.HideUIHelp, typeof(EventBusSystem.Signals.UISignals.HideUIHelp)},
+            {SignalEnum.ShowUIHelp, typeof(EventBusSystem.Signals.UISignals.ShowUIHelp)},
             {SignalEnum.OnChangeTransitionState, typeof(EventBusSystem.Signals.TransitionSignals.OnChangeTransitionState)},
             {SignalEnum.OnReloadScene, typeof(EventBusSystem.Signals.SceneSignals.OnReloadScene)},
             {SignalEnum.OnSceneLoaded, typeof(EventBusSystem.Signals.SceneSignals.OnSceneLoaded)},
@@ -47,6 +51,8 @@ namespace EventBusSystem
 
         public static readonly Dictionary<Type, Type> TypeToSerializedType = new()
         {
+            {typeof(EventBusSystem.Signals.UISignals.HideUIHelp), typeof(EventBusSystem.SerializedSignals.SerializedHideUIHelp)},
+            {typeof(EventBusSystem.Signals.UISignals.ShowUIHelp), typeof(EventBusSystem.SerializedSignals.SerializedShowUIHelp)},
             {typeof(EventBusSystem.Signals.TransitionSignals.OnChangeTransitionState), typeof(EventBusSystem.SerializedSignals.SerializedOnChangeTransitionState)},
             {typeof(EventBusSystem.Signals.SceneSignals.OnReloadScene), typeof(EventBusSystem.SerializedSignals.SerializedOnReloadScene)},
             {typeof(EventBusSystem.Signals.SceneSignals.OnSceneLoaded), typeof(EventBusSystem.SerializedSignals.SerializedOnSceneLoaded)},
@@ -65,6 +71,8 @@ namespace EventBusSystem
 
         public static readonly Dictionary<Type, Type> SerializedTypeToType = new()
         {
+            {typeof(EventBusSystem.SerializedSignals.SerializedHideUIHelp), typeof(EventBusSystem.Signals.UISignals.HideUIHelp)},
+            {typeof(EventBusSystem.SerializedSignals.SerializedShowUIHelp), typeof(EventBusSystem.Signals.UISignals.ShowUIHelp)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnChangeTransitionState), typeof(EventBusSystem.Signals.TransitionSignals.OnChangeTransitionState)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnReloadScene), typeof(EventBusSystem.Signals.SceneSignals.OnReloadScene)},
             {typeof(EventBusSystem.SerializedSignals.SerializedOnSceneLoaded), typeof(EventBusSystem.Signals.SceneSignals.OnSceneLoaded)},
