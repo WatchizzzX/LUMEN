@@ -219,6 +219,12 @@ namespace Managers
                 this.StopMonitoring();
         }
 
+        [ListenTo(SignalEnum.SetSettingsLevel)]
+        private void OnSetLevelSettings(EventModel eventModel)
+        {
+            GraphicChanger.SetQuality(((SetSettingsLevel)eventModel.Payload).SettingsLevel);
+        }
+
         private void OnDevConsoleChangeState()
         {
             RaiseEvent(new OnDevConsoleOpened(DevConsole.IsOpen));
