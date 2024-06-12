@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildType: Closed Alpha
   buildDate:
-    day: 6
+    day: 12
     month: 6
     year: 2024
-  buildNumber: 10
+  buildNumber: 11
