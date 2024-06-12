@@ -12,6 +12,18 @@ namespace EventBusSystem.SerializedSignals
 {
 
   [Serializable]
+  public class SerializedHideUIHelp : SerializedSignal
+  {
+  }
+
+  [Serializable]
+  public class SerializedShowUIHelp : SerializedSignal
+  {
+      [SerializeField] public String Name;
+      [SerializeField] public String Info;
+  }
+
+  [Serializable]
   public class SerializedOnChangeTransitionState : SerializedSignal
   {
       [SerializeField] public TransitionState TransitionState;
