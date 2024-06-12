@@ -1,3 +1,10 @@
+# [0.26.0](https://github.com/l0nnes/LUMEN/compare/v0.25.0...v0.26.0) (2024-06-12)
+
+
+### Features
+
+* Add FAQ in menu ([e34aa6d](https://github.com/l0nnes/LUMEN/commit/e34aa6d504c86d4358cdda5710511fe51c8df651))
+
 # [0.25.0](https://github.com/l0nnes/LUMEN/compare/v0.24.0...v0.25.0) (2024-06-12)
 
 
