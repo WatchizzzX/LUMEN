@@ -1,3 +1,10 @@
+# [0.27.0](https://github.com/l0nnes/LUMEN/compare/v0.26.0...v0.27.0) (2024-06-12)
+
+
+### Features
+
+* Add zoom camera ([48f3265](https://github.com/l0nnes/LUMEN/commit/48f3265ab059f92bb90cbccbb48504ad41668d09))
+
 # [0.26.0](https://github.com/l0nnes/LUMEN/compare/v0.25.0...v0.26.0) (2024-06-12)
 
 
